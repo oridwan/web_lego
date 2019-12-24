@@ -33,7 +33,7 @@ def html_label(label):
         label = label.replace('$\\mathrm{','')
         label = label.replace('}$','')
         if label.find('_')>0:
-            label = label+'<sub>'+label[-1]+'</sub>'
+            label = label[:-2]+'<sub>'+label[-1]+'</sub>'
     return label
 
 
