@@ -123,11 +123,11 @@ jmol_isReady = function(applet)
 
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="btn-block" data-toggle="collapse" href="#collapse1">
+          <a class="btn-block collapsed" data-toggle="collapse" href="#collapse1" aria-expanded="false">
           Calculation Setup</a>
         </h4>
       </div>
-      <div id="collapse1" class="panel-collapse collapse in">
+      <div id="collapse1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
         <div class="panel-body">
 		<table class="table table-striped">
 		  <tbody>
@@ -157,12 +157,12 @@ jmol_isReady = function(applet)
 
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="btn-block" data-toggle="collapse" href="#collapse2">
+          <a class="btn-block collapsed" data-toggle="collapse" href="#collapse2" aria-expanded="false">
           Phonon Dispersion and DOS</a>
         </h4>
       </div>
 
-      <div id="collapse2" class="panel-collapse collapse in">
+      <div id="collapse2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
         <div class="panel-body">
 		  {{ d['data']['plotly_HTML'][80:-30]|safe }}
         </div> <!--END PANEL BODY-->
@@ -170,12 +170,12 @@ jmol_isReady = function(applet)
 
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="btn-block" data-toggle="collapse" href="#collapse3">
+          <a class="btn-block collapsed" data-toggle="collapse" href="#collapse3" aria-expanded="false">
           Band Paths</a>
         </h4>
       </div>
 
-      <div id="collapse3" class="panel-collapse collapse in">
+      <div id="collapse3" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
         <div class="panel-body">
 			<div class='row'>
 				<div class='col-md-6'>
@@ -203,12 +203,12 @@ jmol_isReady = function(applet)
 		{% if d['data']['pt_tables'][loop.index-1] is not none %}
       <div class="panel-heading">
         <h4 class="panel-title">
-			<a class="btn-block" data-toggle="collapse" href="#{{loop.index-1}}">
+			<a class="btn-block collapsed" data-toggle="collapse" href="#{{loop.index-1}}" aria-expanded="false">
 			{{name}}
 		  </a>
         </h4>
       </div>
-	  <div id="{{loop.index-1}}" class="panel-collapse collapse in">
+	  <div id="{{loop.index-1}}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
         <div class="panel-body">
 		<table class="table table-striped">
 		  <tbody>
