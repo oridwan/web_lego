@@ -17,7 +17,7 @@ $ git clone https://gitlab.com/ase/ase.git
 
 ### Go to ase repo and reinstall ase package by
 ```
-$ python setup install
+$ python setup.py install
 ```
 
 ### Copy and unzip the jsmol.zip to the ase/db/static
