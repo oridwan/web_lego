@@ -44,88 +44,49 @@ document.addEventListener('DOMContentLoaded',
         </style>
         
         <table class="search">
-          <td>Class of material</td><td>:</td>
+          <td>Prototypes</td><td>:</td>
           <td>
-            <select name="structureclass" class="ase-input">
+            <select name="quickprototype" class="ase-input">
               <option value="">All</option>
-              <option value="Janus">Janus-MXY</option>
-              <option value="MXene">MXene</option>
-              <option value="TMDC-H">TMDC-H</option>
-              <option value="TMDC-T">TMDC-T</option>
-              <option value="TMDC-T'">TMDC-T'</option>
-              <option value="TMDC-alloy">TMDC-alloy</option>
-              <option value="Xane">Xane</option>
-              <option value="Xene">Xene</option>
-        
-        </select>
-        </td>
+              <option value="BCC">BCC</option>
+              <option value="FCC">FCC</option>
+              <option value="B20-FeSi">B20-FeSi</option>
+        	</select>
+          </td>
           <tr>
-            <td>Dynamic stability</td><td>:</td>
+            <td>Z</td><td>:</td>
             <td>
-              <select name="from_dyn" class="ase-input">
-                <option value="1">low</option>
-                <option value="2" selected>medium</option>
-                <option value="3">high</option>
-              </select>
+              <input type="text" name="from_z" value="" size="6" class="ase-input">
             </td>
             <td>-</td>
             <td>
-              <select name="to_dyn" class="ase-input">
-                <option value="1">low</option>
-                <option value="2">medium</option>
-                <option value="3" selected>high</option>
-              </select>
+              <input type="text" name="to_z" value="" size="6" class="ase-input">
             </td>
           </tr>
+
           <tr>
-            <td>Thermodynamic stability</td><td>:</td>
+          <td>Clean Materials</td><td>:</td>
+          <td>
+            <select name="quickprototype" class="ase-input">
+              <option value="">All</option>
+              <option value="clean">Clean Materials Only</option>
+        	</select>
+          </td>
+          </tr>
+
+          <tr>
+            <td>Number of Weyl Points</td><td>:</td>
             <td>
-              <select name="from_tdyn" class="ase-input">
-                <option value="1">low</option>
-                <option value="2" selected>medium</option>
-                <option value="3">high</option>
-              </select>
+              <input type="text" name="from_w" value="" size="6" class="ase-input">
             </td>
             <td>-</td>
             <td>
-              <select name="to_tdyn" class="ase-input">
-                <option value="1">low</option>
-                <option value="2">medium</option>
-                <option value="3" selected>high</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Magnetic state</td><td>:</td>
-            <td>
-              <select name="magstate" class="ase-input">
-                <option value="">-</option>
-                <option value="NM">NM</option>
-                <option value="FM">FM</option>
-                <option value="AFM">AFM</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Band gap range [eV]</td><td>:</td>
-            <td>
-              <input type="text" name="from_gap" value="" size="6" class="ase-input">
-            </td>
-            <td>-</td>
-            <td>
-              <input type="text" name="to_gap" value="" size="6" class="ase-input">
-            </td>
-            <td>
-              <select name="xc" class="ase-input">
-                <option value="gap">PBE</option>
-                <option value="gap_gw">G0W0@PBE</option>
-                <option value="gap_gllbsc">GLLBSC</option>
-                <option value="gap_hse">HSE06@PBE</option>
-              </select>
+              <input type="text" name="to_w" value="" size="6" class="ase-input">
             </td>
           </tr>
         </table>
 {% endblock search %}
+
       <div class="form-group" style="margin-bottom:0px;">
         <small class="form-text text-muted">
           <a href="https://wiki.fysik.dtu.dk/ase/ase/db/db.html#querying"
