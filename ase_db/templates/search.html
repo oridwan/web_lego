@@ -46,14 +46,19 @@ document.addEventListener('DOMContentLoaded',
         <table class="search">
           <td>Prototypes</td><td>:</td>
           <td>
-            <select name="quickprototype" class="ase-input">
-              <option value="">All</option>
-              <option value="BCC">BCC</option>
-              <option value="FCC">FCC</option>
+		  	<select name="proto" class="ase-input">
+              <option value="_"></option>
+              <option value="A1-FCC">A1-FCC</option>
+              <option value="A2-BCC">A2-BCC</option>
+              <option value="A3-HCP">A3-HCP</option>
+              <option value="A4-Diamond">A4-Diamond</option>
+              <option value="B1-NaCl">B1-NaCl</option>
+              <option value="B2-CsCl">B2-CsCl</option>
               <option value="B20-FeSi">B20-FeSi</option>
+              <option value="L12-Cu3Au">L12-Cu3Au</option>
         	</select>
           </td>
-          <tr>
+          <!--<tr>
             <td>Z</td><td>:</td>
             <td>
               <input type="text" name="from_z" value="" size="6" class="ase-input">
@@ -62,7 +67,7 @@ document.addEventListener('DOMContentLoaded',
             <td>
               <input type="text" name="to_z" value="" size="6" class="ase-input">
             </td>
-          </tr>
+		  </tr>
 
           <tr>
           <td>Clean Materials</td><td>:</td>
@@ -83,7 +88,7 @@ document.addEventListener('DOMContentLoaded',
             <td>
               <input type="text" name="to_w" value="" size="6" class="ase-input">
             </td>
-          </tr>
+          </tr>-->
         </table>
 {% endblock search %}
 
