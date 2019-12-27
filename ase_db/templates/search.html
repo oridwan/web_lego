@@ -1,12 +1,32 @@
 
-
-
 {% extends 'layout.html' %}
 {% block title %}
 Topological Phonon Database
 {% endblock %}
 {% block head %}
-<script src="{{ url_for('static', filename='search.js') }}"></script>
+
+<script>
+function update_table(sid, what, x)
+{
+    request = new XMLHttpRequest();
+    addr ='/update/' + sid + '/' + what + '/' + x + '/'
+    var inputs = document.getElementsByClassName('ase-input');
+    sep = '?'
+
+    for (var i = 0; i < inputs.length; i++) {
+        addr += sep + inputs[i].name + '=' + inputs[i].value;
+        sep = ',';
+    }
+    request.open('GET', addr, true);
+    request.onload = function() {
+        data = request.responseText;
+        table = document.getElementById('database1')
+        table.innerHTML = data;
+    }
+    request.send();
+}
+</script>
+
 <script>
 document.addEventListener('DOMContentLoaded',
                           function() {
@@ -25,10 +45,10 @@ document.addEventListener('DOMContentLoaded',
   </div>
 
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-7">
 	<img src="{{ url_for('static', filename='logo.jpeg') }}" width="100%" height="100%" align="middle">
 	</div>
-	<div class="col-md-4"><h2> Database Statistics</h2>
+	<div class="col-md-5"><h2> Database Statistics</h2>
 	<table class="table table-striped">
 	<tr>
 		<td>Number of Materials: </td>
@@ -46,7 +66,7 @@ document.addEventListener('DOMContentLoaded',
 
 	<tr>
 		<td>Number of Clean Materials: </td>
-		<td>322</td>
+		<td>176</td>
 	</tr>
 	<tr>
 		<td>Number of Nodal Lines: </td>
@@ -75,7 +95,7 @@ document.addEventListener('DOMContentLoaded',
       <div class="form-group" style="margin-top:5px;">
         <input type="text" name="query" id="formula-result"
                class="form-control mt-2 ase-input"
-               placeholder="Search formula e.g. MoS2" size="60">
+               placeholder="Search formula e.g. NaCl" size="60">
         <button type="submit" class="btn btn-default">
           <i class="fa fa-search fa-1x" aria-hidden="true"></i>
         </button>
@@ -102,11 +122,26 @@ document.addEventListener('DOMContentLoaded',
               <option value="A4-Diamond">A4-Diamond</option>
               <option value="B1-NaCl">B1-NaCl</option>
               <option value="B2-CsCl">B2-CsCl</option>
+              <option value="B3-ZnS">B3-ZnS</option>
+              <option value="B4-AlN">B4-AlN</option>
               <option value="B20-FeSi">B20-FeSi</option>
+              <option value="B81-NiAs">B81-NiAs</option>
+              <option value="C1-CaF2">C1-CaF2</option>
+              <option value="C2-FeS2">C2-FeS2</option>
+              <option value="C14-MgZn2">C14-MgZn2</option>
+              <option value="C15-MgCu2">C15-MgCu2</option>
               <option value="L12-Cu3Au">L12-Cu3Au</option>
+              <option value="D03-BiF3">D03-BiF3</option>
+              <option value="A15-Cr3Si">A15-Cr3Si</option>
+              <option value="D51-Al2O3">D51-Al2O3</option>
+              <option value="C1b-MgAgAs">C1b-MgAgAs</option>
+              <option value="Ca2BrN">Ca2BrN</option>
+              <option value="hR10-Calcite">hR10-Calcite</option>
+              <option value="Ho2CF2">Ho2CF2</option>
         	</select>
           </td>
-          <!--<tr>
+
+          <tr>
             <td>Z</td><td>:</td>
             <td>
               <input type="text" name="from_z" value="" size="6" class="ase-input">
@@ -118,29 +153,31 @@ document.addEventListener('DOMContentLoaded',
 		  </tr>
 
           <tr>
-          <td>Clean Materials</td><td>:</td>
-          <td>
-            <select name="quickprototype" class="ase-input">
-              <option value="">All</option>
-              <option value="clean">Clean Materials Only</option>
-        	</select>
-          </td>
-          </tr>
-
-          <tr>
-            <td>Number of Weyl Points</td><td>:</td>
+            <td>Space Group</td><td>:</td>
             <td>
-              <input type="text" name="from_w" value="" size="6" class="ase-input">
+              <input type="text" name="from_spgnum" value="" size="6" class="ase-input">
             </td>
             <td>-</td>
             <td>
-              <input type="text" name="to_w" value="" size="6" class="ase-input">
+              <input type="text" name="to_spgnum" value="" size="6" class="ase-input">
             </td>
-          </tr>-->
+		  </tr>
+
+
+          <tr>
+            <td>Clean Materials</td><td>:</td>
+          <td>
+		  	<select name="proto" class="ase-input">
+              <option value="_"></option>
+              <option value="True">Clean Materials Only</option>
+        	</select>
+          </td>
+		  </tr>
+
         </table>
 {% endblock search %}
 
-      <div class="form-group" style="margin-bottom:0px;">
+      <!--<div class="form-group" style="margin-bottom:0px;">
         <small class="form-text text-muted">
           <a href="https://wiki.fysik.dtu.dk/ase/ase/db/db.html#querying"
              target="_blank">
@@ -148,7 +185,6 @@ document.addEventListener('DOMContentLoaded',
           </a>
         </small>
       </div><br/>
-
       {# Flash query messages #}
       {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -170,7 +206,7 @@ document.addEventListener('DOMContentLoaded',
           <tr><td>{{ key }}</td><td>{{ long }}</td><td>{{ unit|safe }}</td></tr>
         {% endfor %}
         </table>
-      </div>
+		</div> -->
     </form>
   </div>
 
