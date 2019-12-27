@@ -11,8 +11,11 @@ $ git clone https://gitlab.com/ase/ase.git
 	modified:   ase/db/app.py
 	modified:   ase/db/row.py
 	modified:   ase/db/table.py
+	modified:   ase/db/core.py
 	added:      ase/db/plotly_band.py
-	modified:   ase/db/templates/row.html
+	modified:   ase/db/templates/*.html
+	added:      ase/db/static/logo.* 
+
 ```
 
 ### Go to ase repo and reinstall ase package by
@@ -26,5 +29,6 @@ To see the 3D structure, one needs to copy the jsmol file to the static folder `
 ### View database
 
 ```
-$ ase db tp01.db -w
+$ ase db tp02.db -w
 ```
+Then open browser with the url of http://0.0.0.0:5000/ 
