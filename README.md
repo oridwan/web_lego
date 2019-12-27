@@ -24,8 +24,13 @@ $ python setup.py install
 ```
 
 ### Copy and unzip the jsmol.zip to the ase/db/static
-To see the 3D structure, one needs to copy the jsmol file to the static folder `Installation/ase/db/static/jsmol`
+To see the 3D structure, one needs to copy the jsmol file (`ase_db/static/jsmol.zip`)
+to the static folder (`Installation_of_ase/ase/db/static/jsmol`)
 
+An example is given as follows,
+```
+cp -r ase/db/static/jsmol/* /anaconda3/lib/python3.6/site-packages/ase-3.20.0b1-py3.6.egg/ase/db/static/jsmol
+```
 ### View database
 
 ```
