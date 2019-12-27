@@ -7,9 +7,9 @@ from ase.db.core import float_to_time_string, now
 #all_columns = ['id', 'age', 'user', 'formula', 'calculator',
 #               'energy', 'fmax', 'pbc', 'volume',
 #               'charge', 'mass', 'smax', 'magmom']
-all_columns = ['mat_id', 'formula', 'z', 'spg', 'spgnum', 'proto',\
+all_columns = ['mat_id', 'formula', 'z', 'spg', 'proto',\
                'lines', 'ring_pts', 'weyl_pts', 'multi_deg_weyl_pts',\
-               'age']
+               'Max_dEdq']
 
 def get_sql_columns(columns):
     """ Map the names of table columns to names of columns in
