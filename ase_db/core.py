@@ -226,7 +226,6 @@ def parse_selection(selection, **kwargs):
     comparisons = []
 
     # QZ: parse the selection list
-
     if isinstance(expressions, list) and len(expressions)>0:
         expressions1 = [expressions[0]]
 
@@ -234,7 +233,6 @@ def parse_selection(selection, **kwargs):
             if i>0:
                 l1 = expression.split('=')
                 if expression.startswith('from'):
-                    print(i, expression)
                     if len(l1[1])>0:
                         key = l1[0].replace('from_','')
                         key_min = l1[1]
@@ -247,10 +245,9 @@ def parse_selection(selection, **kwargs):
                 elif not expression.startswith('to'):
                     if l1[1] not in ['_', '.', '']:
                         expressions1.append(expression)
-   
-        print('parsed expressions:', expressions1)
     else:
         expressions1 = expressions
+    # ---------------QZ: parse the selection list
 
     for expression in expressions1:
         if isinstance(expression, (list, tuple)):
