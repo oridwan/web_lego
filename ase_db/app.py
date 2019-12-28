@@ -41,7 +41,7 @@ app = Flask(__name__)
 projects = {}  # type: Dict[str, Dict[str, Any]]
 
 
-@app.route('/', defaults={'project_name': 'default'})
+@app.route('/', defaults={'project_name': 'search'})
 @app.route('/<project_name>')
 @app.route('/<project_name>/')
 def search(project_name: str):
@@ -78,7 +78,7 @@ def update(sid: int, what: str, x: str):
                            s=session)
 
 
-@app.route('/<project_name>/row/<uid>')
+@app.route('/<project_name>/materials/<uid>')
 def row(project_name: str, uid: str):
     """Show details for one database row."""
     project = projects[project_name]
@@ -187,7 +187,7 @@ def add_project(db: Database) -> None:
     kd = {key: (key, '', '') for key in all_keys}
     projects['default'] = {
         'name': 'default',
-        'uid_key': 'id',
+        'uid_key': 'mat_id',
         'key_descriptions': create_key_descriptions(kd),
         'database': db,
         'row_to_dict_function': row_to_dict,
