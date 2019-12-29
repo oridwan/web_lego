@@ -41,7 +41,7 @@ app = Flask(__name__)
 projects = {}  # type: Dict[str, Dict[str, Any]]
 
 
-@app.route('/', defaults={'project_name': 'search'})
+@app.route('/', defaults={'project_name': 'default'})
 @app.route('/<project_name>')
 @app.route('/<project_name>/')
 def search(project_name: str):
