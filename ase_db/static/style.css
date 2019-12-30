@@ -112,3 +112,18 @@ tr.rowentry > td > a {
   padding-left: 20px;
   padding-right: 20px;
 }
+
+#banner {
+  width:100%;
+}
+
+@media (max-width: 700px) {
+  .text-block {
+    width: 250px;
+  }
+
+  #banner {
+    min-height: 200px;
+    object-fit: cover;
+  }
+}
