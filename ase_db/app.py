@@ -40,7 +40,6 @@ app = Flask(__name__)
 
 projects = {}  # type: Dict[str, Dict[str, Any]]
 
-
 @app.route('/', defaults={'project_name': 'default'})
 @app.route('/<project_name>')
 @app.route('/<project_name>/')
@@ -105,6 +104,16 @@ def row(project_name: str, uid: str):
  
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid)
+
+@app.route('/<project_name>/news')
+def news(project_name: str):
+    """News page.
+
+    Contains news about the database.
+    """
+    project = projects[project_name]
+    return render_template(project['news_template'],
+                           p=project)
 
 @app.route('/atoms/<project_name>/<int:id>/<type>')
 def atoms(project_name: str, id: int, type: str):
@@ -194,7 +203,8 @@ def add_project(db: Database) -> None:
         'handle_query_function': handle_query,
         'default_columns': all_columns[:],
         'search_template': 'search.html',
-        'row_template': 'row.html'}
+        'row_template': 'row.html',
+        'news_template': 'news.html'}
 
 
 if __name__ == '__main__':
