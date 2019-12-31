@@ -24,9 +24,10 @@ or this::
 
 import io
 import sys
+import pandas as pd
 from typing import Dict, Any
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from ase.db import connect
 from ase.db.core import Database
 from ase.formula import Formula
@@ -124,6 +125,28 @@ def home(project_name: str):
     project = projects[project_name]
     return render_template(project['home_template'],
                            p=project)
+
+@app.route('/csv')
+def csv():
+    # df = pd.DataFrame(Materials_dict)
+    # csv = df.to_csv('table.csv')
+    csv = '1,2,3\n4,5,6\n'
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=table.csv"})
+
+@app.route('/xlsx')
+def xlsx():
+    # df = pd.DataFrame(Materials_dict)
+    # csv = df.to_xls('table.xlsx')
+    xlsx = '1,2,3\n4,5,6\n' # not proper--error opening file
+    return Response(
+        xlsx,
+        mimetype="text/xlsx",
+        headers={"Content-disposition":
+                 "attachment; filename=table.xlsx"})
 
 @app.route('/atoms/<project_name>/<int:id>/<type>')
 def atoms(project_name: str, id: int, type: str):
