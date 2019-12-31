@@ -45,46 +45,46 @@ document.addEventListener('DOMContentLoaded',
   </div>
 
 <div class="row">
-	<div class="col-md-7">
-	<img src="{{ url_for('static', filename='logo.png') }}" width="100%" height="100%" align="middle">
+	<div class="col-md-8">
+	  <img src="{{ url_for('static', filename='images/logo.png') }}" width="100%" height="100%" align="middle">
 	</div>
-	<div class="col-md-5"><h2> Database Statistics</h2>
-	<table class="table table-striped">
-	<tr>
-		<td>Number of Materials: </td>
-		<td>5014</td>
-	</tr>
-	<tr>
-		<td>Number of Unique Prototypes: </td>
-		<td>1267</td>
-	</tr>
+	<div class="col-md-4"><h3> Database Statistics</h3>
+	  <table class="table table-striped" id="search-stats">
+      <tr>
+        <td>Number of Materials: </td>
+        <td>5014</td>
+      </tr>
+      <tr>
+        <td>Number of Unique Prototypes: </td>
+        <td>1267</td>
+      </tr>
 
-	<tr>
-		<td>Number of Unique Space Groups: </td>
-		<td>152</td>
-	</tr>
+      <tr>
+        <td>Number of Unique Space Groups: </td>
+        <td>152</td>
+      </tr>
 
-	<tr>
-		<td>Number of Clean Materials: </td>
-		<td>176</td>
-	</tr>
-	<tr>
-		<td>Number of Nodal Lines: </td>
-		<td>417565</td>
-	</tr>
-	<tr>
-		<td>Number of Nodal Ring Points: </td>
-		<td>413164</td>
-	</tr>
-	<tr>
-		<td>Number of Weyl Points: </td>
-		<td>39288</td>
-	</tr>
-	<tr>
-		<td>Number of Multi-Weyl Points: </td>
-		<td>5016</td>
-	</tr>
-	</table>
+      <tr>
+        <td>Number of Clean Materials: </td>
+        <td>176</td>
+      </tr>
+      <tr>
+        <td>Number of Nodal Lines: </td>
+        <td>417565</td>
+      </tr>
+      <tr>
+        <td>Number of Nodal Ring Points: </td>
+        <td>413164</td>
+      </tr>
+      <tr>
+        <td>Number of Weyl Points: </td>
+        <td>39288</td>
+      </tr>
+      <tr>
+        <td>Number of Multi-Weyl Points: </td>
+        <td>5016</td>
+      </tr>
+    </table>
 	</div>
 </div>
 
@@ -110,46 +110,46 @@ document.addEventListener('DOMContentLoaded',
           width: 100%;
         }
       </style>
-        
-        <table class="search">
-          <td>Prototypes</td><td>:</td>
-          <td colspan="3">
-            <select name="proto" class="ase-input" id="dropdown">
-                  <option value="_"></option>
-                  <option value="A1-FCC">A1-FCC</option>
-                  <option value="A2-BCC">A2-BCC</option>
-                  <option value="A3-HCP">A3-HCP</option>
-                  <option value="A4-Diamond">A4-Diamond</option>
-                  <option value="B1-NaCl">B1-NaCl</option>
-                  <option value="B2-CsCl">B2-CsCl</option>
-                  <option value="B3-ZnS">B3-ZnS</option>
-                  <option value="B4-AlN">B4-AlN</option>
-                  <option value="B20-FeSi">B20-FeSi</option>
-                  <option value="B81-NiAs">B81-NiAs</option>
-                  <option value="C1-CaF2">C1-CaF2</option>
-                  <option value="C2-FeS2">C2-FeS2</option>
-                  <option value="C14-MgZn2">C14-MgZn2</option>
-                  <option value="C15-MgCu2">C15-MgCu2</option>
-                  <option value="L12-Cu3Au">L12-Cu3Au</option>
-                  <option value="D03-BiF3">D03-BiF3</option>
-                  <option value="A15-Cr3Si">A15-Cr3Si</option>
-                  <option value="D51-Al2O3">D51-Al2O3</option>
-                  <option value="C1b-MgAgAs">C1b-MgAgAs</option>
-                  <option value="Ca2BrN">Ca2BrN</option>
-                  <option value="hR10-Calcite">hR10-Calcite</option>
-                  <option value="Ho2CF2">Ho2CF2</option>
-              </select>
-            </td>
-          <tr>
-            <td>Z</td><td>:</td>
-            <td>
-              <input type="text" name="from_z" value="" size="1" class="ase-input">
-            </td>
-            <td>-</td>
-            <td>
-              <input type="text" name="to_z" value="" size="1" class="ase-input">
-            </td>
-		    </tr>
+
+      <table class="search">
+        <td>Prototypes</td><td>:</td>
+        <td colspan="3">
+          <select name="proto" class="ase-input" id="dropdown">
+            <option value="_"></option>
+            <option value="A1-FCC">A1-FCC</option>
+            <option value="A2-BCC">A2-BCC</option>
+            <option value="A3-HCP">A3-HCP</option>
+            <option value="A4-Diamond">A4-Diamond</option>
+            <option value="B1-NaCl">B1-NaCl</option>
+            <option value="B2-CsCl">B2-CsCl</option>
+            <option value="B3-ZnS">B3-ZnS</option>
+            <option value="B4-AlN">B4-AlN</option>
+            <option value="B20-FeSi">B20-FeSi</option>
+            <option value="B81-NiAs">B81-NiAs</option>
+            <option value="C1-CaF2">C1-CaF2</option>
+            <option value="C2-FeS2">C2-FeS2</option>
+            <option value="C14-MgZn2">C14-MgZn2</option>
+            <option value="C15-MgCu2">C15-MgCu2</option>
+            <option value="L12-Cu3Au">L12-Cu3Au</option>
+            <option value="D03-BiF3">D03-BiF3</option>
+            <option value="A15-Cr3Si">A15-Cr3Si</option>
+            <option value="D51-Al2O3">D51-Al2O3</option>
+            <option value="C1b-MgAgAs">C1b-MgAgAs</option>
+            <option value="Ca2BrN">Ca2BrN</option>
+            <option value="hR10-Calcite">hR10-Calcite</option>
+            <option value="Ho2CF2">Ho2CF2</option>
+          </select>
+        </td>
+        <tr>
+          <td>Z</td><td>:</td>
+          <td>
+            <input type="text" name="from_z" value="" size="1" class="ase-input">
+          </td>
+          <td>-</td>
+          <td>
+            <input type="text" name="to_z" value="" size="1" class="ase-input">
+          </td>
+        </tr>
         <tr>
           <td>Space Group</td><td>:</td>
           <td>
@@ -160,16 +160,17 @@ document.addEventListener('DOMContentLoaded',
             <input type="text" name="to_spgnum" value="" size="1" class="ase-input">
           </td>
         </tr>
-          <tr>
-            <td>Clean Materials</td><td>:</td>
+        <tr>
+          <td>Clean Materials</td><td>:</td>
           <td colspan="3">
-		  	<select name="clean" class="ase-input" id="dropdown">
+            <select name="clean" class="ase-input" id="dropdown">
               <option value="_"></option>
               <option value="True">Clean Materials Only</option>
-        	</select>
+            </select>
           </td>
-		  </tr>
-        </table>
+        </tr>
+      </table>
+        
 {% endblock search %}
 
       <!--<div class="form-group" style="margin-bottom:0px;">
