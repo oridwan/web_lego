@@ -115,6 +115,16 @@ def news(project_name: str):
     return render_template(project['news_template'],
                            p=project)
 
+@app.route('/<project_name>/home')
+def home(project_name: str):
+    """Home page.
+
+    Main home page for the database.
+    """
+    project = projects[project_name]
+    return render_template(project['home_template'],
+                           p=project)
+
 @app.route('/atoms/<project_name>/<int:id>/<type>')
 def atoms(project_name: str, id: int, type: str):
     """Return atomic structure as cif, xyz or json."""
@@ -204,7 +214,8 @@ def add_project(db: Database) -> None:
         'default_columns': all_columns[:],
         'search_template': 'search.html',
         'row_template': 'row.html',
-        'news_template': 'news.html'}
+        'news_template': 'news.html',
+        'home_template': 'home.html'}
 
 
 if __name__ == '__main__':
