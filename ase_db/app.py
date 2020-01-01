@@ -24,9 +24,6 @@ or this::
 
 import io
 import sys
-import pandas as pd
-from typing import Dict, Any
-
 from flask import Flask, render_template, request, Response
 from ase.db import connect
 from ase.db.core import Database
@@ -72,9 +69,11 @@ def update(sid: int, what: str, x: str):
     project = projects[session.project_name]
     session.update(what, x, request.args, project)
     table = session.create_table(project['database'], project['uid_key'])
+    csv = table.write_csv(disp=False)
     return render_template('table.html',
                            t=table,
                            p=project,
+                           #d=csv,
                            s=session)
 
 
@@ -127,26 +126,13 @@ def home(project_name: str):
                            p=project)
 
 @app.route('/csv')
-def csv():
-    # df = pd.DataFrame(Materials_dict)
-    # csv = df.to_csv('table.csv')
-    csv = '1,2,3\n4,5,6\n'
+def csv(content: str):
+    """Return atomic structure as cif, xyz or json."""
     return Response(
         csv,
         mimetype="text/csv",
         headers={"Content-disposition":
                  "attachment; filename=table.csv"})
-
-@app.route('/xlsx')
-def xlsx():
-    # df = pd.DataFrame(Materials_dict)
-    # csv = df.to_xls('table.xlsx')
-    xlsx = '1,2,3\n4,5,6\n' # not proper--error opening file
-    return Response(
-        xlsx,
-        mimetype="text/xlsx",
-        headers={"Content-disposition":
-                 "attachment; filename=table.xlsx"})
 
 @app.route('/atoms/<project_name>/<int:id>/<type>')
 def atoms(project_name: str, id: int, type: str):

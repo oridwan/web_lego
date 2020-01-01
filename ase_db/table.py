@@ -138,11 +138,15 @@ class Table:
         if self.keys:
             print('Keys:', ', '.join(cutlist(self.keys, self.cut)))
 
-    def write_csv(self):
+    def write_csv(self, disp=True):
+        content = ''
         if self.verbosity > 0:
-            print(', '.join(self.columns))
+            content += ', '.join(self.columns)
         for row in self.rows:
-            print(', '.join(str(val) for val in row.values))
+            content += '\n ' + ', '.join(str(val) for val in row.values)
+        if disp:
+            print(content)
+        return content
 
 
 class Row:
