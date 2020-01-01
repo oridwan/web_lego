@@ -129,8 +129,8 @@ def csv(sid: int):
     """Respond with .csv of the search table for download."""
     session = Session.get(sid)
     project = projects[session.project_name]
-    session.update('limit', 10000, request.args, project)
-    table = session.create_table(project['database'], project['uid_key'])
+    #session.update('limit', 10000, request.args, project)
+    table = session.create_table(project['database'], project['uid_key'], all=True)
     csv = table.write_csv(disp=False)
     return Response(
         csv,
