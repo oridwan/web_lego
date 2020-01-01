@@ -24,6 +24,7 @@ or this::
 
 import io
 import sys
+from typing import Dict, Any
 from flask import Flask, render_template, request, Response
 from ase.db import connect
 from ase.db.core import Database
@@ -69,11 +70,9 @@ def update(sid: int, what: str, x: str):
     project = projects[session.project_name]
     session.update(what, x, request.args, project)
     table = session.create_table(project['database'], project['uid_key'])
-    csv = table.write_csv(disp=False)
     return render_template('table.html',
                            t=table,
                            p=project,
-                           #d=csv,
                            s=session)
 
 
@@ -125,9 +124,13 @@ def home(project_name: str):
     return render_template(project['home_template'],
                            p=project)
 
-@app.route('/csv')
-def csv(content: str):
-    """Return atomic structure as cif, xyz or json."""
+@app.route('/csv/<int:sid>/')
+def csv(sid: int):
+    """Respond with .csv of the search table for download."""
+    session = Session.get(sid)
+    project = projects[session.project_name]
+    table = session.create_table(project['database'], project['uid_key'])
+    csv = table.write_csv(disp=False)
     return Response(
         csv,
         mimetype="text/csv",
