@@ -60,10 +60,12 @@ with open('db.tex','w') as f:
     f.write('\\begin{document}\n')
     f.write('\\section{All topological phonon candidates}\n')
     f.write('\\input{Tex/%s}\n'%('all-materials'))
-    f.write('\\newpage')
+    f.write('\\newpage\n')
     f.write('\\section{clean topological phonon candidates}\n')
     f.write('\\input{Tex/clean}\n')
-    f.write('\\newpage')
+    f.write('\\newpage\n')
+    f.write('\\section{high degenerate Weyl points}\n')
+    f.write('\\input{Tex/hdwps}\n')
     f.write('\\section{Details of all topological phonon materials}\n')
     for row in rows:
          (mid,spg,number,formula,prototype,fig_band,fig_dos,\
