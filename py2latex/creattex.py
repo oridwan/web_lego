@@ -5,6 +5,7 @@ import pandas as pd
 import time
 from tqdm import tqdm
 def set_style(f):
+    f.write('%\documentclass[amsmath,amssymb]{revtex4}\n')
     f.write('\documentclass[amsmath,amssymb]{revtex4}\n')
     f.write('\\usepackage[ansinew] {inputenc}\n')
     f.write('\\usepackage{graphicx}\n')
@@ -55,9 +56,13 @@ sql = """SELECT Material_id,
       FROM Materials"""
 cur.execute(sql)
 rows = cur.fetchall()
+count = 0
 with open('db.tex','w') as f:
     set_style(f)
     f.write('\\begin{document}\n')
+    f.write('\\input{title_abs}\n')
+    f.write('\\tableofcontents\n')
+    f.write('\\newpage\n')
     f.write('\\section{All topological phonon candidates}\n')
     f.write('\\input{Tex/%s}\n'%('all-materials'))
     f.write('\\newpage\n')
@@ -67,8 +72,11 @@ with open('db.tex','w') as f:
     f.write('\\section{high degenerate Weyl points}\n')
     f.write('\\input{Tex/hdwps}\n')
     f.write('\\section{Details of all topological phonon materials}\n')
-    for row in rows:
-         (mid,spg,number,formula,prototype,fig_band,fig_dos,\
-         poscar, incar, potcar, kpoints, supercell)=row
-         f.write('\\input{Tex/%s}\n'%(mid))
+    #for row in rows:
+    #    count += 1
+    #    (mid,spg,number,formula,prototype,fig_band,fig_dos,\
+    #    poscar, incar, potcar, kpoints, supercell)=row
+    #    f.write('\\input{Tex/%s}\n'%(mid))
+    #    if count == 10:
+    #        break
     f.write('\\end{document}\n')
