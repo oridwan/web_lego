@@ -38,6 +38,7 @@ def set_style(f):
 \\usepackage{tabu}
 \\usepackage{subfigure}
 \\usepackage{lscape}\n\n''')
+    f.write('\\renewcommand{\\thetable}{\\arabic{table}}')
 
 con = sqlite3.connect('test.db')
 cur = con.cursor()
@@ -71,7 +72,7 @@ with open('db.tex','w') as f:
     f.write('\\newpage\n')
     f.write('\\section{high degenerate Weyl points}\n')
     f.write('\\input{Tex/hdwps}\n')
-    f.write('\\section{Details of all topological phonon materials}\n')
+    #f.write('\\section{Details of all topological phonon materials}\n')
     #for row in rows:
     #    count += 1
     #    (mid,spg,number,formula,prototype,fig_band,fig_dos,\
