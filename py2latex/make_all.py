@@ -31,21 +31,21 @@ def set_figs(row, f):
     fig_name = 'imgs/' + row.mat_id + '.pdf'
     formula = row.formula
 
-    fig = plot_all(row['data']['plotly_data']['frequencies'],
-                   row['data']['plotly_data']['distances'],
-                   row['data']['plotly_data']['path_connections'],
-                   row['data']['plotly_data']['labels'],
-                   row['data']['plotly_data']['freq_pts'],
-                   row['data']['plotly_data']['dos'],
-                   row['data']['plotly_data']['pts'],
-                   row['data']['plotly_data']['lines'],
-                   row['data']['plotly_data']['title'],
-                   )
-    fig.write_image(fig_name)
+    #fig = plot_all(row['data']['plotly_data']['frequencies'],
+    #               row['data']['plotly_data']['distances'],
+    #               row['data']['plotly_data']['path_connections'],
+    #               row['data']['plotly_data']['labels'],
+    #               row['data']['plotly_data']['freq_pts'],
+    #               row['data']['plotly_data']['dos'],
+    #               row['data']['plotly_data']['pts'],
+    #               row['data']['plotly_data']['lines'],
+    #               row['data']['plotly_data']['title'],
+    #               )
+    #fig.write_image(fig_name)
     f.write('''
 \\begin{figure}[htbp]
     \\includegraphics[width=0.85\\textwidth]{%s}
-\\caption{The phonon band and DOS of %s}
+\\caption{The phonon band and DOS of %s.}
 \\label{%s}
 \\end{figure}\n'''%(fig_name,formula,label)
 )
@@ -72,7 +72,7 @@ def set_pt_table(row, f, captions, mid):
                     pt_dict[keys[id1]].append(col)
             df = pd.DataFrame(pt_dict)
             raw_tex = df.to_latex()
-            captions= name + ' along high symmetry lines of '+ captions
+            captions= name + ' along high symmetry lines of '+ captions + '.'
             raw_tex=c2latex(raw_tex,captions,mid+'-wp')
             f.write(raw_tex)
 
@@ -88,8 +88,8 @@ def set_path_table(row, f, captions, mid):
     for cols in data:
         for id1, col in enumerate(cols):
             col=col.replace('&#915;','$\Gamma$')
-            col=col.replace('<sub>','_')
-            col=col.replace('</sub>','')
+            col=col.replace('<sub>','$_')
+            col=col.replace('</sub>','$')
             pt_dict[keys[id1]].append(col)
     df = pd.DataFrame(pt_dict)
     raw_tex = df.to_latex()
@@ -112,8 +112,8 @@ with connect('../tp01.db') as db:
         name=row.mat_id+'-'+row.formula
         with open(tex_path,'w') as f:
             set_figs(row, f)
-            set_pt_table(row, f, name, row.mat_id)
             set_path_table(row, f, name, row.mat_id)
+            set_pt_table(row, f, name, row.mat_id)
     sys.stdout.write('> ')
     sys.stdout.flush()
     

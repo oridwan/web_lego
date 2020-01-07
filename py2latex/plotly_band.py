@@ -168,7 +168,8 @@ def plot_all(frequencies, distances, path_connections, labels, \
         col = 1,
         row = 1,
         )
-    freqs = [ max(x[-1]) for x in frequencies ]
+    freqs = [ max(line[-1]) for line in frequencies ]
+    print(freqs)
     fig.update_yaxes(range=[0, 1.05*max(freqs)])
 
     fig.update_layout(height=600, 
