@@ -14,7 +14,7 @@ $ git clone https://gitlab.com/ase/ase.git
 	modified:   ase/db/core.py
 	added:      ase/db/plotly_band.py
 	modified:   ase/db/templates/*.html
-	added:      ase/db/static/logo.* 
+	added:      ase/db/static/* 
 
 ```
 
