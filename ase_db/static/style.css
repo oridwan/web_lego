@@ -1,60 +1,47 @@
 a{
   color:#aa1819
 }
-
 a:hover{
   color:#484d51
 }
-
 .navbar-nav {
   padding-left: 20px;
 }
-
 .navbar-default .navbar-nav>li>a {
   color: #aa1819;
 }
-
 .navbar-default .navbar-nav>li>a:hover {
   color: #484d51;
 }
-
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
   background-color: #aa1819;
   border-color: #aa1819;
 }
-
 .pagination>li>a, .pagination>li>span {
   color: #aa1819;
 }
-
 .pagination>li>a:hover {
   color: #484d51;
 }
-
 .btn-link {
   color: #aa1819;
 }
-
 .btn-link:hover {
   color: #484d51;
 }
-
 button:focus, input:focus, select:focus, textarea:focus{
   border:1px solid #aa1819;
   outline:0
 }
-
 .form-control:focus {
   border-color: #aa1819;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(226, 92, 92, 0.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(226, 92, 92, 0.6);
 }
-
 .container-fluid {
   background-color: #e8e8e8;
 }
-
 .myrow {
 font-size: 0;
 }
@@ -70,26 +57,26 @@ vertical-align: bottom;
 .myrow p:nth-last-child(2) {
 margin-bottom: 0; /* optional */
 }
-
 .col-centered{
 float: none;
 margin: 0 auto;
 }
-
 .ui-autocomplete {
         max-height: 200px;
         overflow-y: auto;
         /* prevent horizontal scrollbar */
         overflow-x: hidden;
 }
-
 .item:hover .media-object {
     height: 70px;
     width: 140px;
 }
-
-#rowentry {background-color: #FFFFFF;}
-#rowentry:hover {background-color: #DDDDDD;}
+#rowentry {
+  background-color: #FFFFFF;
+}
+#rowentry:hover {
+  background-color: #DDDDDD;
+}
 tr.rowentry > td > a {
   color: #000000;
   text-decoration: none;
@@ -97,12 +84,10 @@ tr.rowentry > td > a {
   width: 100%;
   height: 100%;
 }
-
 /* Container holding the image and the text */
 .container {
   position: relative;
 }
-
 .text-block {
   position: absolute;
   top: 20px;
@@ -112,16 +97,45 @@ tr.rowentry > td > a {
   padding-left: 20px;
   padding-right: 20px;
 }
-
 #banner {
   width:100%;
 }
+#count {
+  padding-top: 20px;
+  color: #FFFFFF;
+}
+#stats-block {
+  background-color: #aa1819;
+}
+.stats-1 {
+  font-size: 32pt;
+  font-weight: bold;
+  color: #eeeeee;
+}
+p {
+  color: #cccccc;
+  font-size: 12pt;
+}
+.counter-wrapper {
+  vertical-align: middle;
+}
+#stat-top {
+  padding-top: 50px;
+  padding-bottom: 25px;
+}
+#stat-bot {
+  padding-top: 25px;
+  padding-bottom: 50px;
+}
+#title {
+  width: 100%;
+}
 
+/* Mobile viewports */
 @media (max-width: 700px) {
   .text-block {
     width: 250px;
   }
-
   #banner {
     min-height: 200px;
     object-fit: cover;
