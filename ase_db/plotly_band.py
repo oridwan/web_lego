@@ -12,23 +12,33 @@ def get_path_table(paths, labels):
 def get_pt_tables(pts):
     tables = [None]*3
     for w_dict in pts:
-        path_id = w_dict['path_id'][0] + 1
-        ratio = '{:6.3f}'.format(w_dict['ratio'][0])
-        freq = '{:6.3f}'.format(w_dict['frequency1'])
-        x, y, z, mode1, mode2 = w_dict['X'], w_dict['Y'], w_dict['Z'], w_dict['mode1'], w_dict['mode2']
-        multi = w_dict['multiplicity']
-        deg = w_dict['degeneracy']
-        coordinate = ' ({:6.3f}, {:6.3f}, {:6.3f})'.format(x, y, z)
-        type = w_dict['type']
-        if tables[type] is None:
-            tables[type] = []
-        tables[type].append([coordinate, freq, mode1+1, mode2+1, multi, deg, path_id, ratio])
+        try:
+            path_id = w_dict['path_id'][0] + 1
+            ratio = '{:6.3f}'.format(w_dict['ratio'][0])
+            freq = '{:6.3f}'.format(w_dict['frequency1'])
+            x, y, z, mode1, mode2 = w_dict['X'], w_dict['Y'], w_dict['Z'], w_dict['mode1'], w_dict['mode2']
+            multi = w_dict['multiplicity']
+            deg = w_dict['degeneracy']
+            coordinate = ' ({:6.3f}, {:6.3f}, {:6.3f})'.format(x, y, z)
+            type = w_dict['type']
+            if tables[type] is None:
+                tables[type] = []
+            tables[type].append([coordinate, freq, mode1+1, mode2+1, multi, deg, path_id, ratio])
+        except:
+            print(w_dict)
 
     return tables
 
 def html_label(label):
-    if label.find('Gamma')>0:
+    if label.find('\Gamma')>0:
         label = '&#915;'
+    elif label.find('\Sigma')>0:
+        label = '&#931;'
+    elif label.find('\Lambda')>0:
+        label = '&#923;'
+    elif label.find('\Delta')>0:
+        label = '&#916;'
+
     elif label.find('mathrm')>0:
         label = label.replace('$\\mathrm{','')
         label = label.replace('}$','')
@@ -99,6 +109,8 @@ def plot_all(frequencies, distances, path_connections, labels, \
     
     for line in lines:
         path_id = line['path_id']
+        if path_id is None:
+            path_id = 0
         ratio1 = line['Start_ratio']
         ratio2 = line['End_ratio']
         mode = line['mode']
