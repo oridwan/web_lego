@@ -178,7 +178,7 @@ jmol_isReady = function(applet)
       <div id="collapse3" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
         <div class="panel-body">
 			<div class='row'>
-				<div class='col-md-6'>
+				<div class='col-md-8'>
 				<table class="table table-striped">
 				  <tbody>
 				    <tr>
@@ -193,7 +193,11 @@ jmol_isReady = function(applet)
 				  		{% endfor %}
 				  </tbody>
 				</table>
+				The diagram paths were made according to Hinuma et al, Computational Materials Science 128 (2017) 140–184.
         		</div> <!--END col-md-6-->
+				<div class='col-md-4'>
+						<img src="/static/images/{{d['bravais']}}.jpg" id="banner" alt="News">
+				</div>
         	</div> <!--END ROW-->
         </div> <!--END PANEL BODY-->
       </div> <!--END COLLAPSE-->
