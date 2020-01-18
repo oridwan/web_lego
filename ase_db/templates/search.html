@@ -44,50 +44,6 @@ document.addEventListener('DOMContentLoaded',
     <h1>{{proj}}</h1>
   </div>
 
-<div class="row">
-	<div class="col-md-8">
-	  <img src="{{ url_for('static', filename='images/logo.png') }}" width="100%" height="100%" align="middle">
-	</div>
-	<div class="col-md-4"><h3> Database Statistics</h3>
-	  <table class="table table-striped" id="search-stats">
-      <tr>
-        <td>Number of Materials: </td>
-        <td>5014</td>
-      </tr>
-      <tr>
-        <td>Number of Unique Prototypes: </td>
-        <td>1267</td>
-      </tr>
-
-      <tr>
-        <td>Number of Unique Space Groups: </td>
-        <td>152</td>
-      </tr>
-
-      <tr>
-        <td>Number of Clean Materials: </td>
-        <td>176</td>
-      </tr>
-      <tr>
-        <td>Number of Nodal Lines: </td>
-        <td>417565</td>
-      </tr>
-      <tr>
-        <td>Number of Nodal Ring Points: </td>
-        <td>413164</td>
-      </tr>
-      <tr>
-        <td>Number of Weyl Points: </td>
-        <td>39288</td>
-      </tr>
-      <tr>
-        <td>Number of Multi-Weyl Points: </td>
-        <td>5016</td>
-      </tr>
-    </table>
-	</div>
-</div>
-
   <div class="well mt-2">
     <form id="mainFormID" class="navbar-form navbar-default mt-2"
           role="search"
@@ -96,7 +52,7 @@ document.addEventListener('DOMContentLoaded',
         <input type="text" name="query" id="formula-result"
                class="form-control mt-2 ase-input"
                placeholder="Search formula e.g. NaCl" size="60">
-        <button type="submit" class="btn btn-default">
+        <button type="submit" class="btn btn-danger">
           <i class="fa fa-search fa-1x" aria-hidden="true"></i>
         </button>
       </div><br/>
