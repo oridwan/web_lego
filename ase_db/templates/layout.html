@@ -15,30 +15,25 @@
   </head>
 
   <body {% block BodySettings %}{% endblock %}>
-    <!-- COLLAPSABLE NAVBAR -->
-    <nav class="navbar navbar-default navbar-fixed-top" data-offset-top="197">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/default/home"><img src="/static/images/nav-logo.png"></a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="/default/home">Home</a></li>
-            <li><a href="/default">Search</a></li>
-            <li><a href="/default/news">News</a></li>
-            <li><a href="https://arxiv.org">Citation</a></li>
-            <li><a href="https://github.com/qzhu2017/Topo_phonon">Source Code</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
 
-    <p class="top-pushdown">&nbsp;</p>
+    <div class="container" style="padding: 0px;">
+      <div class="row">
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+              <a href="/default/home">
+                <img src="/static/images/nav-logo.png" class="nav navbar-nav navbar-left" height="45px">
+              </a>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/default/home">Home</a></li>
+              <li><a href="/default">Search</a></li>
+              <li><a href="/default/news">News</a></li>
+              <li><a href="https://arxiv.org">Citation</a></li>
+              <li><a href="https://github.com/qzhu2017/Topo_phonon">Source code</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div> <!--end of container-->
 
 {% block content %}
 {% endblock %}
