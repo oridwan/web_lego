@@ -1,3 +1,11 @@
+::selection {
+  background:#333;
+  color:#fff;
+}
+::-moz-selection {
+  background:#333;
+  color:#fff;
+}
 a{
   color:#aa1819
 }
@@ -179,9 +187,21 @@ p {
   color: ##fff;
   font-size: xx-large;
 }
+#search h1{
+  font-size: 50pt;
+  color: #aa1819;
+  line-height: 150px;
+}
+table.search {
+  border-collapse: separate;
+  border-spacing: 0.5em 1em;
+}
+#dropdown {
+  width: 100%;
+}
 
 /* Mobile viewports */
-@media (max-width: 700px) {
+@media only screen and (max-width: 768px) {
   .text-block {
     width: 250px;
   }
@@ -192,5 +212,8 @@ p {
   .col-sm-4 {
     text-align: center;
     margin: 25px 0;
+  }
+  #search h1{
+    line-height: unset;
   }
 }
