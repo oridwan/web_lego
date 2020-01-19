@@ -199,6 +199,9 @@ table.search {
 #dropdown {
   width: 100%;
 }
+footer {
+  text-align: center;
+}
 
 /* Mobile viewports */
 @media only screen and (max-width: 768px) {
