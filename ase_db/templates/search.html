@@ -4,6 +4,7 @@
 Topological Phonon Database
 {% endblock %}
 {% block head %}
+<title>TPDB | Search</title>
 
 <script>
 function update_table(sid, what, x)
@@ -38,95 +39,95 @@ document.addEventListener('DOMContentLoaded',
 
 {% block content %}
 
-
-<div class="container">
-  <div class="row">
-    <h1>{{proj}}</h1>
-  </div>
-
-  <div class="well mt-2">
-    <form id="mainFormID" class="navbar-form navbar-default mt-2"
-          role="search"
-          action="javascript:update_table({{ session_id }}, 'query', '0')">
-      <div class="form-group" style="margin-top:5px;">
-        <input type="text" name="query" id="formula-result"
-               class="form-control mt-2 ase-input"
-               placeholder="Search formula e.g. NaCl" size="60">
-        <button type="submit" class="btn btn-danger">
-          <i class="fa fa-search fa-1x" aria-hidden="true"></i>
-        </button>
-      </div><br/>
 {% block search %}
-      <style>
-        table.search {
-          border-collapse: separate;
-          border-spacing: 0.5em 1em;
-        }
-        #dropdown {
-          width: 100%;
-        }
-      </style>
-
-      <table class="search">
-        <td>Prototypes</td><td>:</td>
-        <td colspan="3">
-          <select name="proto" class="ase-input" id="dropdown">
-            <option value="_"></option>
-            <option value="A1-FCC">A1-FCC</option>
-            <option value="A2-BCC">A2-BCC</option>
-            <option value="A3-HCP">A3-HCP</option>
-            <option value="A4-Diamond">A4-Diamond</option>
-            <option value="B1-NaCl">B1-NaCl</option>
-            <option value="B2-CsCl">B2-CsCl</option>
-            <option value="B3-ZnS">B3-ZnS</option>
-            <option value="B4-AlN">B4-AlN</option>
-            <option value="B20-FeSi">B20-FeSi</option>
-            <option value="B81-NiAs">B81-NiAs</option>
-            <option value="C1-CaF2">C1-CaF2</option>
-            <option value="C2-FeS2">C2-FeS2</option>
-            <option value="C14-MgZn2">C14-MgZn2</option>
-            <option value="C15-MgCu2">C15-MgCu2</option>
-            <option value="L12-Cu3Au">L12-Cu3Au</option>
-            <option value="D03-BiF3">D03-BiF3</option>
-            <option value="A15-Cr3Si">A15-Cr3Si</option>
-            <option value="D51-Al2O3">D51-Al2O3</option>
-            <option value="C1b-MgAgAs">C1b-MgAgAs</option>
-            <option value="Ca2BrN">Ca2BrN</option>
-            <option value="hR10-Calcite">hR10-Calcite</option>
-            <option value="Ho2CF2">Ho2CF2</option>
-          </select>
-        </td>
-        <tr>
-          <td>Z</td><td>:</td>
-          <td>
-            <input type="text" name="from_z" value="" size="1" class="ase-input">
-          </td>
-          <td>-</td>
-          <td>
-            <input type="text" name="to_z" value="" size="1" class="ase-input">
-          </td>
-        </tr>
-        <tr>
-          <td>Space Group</td><td>:</td>
-          <td>
-            <input type="text" name="from_spgnum" value="" size="1" class="ase-input">
-          </td>
-          <td>-</td>
-          <td>
-            <input type="text" name="to_spgnum" value="" size="1" class="ase-input">
-          </td>
-        </tr>
-        <tr>
-          <td>Clean Materials</td><td>:</td>
+<div class="container">
+  <div class="col-md-12">
+    <div class="row">
+      <h1>{{proj}}</h1>
+    </div>
+    <div class="col-md-6">
+      <div class="col-md-6">
+        <img src="/static/images/search.png" height="200px">
+      </div>
+      <div class="col-md-6" id="search">
+        <h1>Search</h1>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <form id="mainFormID" class="navbar-form navbar-default" role="search" action="javascript:update_table({{ session_id }}, 'query', '0')">        
+        <div class="form-group" style="margin-top:5px;">
+          <input type="text" name="query" id="formula-result"
+                class="form-control mt-2 ase-input"
+                placeholder="Search formula e.g. NaCl" size="40">
+          <button type="submit" class="btn btn-danger">
+            <i class="fa fa-search fa-1x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <table class="search">
+          <td>Prototypes</td><td>:</td>
           <td colspan="3">
-            <select name="clean" class="ase-input" id="dropdown">
+            <select name="proto" class="ase-input" id="dropdown">
               <option value="_"></option>
-              <option value="True">Clean Materials Only</option>
+              <option value="A1-FCC">A1-FCC</option>
+              <option value="A2-BCC">A2-BCC</option>
+              <option value="A3-HCP">A3-HCP</option>
+              <option value="A4-Diamond">A4-Diamond</option>
+              <option value="B1-NaCl">B1-NaCl</option>
+              <option value="B2-CsCl">B2-CsCl</option>
+              <option value="B3-ZnS">B3-ZnS</option>
+              <option value="B4-AlN">B4-AlN</option>
+              <option value="B20-FeSi">B20-FeSi</option>
+              <option value="B81-NiAs">B81-NiAs</option>
+              <option value="C1-CaF2">C1-CaF2</option>
+              <option value="C2-FeS2">C2-FeS2</option>
+              <option value="C14-MgZn2">C14-MgZn2</option>
+              <option value="C15-MgCu2">C15-MgCu2</option>
+              <option value="L12-Cu3Au">L12-Cu3Au</option>
+              <option value="D03-BiF3">D03-BiF3</option>
+              <option value="A15-Cr3Si">A15-Cr3Si</option>
+              <option value="D51-Al2O3">D51-Al2O3</option>
+              <option value="C1b-MgAgAs">C1b-MgAgAs</option>
+              <option value="Ca2BrN">Ca2BrN</option>
+              <option value="hR10-Calcite">hR10-Calcite</option>
+              <option value="Ho2CF2">Ho2CF2</option>
             </select>
           </td>
-        </tr>
-      </table>
-        
+          <tr>
+            <td>Z</td><td>:</td>
+            <td>
+              <input type="text" name="from_z" value="" size="1" class="ase-input">
+            </td>
+            <td>-</td>
+            <td>
+              <input type="text" name="to_z" value="" size="1" class="ase-input">
+            </td>
+          </tr>
+          <tr>
+            <td>Space Group</td><td>:</td>
+            <td>
+              <input type="text" name="from_spgnum" value="" size="1" class="ase-input">
+            </td>
+            <td>-</td>
+            <td>
+              <input type="text" name="to_spgnum" value="" size="1" class="ase-input">
+            </td>
+          </tr>
+          <tr>
+            <td>Clean Materials</td><td>:</td>
+            <td colspan="3">
+              <select name="clean" class="ase-input" id="dropdown">
+                <option value="_"></option>
+                <option value="True">Clean Materials Only</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+  <div id="database1"></div>
+</div>
+
 {% endblock search %}
 
       <!--<div class="form-group" style="margin-bottom:0px;">
@@ -158,12 +159,5 @@ document.addEventListener('DOMContentLoaded',
           <tr><td>{{ key }}</td><td>{{ long }}</td><td>{{ unit|safe }}</td></tr>
         {% endfor %}
         </table>
-		</div> -->
-    </form>
-  </div>
-
-  <div id="database1"></div>
-
-</div> <!-- class="container" -->
-
+    </div> -->
 {% endblock content %}
