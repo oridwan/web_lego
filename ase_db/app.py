@@ -234,4 +234,4 @@ def add_project(db: Database) -> None:
 if __name__ == '__main__':
     db = connect(sys.argv[1])
     add_project(db)
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
