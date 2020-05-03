@@ -5,13 +5,11 @@
 
     <link rel="shortcut icon" href="/static/favicon.png" />
   
-{% include 'js.html' %}
-{% include 'style.html' %}
-{% block head %}
-{% endblock %}
-
+    {% include 'js.html' %}
+    {% include 'style.html' %}
+    {% block head %}
+    {% endblock %}
     <title>{% block title %}{% endblock %}</title>
-
   </head>
 
   <body {% block BodySettings %}{% endblock %}>
@@ -29,21 +27,26 @@
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/default/home">Home</a></li>
-            <li><a href="/default">Search</a></li>
+            <li><a href="/default/search">Search</a></li>
             <li><a href="/default/news">News</a></li>
-            <li><a href="https://arxiv.org">Citation</a></li>
-            <li><a href="https://github.com/qzhu2017/Topo_phonon">Source Code</a></li>
+            <li><a href="https://arxiv.org" target="_blank">Citation</a></li>
+            <li><a href="https://github.com/qzhu2017/Topo_phonon" target="_blank">Source Code</a></li>
           </ul>
         </div>
       </div>
     </nav>
-
     <p class="top-pushdown">&nbsp;</p>
+    {% block content %}
+    {% endblock %}
+  </body>
 
-{% block content %}
-{% endblock %}
-
-</body>
-
-<footer>&copy; Copyright 2020, based on <a href='https://wiki.fysik.dtu.dk/ase/ase/db/db.html'>ASE database tool</a></footer>
+  <footer>
+    <p style="color: #888888; text-align: center;">
+      &copy; 
+      <script>
+        document.write(new Date().getFullYear())
+      </script>
+      based on the <a href='https://wiki.fysik.dtu.dk/ase/ase/db/db.html'>ASE database system.</a>
+    </p>
+  </footer>
 </html>

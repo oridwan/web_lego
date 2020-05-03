@@ -39,9 +39,7 @@ app = Flask(__name__)
 
 projects = {}  # type: Dict[str, Dict[str, Any]]
 
-@app.route('/', defaults={'project_name': 'default'})
-@app.route('/<project_name>')
-@app.route('/<project_name>/')
+@app.route('/<project_name>/search')
 def search(project_name: str):
     """Search page.
 
@@ -104,16 +102,7 @@ def row(project_name: str, uid: str):
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid)
 
-@app.route('/<project_name>/news')
-def news(project_name: str):
-    """News page.
-
-    Contains news about the database.
-    """
-    project = projects[project_name]
-    return render_template(project['news_template'],
-                           p=project)
-
+@app.route('/', defaults={'project_name': 'default'})
 @app.route('/<project_name>/home')
 def home(project_name: str):
     """Home page.
@@ -122,6 +111,16 @@ def home(project_name: str):
     """
     project = projects[project_name]
     return render_template(project['home_template'],
+                           p=project)
+
+@app.route('/<project_name>/news')
+def news(project_name: str):
+    """News page.
+
+    Contains news about the database.
+    """
+    project = projects[project_name]
+    return render_template(project['news_template'],
                            p=project)
 
 @app.route('/csv/<int:sid>/')
@@ -231,7 +230,8 @@ def add_project(db: Database) -> None:
         'home_template': 'home.html'}
 
 
-if __name__ == '__main__':
-    db = connect(sys.argv[1])
-    add_project(db)
-    app.run(host='0.0.0.0', debug=False)
+# Overridden by lines 335-344 in cli.py
+# if __name__ == '__main__':
+#     db = connect(sys.argv[1])
+#     add_project(db)
+#     app.run(host='0.0.0.0', port=8000, debug=True)
