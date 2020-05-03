@@ -340,7 +340,7 @@ def main(args):
             return
         import ase.db.app as app
         app.add_project(db)
-        app.app.run(host='0.0.0.0', port=5001, debug=True)
+        app.app.run(host='0.0.0.0', port=5001, debug=False)
         return
 
     columns = list(all_columns)
