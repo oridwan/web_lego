@@ -39,4 +39,21 @@ cp -r ase/db/static/jsmol/* ~/anaconda3/lib/python3.6/site-packages/ase-3.20.0b1
 ```bash
 $ ase db tp02.db -w
 ```
-Then open browser with the url of http://0.0.0.0:5000/ 
+Then open browser with the url of http://0.0.0.0:5000/
+
+### Running on CMS
+```bash
+$ cd ~/github/web-page
+$ git pull origin master
+$ cp -r ase_root/* ../ase-3.20.0b1
+$ cp -r ase_db/* ../ase-3.20.0b1/ase/db
+$ cd ../ase-3.20.0b1
+$ python setup.py install
+$ cd ~/github/web-page
+$ cp -r ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+$ cp -r ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+$ cp -r ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+$ conda activate tpdb
+(tpdb) $ nohup ase db tp02.db -w &
+```
+Hit enter once more after the last command.
