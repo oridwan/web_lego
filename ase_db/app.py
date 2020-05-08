@@ -102,26 +102,30 @@ def row(project_name: str, uid: str):
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid)
 
-@app.route('/', defaults={'project_name': 'default'})
-@app.route('/<project_name>/home')
-def home(project_name: str):
+@app.route('/hidden')
+def hidden():
+    """Hidden page
+
+    Temporary page used for webserver staging and testing. 
+    """
+    return render_template('hidden.html')
+
+@app.route('/')
+@app.route('/home')
+def home():
     """Home page.
 
     Main home page for the database.
     """
-    project = projects[project_name]
-    return render_template(project['home_template'],
-                           p=project)
+    return render_template('home.html')
 
-@app.route('/<project_name>/news')
-def news(project_name: str):
+@app.route('/news')
+def news():
     """News page.
 
     Contains news about the database.
     """
-    project = projects[project_name]
-    return render_template(project['news_template'],
-                           p=project)
+    return render_template('news.html')
 
 @app.route('/csv/<int:sid>/')
 def csv(sid: int):
@@ -225,10 +229,7 @@ def add_project(db: Database) -> None:
         'handle_query_function': handle_query,
         'default_columns': all_columns[:],
         'search_template': 'search.html',
-        'row_template': 'row.html',
-        'news_template': 'news.html',
-        'home_template': 'home.html'}
-
+        'row_template': 'row.html'}
 
 # Overridden by lines 335-344 in cli.py
 # if __name__ == '__main__':
