@@ -102,6 +102,7 @@ def row(project_name: str, uid: str):
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid)
 
+
 @app.route('/hidden')
 def hidden():
     """Hidden page
@@ -109,6 +110,7 @@ def hidden():
     Temporary page used for webserver staging and testing. 
     """
     return render_template('hidden.html')
+
 
 @app.route('/')
 @app.route('/home')
@@ -119,6 +121,7 @@ def home():
     """
     return render_template('home.html')
 
+
 @app.route('/news')
 def news():
     """News page.
@@ -126,6 +129,7 @@ def news():
     Contains news about the database.
     """
     return render_template('news.html')
+
 
 @app.route('/csv/<int:sid>/')
 def csv(sid: int):
@@ -140,6 +144,7 @@ def csv(sid: int):
         mimetype="text/csv",
         headers={"Content-disposition":
                  "attachment; filename=table.csv"})
+
 
 @app.route('/atoms/<project_name>/<int:id>/<type>')
 def atoms(project_name: str, id: int, type: str):
@@ -181,6 +186,7 @@ def gui(id: int):
 @app.route('/test')
 def test():
     from pyjokes import get_joke as j
+    1 / 0
     return j()
 
 
@@ -196,6 +202,16 @@ def robots():
             'Disallow: /\n',
             200)
 
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
+    
 
 @app.route('/favicon.ico')
 def favicon():
