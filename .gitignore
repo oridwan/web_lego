@@ -1144,3 +1144,4 @@ cmrconf.py
 tpdbconf.py
 *.code-workspace
 *.old
+*.db
