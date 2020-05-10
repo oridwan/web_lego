@@ -54,6 +54,6 @@ $ cp -r ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase
 $ cp -r ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 $ cp -r ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 $ conda activate tpdb
-(tpdb) $ nohup ase db tp02.db -w &
+(tpdb) $ nohup ase db /scratch/tpdb/tp02.db -w &
 ```
 Hit enter once more after the last command.
