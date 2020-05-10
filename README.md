@@ -45,14 +45,13 @@ Then open browser with the url of http://0.0.0.0:5000/
 ```bash
 $ cd ~/github/web-page
 $ git pull origin master
-$ cp -r ase_root/* ../ase-3.20.0b1
-$ cp -r ase_db/* ../ase-3.20.0b1/ase/db
-$ cd ../ase-3.20.0b1
+$ cp -r ase_root/* ~/github/ase-3.20.0b1
+$ cp -r ase_db/* ~/github/ase-3.20.0b1/ase/db
+$ cd ~/github/ase-3.20.0b1
 $ python setup.py install
-$ cd ~/github/web-page
-$ cp -r ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
-$ cp -r ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
-$ cp -r ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+$ cp -r ~/github/web-page/ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+$ cp -r ~/github/web-page/ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+$ cp -r ~/github/web-page/ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 $ conda activate tpdb
 (tpdb) $ nohup ase db /scratch/tpdb/tp01.db -w &
 ```
