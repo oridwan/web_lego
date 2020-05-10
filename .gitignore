@@ -1143,3 +1143,4 @@ cms_path.txt
 cmrconf.py
 tpdbconf.py
 *.code-workspace
+*.old
