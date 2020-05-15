@@ -43,16 +43,16 @@ Then open browser with the url of http://0.0.0.0:5000/
 
 ### Running on CMS
 ```bash
-$ cd /scratch/tpdb/github/web-page
-$ git pull origin master
-$ cp -r ase_root/* /scratch/tpdb/ase-3.20.0b1
-$ cp -r ase_db/* /scratch/tpdb/ase-3.20.0b1/ase/db
-$ cd /scratch/tpdb/ase-3.20.0b1
-$ python setup.py install
-$ cp -r /scratch/tpdb/github/web-page/ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
-$ cp -r /scratch/tpdb/github/web-page/ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
-$ cp -r /scratch/tpdb/github/web-page/ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 $ conda activate tpdb
+(tpdb) $ cd /scratch/tpdb/github/web-page
+(tpdb) $ git pull origin master
+(tpdb) $ cp -r ase_root/* /scratch/tpdb/ase-3.20.0b1
+(tpdb) $ cp -r ase_db/* /scratch/tpdb/ase-3.20.0b1/ase/db
+(tpdb) $ cd /scratch/tpdb/ase-3.20.0b1
+(tpdb) $ python setup.py install
+(tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+(tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
+(tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 (tpdb) $ nohup ase db /scratch/tpdb/tp01.db -w &
 ```
 Hit enter once more after the last command.
