@@ -49,7 +49,7 @@ $ conda activate tpdb
 (tpdb) $ cp -r ase_root/* /scratch/tpdb/ase-3.20.0b1
 (tpdb) $ cp -r ase_db/* /scratch/tpdb/ase-3.20.0b1/ase/db
 (tpdb) $ cd /scratch/tpdb/ase-3.20.0b1
-(tpdb) $ python setup.py install
+(tpdb) $ pip install -e .
 (tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 (tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 (tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
