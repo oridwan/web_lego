@@ -53,6 +53,7 @@ $ conda activate tpdb
 (tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/css ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 (tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/images ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
 (tpdb) $ cp -r /scratch/tpdb/github/web-page/ase_db/static/js ~/miniconda3/envs/tpdb/lib/python3.8/site-packages/ase-3.20.0b1-py3.8.egg/ase/db/static/
-(tpdb) $ nohup ase db /scratch/tpdb/tp01.db -w &
+(tpdb) $ cd /scratch/tpdb/
+(tpdb) $ nohup ase db tp01.db -w &
 ```
 Hit enter once more after the last command.
