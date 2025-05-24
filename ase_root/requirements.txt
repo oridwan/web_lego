@@ -1,4 +1,3 @@
-ase
 flask
 plotly
 numpy

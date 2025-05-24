@@ -29,7 +29,7 @@ from flask import Flask, render_template, request, Response
 from ase.db import connect
 from ase.db.core import Database
 from ase.formula import Formula
-from ase.db.web import create_key_descriptions, Session
+from ase.db.web import  Session
 from ase.db.row import row2dct, AtomsRow
 from ase.db.table import all_columns
 from .plotly_band import plot_all, get_path_table, get_pt_tables
@@ -41,7 +41,13 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../ase_root')))
 app = Flask(__name__)
 app.config.from_object(Config)
-
+def create_key_descriptions(keys):
+    """Return dictionary of key -> (name, unit, description)."""
+    key_descriptions = {}
+    for key in keys:
+        name, unit, description = keys[key] if isinstance(keys[key], tuple) else (key, '', '')
+        key_descriptions[key] = (name or key, unit, description)
+    return key_descriptions
 if not app.debug:
     if app.config['MAIL_SERVER']:
         auth = None
