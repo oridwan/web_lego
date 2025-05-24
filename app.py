@@ -294,5 +294,5 @@ if __name__ == '__main__':
     add_project(db)
 
     # Use Render's dynamic port environment variable
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5002))
     app.run(host='0.0.0.0', port=port)
