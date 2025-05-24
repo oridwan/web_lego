@@ -278,9 +278,15 @@ def add_project(db: Database) -> None:
         'default_columns': all_columns[:],
         'search_template': 'search.html',
         'row_template': 'row.html'}
+if __name__ == '__main__':
+    from ase.db import connect
+    import os
 
-# Overridden by lines 335-344 in cli.py
-# if __name__ == '__main__':
-#     db = connect(sys.argv[1])
-#     add_project(db)
-#     app.run(host='0.0.0.0', port=8000, debug=True)
+    # Load the database (make sure tp01.db exists in the same directory)
+    db_path = os.path.join(os.path.dirname(__file__), 'tp01.db')
+    db = connect(db_path)
+    add_project(db)
+
+    # Use Render's dynamic port environment variable
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
