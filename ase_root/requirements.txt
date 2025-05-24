@@ -1,4 +1,6 @@
-numpy
-psycopg2-binary
+ase
 flask
 plotly
+numpy
+scipy
+matplotlib
