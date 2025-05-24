@@ -21,7 +21,7 @@ with open('README.rst') as fd:
     long_description = fd.read()
 
 # Get the current version number:
-with open('ase/__init__.py') as fd:
+with open('ase/ase/__init__.py') as fd:
     version = re.search("__version__ = '(.*)'", fd.read()).group(1)
 
 
