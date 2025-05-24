@@ -37,7 +37,8 @@ from ase.db.config import Config
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
-
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../ase_root')))
 app = Flask(__name__)
 app.config.from_object(Config)
 
