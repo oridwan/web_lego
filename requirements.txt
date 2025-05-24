@@ -1,3 +1,6 @@
-./ase_root
+-e ./ase_root
 flask
 plotly
+numpy
+scipy
+matplotlib
