@@ -32,7 +32,7 @@ from ase.formula import Formula
 from ase.db.web import  Session
 from ase.db.row import row2dct, AtomsRow
 from ase.db.table import all_columns
-from .plotly_band import plot_all, get_path_table, get_pt_tables
+from plotly_band import plot_all, get_path_table, get_pt_tables
 from ase.db.config import Config
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
