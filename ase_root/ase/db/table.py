@@ -6,7 +6,7 @@ import numpy as np
 
 from ase.db.core import float_to_time_string, now
 
-all_columns = ['id', 'formula', 'space_group_number', 'pearson_symbol', 'mace_energy', 'ff_energy', 'vasp_energy', 'topology']  
+all_columns = ['id', 'formula', 'space_group_number', 'pearson_symbol', 'mace_energy', 'ff_energy', 'vasp_energy', 'topology', 'remark']  
 
 def get_sql_columns(columns):
     """ Map the names of table columns to names of columns in
