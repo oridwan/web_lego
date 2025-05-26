@@ -17,4 +17,4 @@ fi
 
 # 3. Start the ASE web server
 echo "Starting ASE web server..."
-ase db lego_sp2.db -w
+ase db lego-sp2.db -w
