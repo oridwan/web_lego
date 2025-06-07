@@ -1,3 +1,5 @@
+# fmt: off
+
 """ASE LAMMPS Calculator Library Version"""
 
 
@@ -377,7 +379,7 @@ xz and yz are the tilt of the lattice vectors, all to be edited.
         system_changes: list of str
             List of what has changed since last calculation.  Can be
             any combination of these five: 'positions', 'numbers', 'cell',
-            'pbc', 'charges' and 'magmoms'.
+            'pbc', 'initial_charges' and 'initial_magmoms'.
         """
         if len(system_changes) == 0:
             return
@@ -415,9 +417,10 @@ xz and yz are the tilt of the lattice vectors, all to be edited.
         if self.parameters.atom_types is None:
             raise NameError("atom_types are mandatory.")
 
-        do_rebuild = (not np.array_equal(atoms.numbers,
-                                         self.previous_atoms_numbers)
-                      or ("numbers" in system_changes))
+        do_rebuild = (
+            not np.array_equal(atoms.numbers, self.previous_atoms_numbers)
+            or any(_ in system_changes for _ in ('numbers', 'initial_charges'))
+        )
         if not do_rebuild:
             do_redo_atom_types = not np.array_equal(
                 atoms.numbers, self.previous_atoms_numbers)
@@ -494,10 +497,13 @@ xz and yz are the tilt of the lattice vectors, all to be edited.
         )
         self.results['free_energy'] = self.results['energy']
 
-        ids = self.lmp.numpy.extract_atom("id")
-        # if ids doesn't match atoms then data is MPI distributed, which
-        # we can't handle
-        assert len(ids) == len(atoms)
+        # check for MPI active as per https://matsci.org/t/lammps-ids-in-python/60509/5
+        world_size = self.lmp.extract_setting('world_size')
+        if world_size != 1:
+            raise RuntimeError('Unsupported MPI active as indicated by '
+                               f'world_size == {world_size} != 1')
+        # select just n_local which we assume is equal to len(atoms)
+        ids = self.lmp.numpy.extract_atom("id")[0:len(atoms)]
         self.results["energies"] = convert(
             self.lmp.numpy.extract_compute('pe_peratom',
                                            self.LMP_STYLE_ATOM,
@@ -612,6 +618,14 @@ xz and yz are the tilt of the lattice vectors, all to be edited.
         for (i, i_type) in current_types - previous_types:
             cmd = f"set atom {i} type {i_type}"
             self.lmp.command(cmd)
+
+        # set charges only when LAMMPS `atom_style` permits charges
+        # https://docs.lammps.org/Library_properties.html#extract-atom-flags
+        if self.lmp.extract_setting('q_flag') == 1:
+            charges = atoms.get_initial_charges()
+            if np.any(charges != 0.0):
+                for i, q in enumerate(charges):
+                    self.lmp.command(f'set atom {i + 1} charge {q}')
 
         self.previous_atoms_numbers = atoms.numbers.copy()
 

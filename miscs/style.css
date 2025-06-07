@@ -1,0 +1,77 @@
+th {
+  font-weight: normal;
+  text-align: left;
+}
+.text-underline {
+  text-decoration: underline;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+.column3 {
+  float: left;
+  width: 33%;
+  padding: 5px;
+}
+
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/*------------------------------------*\
+	LISTS
+\*------------------------------------*/
+ul{
+	width:1080px;
+	margin-bottom:20px;
+	overflow:hidden;
+	border-top:1px solid #ccc;
+}
+li{
+	line-height:1.5em;
+	border-bottom:1px solid #ccc;
+	float:left;
+	display:inline;
+}
+#single li	{ width:100%;}
+#double li	{ width:50%;}
+#triple li	{ width:33.333%; }
+#quad li		{ width:25%; }
+#five li		{ width:20%; }
+#six li		{ width:16.666%; }
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}

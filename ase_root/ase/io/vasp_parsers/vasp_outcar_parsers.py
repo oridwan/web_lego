@@ -1,3 +1,5 @@
+# fmt: off
+
 """
 Module for parsing OUTCAR files.
 """
@@ -11,8 +13,10 @@ import numpy as np
 
 import ase
 from ase import Atoms
-from ase.calculators.singlepoint import (SinglePointDFTCalculator,
-                                         SinglePointKPoint)
+from ase.calculators.singlepoint import (
+    SinglePointDFTCalculator,
+    SinglePointKPoint,
+)
 from ase.data import atomic_numbers
 from ase.io import ParseError, read
 from ase.io.utils import ImageChunk
@@ -396,7 +400,9 @@ class Magmom(VaspChunkPropertyParser):
         idx = parts.index('magnetization') + 1
         magmom_lst = parts[idx:]
         if len(magmom_lst) != 1:
-            magmom = np.array(list(map(float, magmom_lst)))
+            magmom: Union[np.ndarray, float] = np.array(
+                list(map(float, magmom_lst))
+            )
         else:
             magmom = float(magmom_lst[0])
         return {'magmom': magmom}

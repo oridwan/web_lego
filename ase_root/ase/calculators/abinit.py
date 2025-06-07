@@ -1,3 +1,5 @@
+# fmt: off
+
 """This module defines an ASE interface to ABINIT.
 
 http://www.abinit.org/
@@ -7,8 +9,11 @@ from pathlib import Path
 from subprocess import check_output
 
 import ase.io.abinit as io
-from ase.calculators.genericfileio import (BaseProfile, CalculatorTemplate,
-                                           GenericFileIOCalculator)
+from ase.calculators.genericfileio import (
+    BaseProfile,
+    CalculatorTemplate,
+    GenericFileIOCalculator,
+)
 
 
 class AbinitProfile(BaseProfile):

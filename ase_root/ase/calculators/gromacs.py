@@ -1,3 +1,5 @@
+# fmt: off
+
 """This module defines an ASE interface to GROMACS.
 
 http://www.gromacs.org/
@@ -23,8 +25,11 @@ from glob import glob
 import numpy as np
 
 from ase import units
-from ase.calculators.calculator import (CalculatorSetupError, FileIOCalculator,
-                                        all_changes)
+from ase.calculators.calculator import (
+    CalculatorSetupError,
+    FileIOCalculator,
+    all_changes,
+)
 from ase.io.gromos import read_gromos, write_gromos
 
 

@@ -1,7 +1,9 @@
+# fmt: off
 import pytest
 from numpy.testing import assert_allclose
 
 from ase.build import bulk
+from ase.calculators.fd import calculate_numerical_stress
 
 
 @pytest.mark.calculator_lite()
@@ -17,5 +19,5 @@ def test_main(factory):
     )
     atoms.calc = calc
 
-    assert_allclose(atoms.get_stress(), calc.calculate_numerical_stress(atoms),
+    assert_allclose(atoms.get_stress(), calculate_numerical_stress(atoms),
                     atol=1e-3, rtol=1e-3)

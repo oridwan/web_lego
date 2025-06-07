@@ -1,11 +1,16 @@
+# fmt: off
 """Test the ase.vibrations.Vibrations object using a harmonic calculator."""
 import os
 from pathlib import Path
 
 import numpy as np
 import pytest
-from numpy.testing import (assert_array_almost_equal,
-                           assert_array_equal)
+from numpy.testing import assert_array_almost_equal, assert_array_equal
+
+try:
+    from numpy.exceptions import ComplexWarning  # NumPy 2.0.0
+except ImportError:
+    from numpy import ComplexWarning  # type: ignore[attr-defined,no-redef]
 
 import ase.io
 from ase import Atoms, units
@@ -364,7 +369,7 @@ def test_init(n2_data):
 
 
 def test_energies_and_modes(n2_data, n2_vibdata):
-    energies, modes = n2_vibdata.get_energies_and_modes()
+    energies, _modes = n2_vibdata.get_energies_and_modes()
     assert_array_almost_equal(n2_data['ref_frequencies'],
                               energies / units.invcm,
                               decimal=5)
@@ -438,14 +443,14 @@ def test_constrained_atoms(n2_data):
 
 
 def test_dos(n2_vibdata):
-    with pytest.warns(np.ComplexWarning):
+    with pytest.warns(ComplexWarning):
         dos = n2_vibdata.get_dos()
     assert_array_almost_equal(dos.get_energies(),
                               n2_vibdata.get_energies())
 
 
 def test_pdos(n2_vibdata):
-    with pytest.warns(np.ComplexWarning):
+    with pytest.warns(ComplexWarning):
         pdos = n2_vibdata.get_pdos()
     assert_array_almost_equal(pdos[0].get_energies(),
                               n2_vibdata.get_energies())

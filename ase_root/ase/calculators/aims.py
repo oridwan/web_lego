@@ -1,3 +1,5 @@
+# fmt: off
+
 """This module defines an ASE interface to FHI-aims.
 
 Felix Hanke hanke@liverpool.ac.uk
@@ -12,9 +14,12 @@ import re
 
 import numpy as np
 
-from ase.calculators.genericfileio import (BaseProfile, CalculatorTemplate,
-                                           GenericFileIOCalculator,
-                                           read_stdout)
+from ase.calculators.genericfileio import (
+    BaseProfile,
+    CalculatorTemplate,
+    GenericFileIOCalculator,
+    read_stdout,
+)
 from ase.io.aims import write_aims, write_control
 
 
@@ -168,7 +173,7 @@ class AimsTemplate(CalculatorTemplate):
         return AimsProfile.from_config(cfg, self.name, **kwargs)
 
     def socketio_argv(self, profile, unixsocket, port):
-        return []
+        return [profile.command]
 
     def socketio_parameters(self, unixsocket, port):
         if port:

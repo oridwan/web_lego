@@ -1,13 +1,15 @@
+# fmt: off
+
+from itertools import product
 from math import cos, pi, sin
 from typing import Any, Dict, Optional, Tuple, Union
 
 import numpy as np
-from itertools import product
-from ase.cell import Cell
-
-from scipy.spatial.transform import Rotation
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import Axes3D, proj3d
+from scipy.spatial.transform import Rotation
+
+from ase.cell import Cell
 
 
 def bz_vertices(icell, dim=3):
@@ -119,7 +121,7 @@ class SpacePlot:
 
             def draw(self, renderer):
                 xs3d, ys3d, zs3d = self._verts3d
-                xs, ys, zs = proj3d.proj_transform(xs3d, ys3d,
+                xs, ys, _zs = proj3d.proj_transform(xs3d, ys3d,
                                                    zs3d, self.ax.axes.M)
                 self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
                 FancyArrowPatch.draw(self, renderer)

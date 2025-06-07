@@ -1,12 +1,14 @@
+# fmt: off
+
 import copy
 import os
+import shlex
 import subprocess
 import warnings
 from abc import abstractmethod
 from dataclasses import dataclass, field
 from math import pi, sqrt
 from pathlib import Path
-import shlex
 from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 import numpy as np
@@ -15,7 +17,7 @@ from ase.calculators.abc import GetPropertiesMixin
 from ase.cell import Cell
 from ase.config import cfg as _cfg
 from ase.outputs import Properties, all_outputs
-from ase.utils import jsonable
+from ase.utils import deprecated, jsonable
 
 from .names import names
 
@@ -203,6 +205,10 @@ def get_calculator_class(name):
         from ase.calculators.acemolecule import ACE as Calculator
     elif name == 'Psi4':
         from ase.calculators.psi4 import Psi4 as Calculator
+    elif name == 'mattersim':
+        from mattersim.forcefield import MatterSimCalculator as Calculator
+    elif name == 'mace_mp':
+        from mace.calculators import mace_mp as Calculator
     elif name in external_calculators:
         Calculator = external_calculators[name]
     else:
@@ -387,31 +393,6 @@ def kpts2ndarray(kpts, atoms=None):
     return kpts2kpts(kpts, atoms=atoms).kpts
 
 
-class EigenvalOccupationMixin:
-    """Define 'eigenvalues' and 'occupations' properties on class.
-
-    eigenvalues and occupations will be arrays of shape (spin, kpts, nbands).
-
-    Classes must implement the old-fashioned get_eigenvalues and
-    get_occupations methods."""
-
-    # We should maybe deprecate this and rely on the new
-    # Properties object for eigenvalues/occupations.
-
-    @property
-    def eigenvalues(self):
-        return self._propwrapper().eigenvalues
-
-    @property
-    def occupations(self):
-        return self._propwrapper().occupations
-
-    def _propwrapper(self):
-        from ase.calculator.singlepoint import OutputPropertyWrapper
-
-        return OutputPropertyWrapper(self)
-
-
 class Parameters(dict):
     """Dictionary for parameters.
 
@@ -568,6 +549,10 @@ class BaseCalculator(GetPropertiesMixin):
     @property
     def name(self) -> str:
         return self._get_name()
+
+    def todict(self) -> dict[str, Any]:
+        """Obtain a dictionary of parameter information"""
+        return {}
 
 
 class Calculator(BaseCalculator):
@@ -894,19 +879,27 @@ class Calculator(BaseCalculator):
                 )
                 raise RuntimeError(msg) from e
 
+    @deprecated('Please use `ase.calculators.fd.FiniteDifferenceCalculator`.')
     def calculate_numerical_forces(self, atoms, d=0.001):
         """Calculate numerical forces using finite difference.
 
-        All atoms will be displaced by +d and -d in all directions."""
-        from ase.calculators.test import numeric_forces
+        All atoms will be displaced by +d and -d in all directions.
 
-        return numeric_forces(atoms, d=d)
+        .. deprecated:: 3.24.0
+        """
+        from ase.calculators.fd import calculate_numerical_forces
 
+        return calculate_numerical_forces(atoms, eps=d)
+
+    @deprecated('Please use `ase.calculators.fd.FiniteDifferenceCalculator`.')
     def calculate_numerical_stress(self, atoms, d=1e-6, voigt=True):
-        """Calculate numerical stress using finite difference."""
-        from ase.calculators.test import numeric_stress
+        """Calculate numerical stress using finite difference.
 
-        return numeric_stress(atoms, d=d, voigt=voigt)
+        .. deprecated:: 3.24.0
+        """
+        from ase.calculators.fd import calculate_numerical_stress
+
+        return calculate_numerical_stress(atoms, eps=d, voigt=voigt)
 
     def _deprecated_get_spin_polarized(self):
         msg = (

@@ -1,3 +1,5 @@
+# fmt: off
+
 """
 Implementation of the Precon abstract base class and subclasses
 """
@@ -19,8 +21,10 @@ from ase.constraints import FixAtoms
 from ase.filters import Filter
 from ase.geometry import find_mic
 from ase.neighborlist import neighbor_list
-from ase.optimize.precon.neighbors import (estimate_nearest_neighbour_distance,
-                                           get_neighbours)
+from ase.optimize.precon.neighbors import (
+    estimate_nearest_neighbour_distance,
+    get_neighbours,
+)
 from ase.utils import longsum, tokenize_version
 
 try:
@@ -1126,7 +1130,7 @@ class Exp_FF(Exp, FF):
         start_time = time.time()
         if self.apply_positions:
             # compute neighbour list
-            i_list, j_list, rij_list, fixed_atoms = get_neighbours(
+            i_list, j_list, rij_list, _fixed_atoms = get_neighbours(
                 atoms, self.r_cut, self.neighbor_list)
             self.logfile.write(
                 f'--- neighbour list created in {(time.time() - start_time)} s '

@@ -1,14 +1,24 @@
+# fmt: off
+
+import shlex
 from abc import ABC, abstractmethod
 from contextlib import ExitStack
 from os import PathLike
 from pathlib import Path
-import shlex
 from typing import Any, Iterable, List, Mapping, Optional, Set
 
 from ase.calculators.abc import GetOutputsMixin
 from ase.calculators.calculator import (
-    BaseCalculator, _validate_command, BadConfiguration)
+    BadConfiguration,
+    BaseCalculator,
+    _validate_command,
+)
 from ase.config import cfg as _cfg
+
+link_calculator_docs = (
+    "https://wiki.fysik.dtu.dk/ase/ase/calculators/"
+    "calculators.html#calculator-configuration"
+)
 
 
 class BaseProfile(ABC):
@@ -271,7 +281,10 @@ class GenericFileIOCalculator(BaseCalculator, GetOutputsMixin):
         self.template = template
         if profile is None:
             if template.name not in self.cfg.parser:
-                raise BadConfiguration(f'No configuration of {template.name}')
+                raise BadConfiguration(
+                    f"No configuration of '{template.name}'. "
+                    f"See '{link_calculator_docs}'"
+                )
             try:
                 profile = template.load_profile(self.cfg)
             except Exception as err:

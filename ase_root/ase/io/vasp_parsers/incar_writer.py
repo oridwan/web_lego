@@ -1,3 +1,5 @@
+# fmt: off
+
 from collections.abc import Iterable
 
 
@@ -22,7 +24,7 @@ def generate_incar_lines(parameters):
         return "\n".join(incar_lines) + "\n"
 
 
-def generate_line(key, value, num_spaces=1):
+def generate_line(key, value, num_spaces=0):
     indent = " " * num_spaces
     if isinstance(value, str):
         if value.find("\n") != -1:

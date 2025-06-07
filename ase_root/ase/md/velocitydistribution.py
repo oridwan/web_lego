@@ -1,3 +1,5 @@
+# fmt: off
+
 # VelocityDistributions.py -- set up a velocity distribution
 
 """Module for setting up velocity distributions such as Maxwell–Boltzmann.
@@ -7,7 +9,7 @@ MaxwellBoltzmannDistribution, which sets the momenta of a list of
 atoms according to a Maxwell-Boltzmann distribution at a given
 temperature.
 """
-from typing import Optional
+from typing import Literal, Optional
 
 import numpy as np
 
@@ -23,31 +25,43 @@ class UnitError(Exception):
     """Exception raised when wrong units are specified"""
 
 
-def force_temperature(atoms: Atoms, temperature: float, unit: str = "K"):
-    """Force the (nuclear) temperature to a precise value.
+def force_temperature(atoms: Atoms,
+                      temperature: float,
+                      unit: Literal["K", "eV"] = "K"):
+    """
+    Force the temperature of the atomic system to a precise value.
 
-    Parameters:
-    atoms: ase.Atoms
-        the structure
-    temperature: float
-        nuclear temperature to set
-    unit: str
-        'K' or 'eV' as unit for the temperature
+    This function adjusts the momenta of the atoms to achieve the
+    exact specified temperature, overriding the Maxwell-Boltzmann
+    distribution. The temperature can be specified in either Kelvin
+    (K) or electron volts (eV).
+
+    Parameters
+    ----------
+    atoms
+        The atomic system represented as an ASE Atoms object.
+    temperature
+        The exact temperature to force for the atomic system.
+    unit
+        The unit of the specified temperature.
+        Can be either 'K' (Kelvin) or 'eV' (electron volts). Default is 'K'.
     """
 
     if unit == "K":
-        E_temp = temperature * units.kB
+        target_temp = temperature * units.kB
     elif unit == "eV":
-        E_temp = temperature
+        target_temp = temperature
     else:
         raise UnitError(f"'{unit}' is not supported, use 'K' or 'eV'.")
 
     if temperature > eps_temp:
-        E_kin0 = atoms.get_kinetic_energy() / len(atoms) / 1.5
-        gamma = E_temp / E_kin0
+        ndof = atoms.get_number_of_degrees_of_freedom()
+        current_temp = 2 * atoms.get_kinetic_energy() / ndof
+        scale = target_temp / current_temp
     else:
-        gamma = 0.0
-    atoms.set_momenta(atoms.get_momenta() * np.sqrt(gamma))
+        scale = 0.0
+
+    atoms.set_momenta(atoms.get_momenta() * np.sqrt(scale))
 
 
 def _maxwellboltzmanndistribution(masses, temp, communicator=None, rng=None):
@@ -101,7 +115,7 @@ def MaxwellBoltzmannDistribution(
         The atoms.  Their momenta will be modified.
 
     temp: float (deprecated)
-        The temperature in eV.  Deprecated, use temperature_K instead.
+        The temperature in eV.  Deprecated, use ``temperature_K`` instead.
 
     temperature_K: float
         The temperature in Kelvin.
@@ -119,7 +133,7 @@ def MaxwellBoltzmannDistribution(
     rng: Numpy RNG (optional)
         Random number generator.  Default: numpy.random
         If you would like to always get the identical distribution, you can
-        supply a random seed like `rng=numpy.random.RandomState(seed)`, where
+        supply a random seed like ``rng=numpy.random.RandomState(seed)``, where
         seed is an integer.
     """
     temp = units.kB * process_temperature(temp, temperature_K, 'eV')

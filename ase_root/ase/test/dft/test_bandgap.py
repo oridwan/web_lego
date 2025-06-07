@@ -1,4 +1,6 @@
+# fmt: off
 import numpy as np
+
 from ase.dft.bandgap import bandgap
 
 

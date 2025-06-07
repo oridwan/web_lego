@@ -1,4 +1,7 @@
+# fmt: off
+
 import numpy as np
+
 from ase.build.niggli import niggli_reduce_cell
 
 

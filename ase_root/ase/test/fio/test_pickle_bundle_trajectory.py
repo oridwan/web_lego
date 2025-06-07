@@ -1,3 +1,4 @@
+# fmt: off
 import sys
 from pathlib import Path
 from subprocess import check_call, check_output
@@ -10,8 +11,10 @@ from ase.calculators.calculator import compare_atoms
 from ase.calculators.emt import EMT
 from ase.constraints import FixAtoms
 from ase.io import read, write
-from ase.io.bundletrajectory import (BundleTrajectory,
-                                     print_bundletrajectory_info)
+from ase.io.bundletrajectory import (
+    BundleTrajectory,
+    print_bundletrajectory_info,
+)
 from ase.io.pickletrajectory import PickleTrajectory
 
 trajname = 'pickletraj.traj'

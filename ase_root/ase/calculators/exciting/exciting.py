@@ -1,3 +1,5 @@
+# fmt: off
+
 """ASE Calculator for the ground state exciting DFT code.
 
 Exciting calculator class in this file allow for writing exciting input
@@ -17,10 +19,15 @@ from typing import Any, Mapping
 
 import ase.io.exciting
 from ase.calculators.calculator import PropertyNotImplementedError
-from ase.calculators.exciting.runner import (SimpleBinaryRunner,
-                                             SubprocessRunResults)
-from ase.calculators.genericfileio import (BaseProfile, CalculatorTemplate,
-                                           GenericFileIOCalculator)
+from ase.calculators.exciting.runner import (
+    SimpleBinaryRunner,
+    SubprocessRunResults,
+)
+from ase.calculators.genericfileio import (
+    BaseProfile,
+    CalculatorTemplate,
+    GenericFileIOCalculator,
+)
 
 
 class ExcitingProfile(BaseProfile):

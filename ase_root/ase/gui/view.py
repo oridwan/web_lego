@@ -1,3 +1,5 @@
+# fmt: off
+
 from math import cos, sin, sqrt
 from os.path import basename
 
@@ -55,11 +57,20 @@ def get_cell_coordinates(cell, shifted=False):
 
 
 def get_bonds(atoms, covalent_radii):
-    from ase.neighborlist import NeighborList
-    nl = NeighborList(covalent_radii * 1.5,
-                      skin=0, self_interaction=False)
-    nl.update(atoms)
-    nbonds = nl.nneighbors + nl.npbcneighbors
+    from ase.neighborlist import PrimitiveNeighborList
+
+    nl = PrimitiveNeighborList(
+        covalent_radii * 1.5,
+        skin=0.0,
+        self_interaction=False,
+        bothways=False,
+    )
+    nl.update(atoms.pbc, atoms.get_cell(complete=True), atoms.positions)
+    number_of_neighbors = sum(indices.size for indices in nl.neighbors)
+    number_of_pbc_neighbors = sum(
+        offsets.any(axis=1).sum() for offsets in nl.displacements
+    )  # sum up all neighbors that have non-zero supercell offsets
+    nbonds = number_of_neighbors + number_of_pbc_neighbors
 
     bonds = np.empty((nbonds, 5), int)
     if nbonds == 0:
@@ -85,7 +96,6 @@ def get_bonds(atoms, covalent_radii):
 class View:
     def __init__(self, rotations):
         self.colormode = 'jmol'  # The default colors
-        self.labels = None
         self.axes = rotate(rotations)
         self.configured = False
         self.frame = None
@@ -99,6 +109,7 @@ class View:
         # scaling factors for vectors
         self.force_vector_scale = self.config['force_vector_scale']
         self.velocity_vector_scale = self.config['velocity_vector_scale']
+        self.magmom_vector_scale = self.config['magmom_vector_scale']
 
         # buttons
         self.b1 = 1  # left
@@ -139,6 +150,11 @@ class View:
         else:
             self.draw()
 
+    def get_bonds(self, atoms):
+        # this method exists rather than just using the standalone function
+        # so that it can be overridden by external libraries
+        return get_bonds(atoms, self.get_covalent_radii(atoms))
+
     def set_atoms(self, atoms):
         natoms = len(atoms)
 
@@ -151,7 +167,7 @@ class View:
         if self.showing_bonds():
             atomscopy = atoms.copy()
             atomscopy.cell *= self.images.repeat[:, np.newaxis]
-            bonds = get_bonds(atomscopy, self.get_covalent_radii(atoms))
+            bonds = self.get_bonds(atomscopy)
         else:
             bonds = np.empty((0, 5), int)
 
@@ -168,29 +184,29 @@ class View:
         self.X_cell = self.X[natoms:natoms + len(B1)]
         self.X_bonds = self.X[natoms + len(B1):]
 
-        if 1:  # if init or frame != self.frame:
-            cell = atoms.cell
-            ncellparts = len(B1)
-            nbonds = len(bonds)
+        cell = atoms.cell
+        ncellparts = len(B1)
+        nbonds = len(bonds)
 
-            if 1:  # init or (atoms.cell != self.atoms.cell).any():
-                self.X_cell[:] = np.dot(B1, cell)
-                self.B = np.empty((ncellparts + nbonds, 3))
-                self.B[:ncellparts] = np.dot(B2, cell)
+        self.X_cell[:] = np.dot(B1, cell)
+        self.B = np.empty((ncellparts + nbonds, 3))
+        self.B[:ncellparts] = np.dot(B2, cell)
 
-            if nbonds > 0:
-                P = atoms.positions
-                Af = self.images.repeat[:, np.newaxis] * cell
-                a = P[bonds[:, 0]]
-                b = P[bonds[:, 1]] + np.dot(bonds[:, 2:], Af) - a
-                d = (b**2).sum(1)**0.5
-                r = 0.65 * self.get_covalent_radii()
-                x0 = (r[bonds[:, 0]] / d).reshape((-1, 1))
-                x1 = (r[bonds[:, 1]] / d).reshape((-1, 1))
-                self.X_bonds[:] = a + b * x0
-                b *= 1.0 - x0 - x1
-                b[bonds[:, 2:].any(1)] *= 0.5
-                self.B[ncellparts:] = self.X_bonds + b
+        if nbonds > 0:
+            P = atoms.positions
+            Af = self.images.repeat[:, np.newaxis] * cell
+            a = P[bonds[:, 0]]
+            b = P[bonds[:, 1]] + np.dot(bonds[:, 2:], Af) - a
+            d = (b**2).sum(1)**0.5
+            r = 0.65 * self.get_covalent_radii()
+            x0 = (r[bonds[:, 0]] / d).reshape((-1, 1))
+            x1 = (r[bonds[:, 1]] / d).reshape((-1, 1))
+            self.X_bonds[:] = a + b * x0
+            b *= 1.0 - x0 - x1
+            b[bonds[:, 2:].any(1)] *= 0.5
+            self.B[ncellparts:] = self.X_bonds + b
+
+        self.obs.set_atoms.notify()
 
     def showing_bonds(self):
         return self.window['toggle-show-bonds']
@@ -201,22 +217,24 @@ class View:
     def toggle_show_unit_cell(self, key=None):
         self.set_frame()
 
-    def update_labels(self):
+    def get_labels(self):
         index = self.window['show-labels']
         if index == 0:
-            self.labels = None
-        elif index == 1:
-            self.labels = list(range(len(self.atoms)))
-        elif index == 2:
-            self.labels = list(get_magmoms(self.atoms))
-        elif index == 4:
+            return None
+
+        if index == 1:
+            return list(range(len(self.atoms)))
+
+        if index == 2:
+            return list(get_magmoms(self.atoms))
+
+        if index == 4:
             Q = self.atoms.get_initial_charges()
-            self.labels = [f'{q:.4g}' for q in Q]
-        else:
-            self.labels = self.atoms.get_chemical_symbols()
+            return [f'{q:.4g}' for q in Q]
+
+        return self.atoms.symbols
 
     def show_labels(self):
-        self.update_labels()
         self.draw()
 
     def toggle_show_axes(self, key=None):
@@ -239,6 +257,9 @@ class View:
     def toggle_show_forces(self, key=None):
         self.draw()
 
+    def toggle_show_magmoms(self, key=None):
+        self.draw()
+
     def hide_selected(self):
         self.images.visible[self.images.selected] = False
         self.draw()
@@ -255,7 +276,7 @@ class View:
 
     def colors_window(self, key=None):
         win = ColorWindow(self)
-        self.register_vulnerable(win)
+        self.obs.new_atoms.register(win.notify_atoms_changed)
         return win
 
     def focus(self, x=None):
@@ -420,6 +441,21 @@ class View:
             f = self.get_forces()
             vector_arrays.append(f * self.force_vector_scale)
 
+        if self.window['toggle-show-magmoms']:
+            magmom = get_magmoms(self.atoms)
+            # Turn this into a 3D vector if it is a scalar
+            magmom_vecs = []
+            for i in range(len(magmom)):
+                if isinstance(magmom[i], (int, float)):
+                    magmom_vecs.append(np.array([0, 0, magmom[i]]))
+                elif isinstance(magmom[i], np.ndarray) and len(magmom[i]) == 3:
+                    magmom_vecs.append(magmom[i])
+                else:
+                    raise TypeError('Magmom is not a 3-component vector '
+                                'or a scalar')
+            magmom_vecs = np.array(magmom_vecs)
+            vector_arrays.append(magmom_vecs * 0.5 * self.magmom_vector_scale)
+
         for array in vector_arrays:
             array[:] = np.dot(array, axes) + X[:n]
 
@@ -434,7 +470,7 @@ class View:
         ncell = len(self.X_cell)
         bond_linewidth = self.scale * 0.15
 
-        self.update_labels()
+        labels = self.get_labels()
 
         if self.arrowkey_mode == self.ARROWKEY_MOVE:
             movecolor = GREEN
@@ -485,10 +521,10 @@ class View:
                                A[a, 0], A[a, 1], A[a, 0] + ra, A[a, 1] + ra)
 
                     # Draw labels on the atoms
-                    if self.labels is not None:
+                    if labels is not None:
                         self.window.text(A[a, 0] + ra / 2,
                                          A[a, 1] + ra / 2,
-                                         str(self.labels[a]))
+                                         str(labels[a]))
 
                     # Draw cross on constrained atoms
                     if constrained[a]:
@@ -524,7 +560,9 @@ class View:
         self.window.update()
 
         if status:
-            self.status(self.atoms)
+            self.status.status(self.atoms)
+
+        self.obs.draw.notify()
 
     def arrow(self, coords, width):
         line = self.window.line

@@ -1,3 +1,4 @@
+# fmt: off
 import io
 import warnings
 
@@ -8,8 +9,14 @@ from ase import Atoms
 from ase.build import molecule
 from ase.calculators.calculator import compare_atoms
 from ase.io.bytes import parse_atoms, to_bytes
-from ase.io.cif import (CIFLoop, NoStructureData, parse_cif, parse_loop,
-                        read_cif, write_cif)
+from ase.io.cif import (
+    CIFLoop,
+    NoStructureData,
+    parse_cif,
+    parse_loop,
+    read_cif,
+    write_cif,
+)
 
 
 def parse_string(string):
@@ -276,11 +283,8 @@ def test_cif():
     elements = np.unique(atoms_leg.get_atomic_numbers())
     for n in (11, 17, 53):
         assert n in elements
-    try:
-        atoms_leg.info['occupancy']
-        raise AssertionError
-    except KeyError:
-        pass
+
+    assert 'occupancy' not in atoms_leg.info
 
     cif_file = io.StringIO(content)
     # new behavior is to still not read the K atoms, but build info

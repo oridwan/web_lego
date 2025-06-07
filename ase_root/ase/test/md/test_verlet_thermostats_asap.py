@@ -1,11 +1,11 @@
+# fmt: off
 import numpy as np
 import pytest
 
 from ase.build import bulk
 from ase.io import Trajectory, read
 from ase.md import Andersen, Langevin, VelocityVerlet
-from ase.md.velocitydistribution import (MaxwellBoltzmannDistribution,
-                                         Stationary)
+from ase.md.velocitydistribution import MaxwellBoltzmannDistribution, Stationary
 from ase.units import fs
 
 

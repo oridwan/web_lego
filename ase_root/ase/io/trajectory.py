@@ -1,3 +1,5 @@
+# fmt: off
+
 """Trajectory"""
 import contextlib
 import io
@@ -25,8 +27,8 @@ def Trajectory(filename, mode='r', atoms=None, properties=None, master=None,
 
     Parameters:
 
-    filename: str
-        The name of the file.  Traditionally ends in .traj.
+    filename: str | Path
+        The name/path of the file.  Traditionally ends in .traj.
     mode: str
         The mode.  'r' is read mode, the file should already exist, and
         no atoms argument should be specified.
@@ -66,7 +68,7 @@ class TrajectoryWriter:
 
         Parameters:
 
-        filename: str
+        filename: str | Path
             The name of the file.  Traditionally ends in .traj.
         mode: str
             The mode.  'r' is read mode, the file should already exist, and
@@ -497,7 +499,7 @@ def main():
                                    description='Convert old trajectory '
                                    'file(s) to new format. '
                                    'The old file is kept as a1.traj.old.')
-    opts, args = parser.parse_args()
+    _opts, args = parser.parse_args()
     for name in args:
         convert(name)
 

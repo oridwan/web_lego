@@ -1,3 +1,4 @@
+# fmt: off
 from pathlib import Path
 
 import numpy as np
@@ -5,10 +6,12 @@ import pytest
 
 from ase.build import bulk, molecule
 from ase.calculators.emt import EMT
-from ase.calculators.subprocesscalculator import (MPICommand,
-                                                  NamedPackedCalculator,
-                                                  ParallelDispatch,
-                                                  gpaw_process)
+from ase.calculators.subprocesscalculator import (
+    MPICommand,
+    NamedPackedCalculator,
+    ParallelDispatch,
+    gpaw_process,
+)
 from ase.optimize import BFGS
 
 

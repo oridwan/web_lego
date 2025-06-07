@@ -1,3 +1,5 @@
+# fmt: off
+
 """ This module defines a FileIOCalculator for DFTB+
 
 http://www.dftbplus.org/
@@ -10,8 +12,12 @@ import os
 
 import numpy as np
 
-from ase.calculators.calculator import (FileIOCalculator, kpts2ndarray,
-                                        kpts2sizeandoffsets, BadConfiguration)
+from ase.calculators.calculator import (
+    BadConfiguration,
+    FileIOCalculator,
+    kpts2ndarray,
+    kpts2sizeandoffsets,
+)
 from ase.units import Bohr, Hartree
 
 

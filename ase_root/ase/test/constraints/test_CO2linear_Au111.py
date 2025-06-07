@@ -1,3 +1,4 @@
+# fmt: off
 from math import cos, pi, sin
 
 import pytest
@@ -33,6 +34,8 @@ def test_au111(wrap, testdir):
         slab.set_scaled_positions(slab.get_scaled_positions() % 1.0)
     constraint = FixLinearTriatomic(triples=[(-2, -3, -1)])
     slab.set_constraint(constraint)
+
+    assert slab.get_number_of_degrees_of_freedom() == 53
 
     with BFGS(slab, trajectory='relax_%d.traj' % wrap) as dyn:
         dyn.run(fmax=0.05)

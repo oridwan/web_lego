@@ -1,3 +1,5 @@
+# fmt: off
+
 import os
 
 import numpy as np
@@ -43,7 +45,7 @@ class AddAtoms:
         combobox = ui.ComboBox(labels, values)
         win.add([_('Add:'), combobox,
                  ui.Button(_('File ...'), callback=choose_file)])
-        combobox.widget.bind('<Return>', lambda e: self.add())
+        ui.bind_enter(combobox.widget, lambda e: self.add())
 
         combobox.value = default
         self.combobox = combobox
@@ -136,7 +138,7 @@ class AddAtoms:
         atoms = self.gui.atoms
         if len(atoms) and self.picky.value:
             from ase.geometry import get_distances
-            disps, dists = get_distances(atoms.positions,
+            _disps, dists = get_distances(atoms.positions,
                                          newatoms.positions)
             mindist = dists.min()
             if mindist < 0.5:

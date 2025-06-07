@@ -1,7 +1,9 @@
+# fmt: off
 import importlib.util
 import os
 import re
 import tempfile
+from functools import cached_property
 from pathlib import Path
 
 import pytest
@@ -16,8 +18,10 @@ from ase.calculators.dftb import Dftb
 from ase.calculators.dftd3 import DFTD3
 from ase.calculators.elk import ELK
 from ase.calculators.espresso import Espresso, EspressoTemplate
-from ase.calculators.exciting.exciting import (ExcitingGroundStateCalculator,
-                                               ExcitingGroundStateTemplate)
+from ase.calculators.exciting.exciting import (
+    ExcitingGroundStateCalculator,
+    ExcitingGroundStateTemplate,
+)
 from ase.calculators.genericfileio import read_stdout
 from ase.calculators.gromacs import Gromacs, get_gromacs_version
 from ase.calculators.mopac import MOPAC
@@ -28,7 +32,6 @@ from ase.calculators.siesta import Siesta
 from ase.calculators.vasp import Vasp, get_vasp_version
 from ase.config import Config
 from ase.io.espresso import Namelist
-from ase.utils import lazyproperty
 
 
 class NotInstalled(Exception):
@@ -43,7 +46,7 @@ Could not import asetest package.  Please install ase-datafiles
 using e.g. "pip install ase-datafiles" to run calculator integration
 tests.""")
 
-    @lazyproperty
+    @cached_property
     def datafiles_module(self):
         try:
             import asetest
@@ -51,7 +54,7 @@ tests.""")
             return None
         return asetest
 
-    @lazyproperty
+    @cached_property
     def datafile_config(self):
         # XXXX TODO avoid requiring the dummy [parallel] section
         datafiles = self.datafiles_module
@@ -88,7 +91,7 @@ pseudo_path = {path}/siesta
 """
         return datafile_config
 
-    @lazyproperty
+    @cached_property
     def cfg(self):
         # First we load the usual configfile.
         # But we don't want to run tests against the user's production
@@ -267,10 +270,10 @@ class EspressoFactory:
     def version(self):
         return self.profile.version()
 
-    @lazyproperty
+    @cached_property
     def pseudopotentials(self):
         pseudopotentials = {}
-        for path in self.profile.pseudo_dir.glob('*.UPF'):
+        for path in Path(self.profile.pseudo_dir).glob('*.UPF'):
             fname = path.name
             # Names are e.g. si_lda_v1.uspp.F.UPF
             symbol = fname.split('_', 1)[0].capitalize()

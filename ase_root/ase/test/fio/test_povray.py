@@ -1,3 +1,4 @@
+# fmt: off
 from subprocess import DEVNULL, check_call
 
 import numpy as np
@@ -7,8 +8,12 @@ from ase import Atoms
 from ase.build import molecule
 from ase.cell import Cell
 from ase.io import write
-from ase.io.pov import (POVRAYIsosurface, get_bondpairs,
-                        set_high_bondorder_pairs, write_pov)
+from ase.io.pov import (
+    POVRAYIsosurface,
+    get_bondpairs,
+    set_high_bondorder_pairs,
+    write_pov,
+)
 
 
 def test_povray_io(testdir, povray_executable):
@@ -81,7 +86,7 @@ def test_compute_isosurface(isosurface_things):
 
 
 def test_render_isosurface(testdir, isosurface_things, povray_executable):
-    cell, center_cell_position, isosurf = isosurface_things
+    cell, _center_cell_position, isosurf = isosurface_things
 
     atoms = Atoms(
         'H3',

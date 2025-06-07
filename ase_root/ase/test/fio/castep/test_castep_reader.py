@@ -1,8 +1,11 @@
+# fmt: off
 """Tests for the Castep.read method"""
 from io import StringIO
 
 import numpy as np
+import pytest
 
+from ase.constraints import FixAtoms, FixCartesian
 from ase.io.castep.castep_reader import (
     _read_forces,
     _read_fractional_coordinates,
@@ -13,8 +16,8 @@ from ase.io.castep.castep_reader import (
     _read_stress,
     _read_unit_cell,
     _set_energy_and_free_energy,
+    read_castep_castep,
 )
-from ase.constraints import FixAtoms, FixCartesian
 from ase.units import GPa
 
 HEADER = """\
@@ -205,6 +208,85 @@ HEADER_DETAILED = """\
 """  # noqa: E501
 
 
+# Some XC functionals cannot be mapped by ASE to keywords; e.g. from Castep 25
+HEADER_PZ_LDA = """\
+ ************************************ Title ************************************
+ 
+
+ ***************************** General Parameters ******************************
+  
+ output verbosity                               : normal  (1)
+ write checkpoint data to                       : castep.check
+ type of calculation                            : single point energy
+ stress calculation                             : on
+ density difference calculation                 : off
+ electron localisation func (ELF) calculation   : off
+ Hirshfeld analysis                             : off
+ polarisation (Berry phase) analysis            : off
+ molecular orbital projected DOS                : off
+ deltaSCF calculation                           : off
+ unlimited duration calculation
+ timing information                             : on
+ memory usage estimate                          : on
+ write extra output files                       : on
+ write final potential to formatted file        : off
+ write final density to formatted file          : off
+ write BibTeX reference list                    : on
+ write OTFG pseudopotential files               : on
+ write electrostatic potential file             : on
+ write bands file                               : on
+ checkpoint writing                             : both castep_bin and check files
+ random number generator seed                   :  112211524
+
+ *********************** Exchange-Correlation Parameters ***********************
+  
+ using functional                               : Perdew-Zunger Local Density Approximation
+ DFT+D: Semi-empirical dispersion correction    : off
+
+ ************************* Pseudopotential Parameters **************************
+  
+ pseudopotential representation                 : reciprocal space
+ <beta|phi> representation                      : reciprocal space
+ spin-orbit coupling                            : off
+
+ **************************** Basis Set Parameters *****************************
+  
+ basis set accuracy                             : FINE
+ finite basis set correction                    : none
+
+ **************************** Electronic Parameters ****************************
+  
+ number of  electrons                           :  28.00    
+ net charge of system                           :  0.000    
+ treating system as non-spin-polarized
+ number of bands                                :         18
+
+ ********************* Electronic Minimization Parameters **********************
+  
+ Method: Treating system as metallic with density mixing treatment of electrons,
+         and number of  SD  steps               :          1
+         and number of  CG  steps               :          4
+  
+ total energy / atom convergence tol.           : 0.1000E-04   eV
+ eigen-energy convergence tolerance             : 0.1429E-06   eV
+ max force / atom convergence tol.              : ignored
+ periodic dipole correction                     : NONE
+
+ ************************** Density Mixing Parameters **************************
+  
+ density-mixing scheme                          : Pulay
+ max. length of mixing history                  :         20
+
+ *********************** Population Analysis Parameters ************************
+  
+ Population analysis with cutoff                :  3.000       A
+ Population analysis output                     : summary and pdos components
+
+ *******************************************************************************
+
+"""  # noqa: E501,W291,W293
+
+
 def test_header():
     """Test if the header blocks can be parsed correctly."""
     out = StringIO(HEADER)
@@ -239,6 +321,24 @@ def test_header_detailed():
         'elec_energy_tol': 1e-5,
         'elec_convergence_win': 3,
         'mixing_scheme': 'Broyden',
+    }
+    assert parameters == parameters_ref
+
+
+def test_header_castep25():
+    """Test if header block with unknown XC functional is parsed correctly"""
+    out = StringIO(HEADER_PZ_LDA)
+    parameters = _read_header(out)
+    parameters_ref = {
+        "task": "SinglePoint",
+        "iprint": 1,
+        "calculate_stress": True,
+        "xc_functional": "Perdew-Zunger Local Density Approximation",
+        "sedc_apply": False,
+        "basis_precision": "FINE",
+        "finite_basis_corr": 0,
+        "elec_energy_tol": 1e-5,
+        "mixing_scheme": "Pulay",
     }
     assert parameters == parameters_ref
 
@@ -609,3 +709,33 @@ def test_energy_and_free_energy_non_metallic():
     _set_energy_and_free_energy(results)
     assert results['energy'] == -341.516024
     assert results['free_energy'] == -341.5163888035
+
+
+@pytest.mark.filterwarnings('ignore::UserWarning')
+def test_md_images(datadir):
+    """Test if multiple images can be read for the MolecularDynamics task."""
+    images = read_castep_castep(f'{datadir}/castep/md.castep', index=':')
+
+    assert len(images) == 3  # 0th, 1st, 2nd steps
+
+    # `read_castep_castep_old` could parse multi-images but not forces / stress
+    # check if new `read_castep_castep` can do
+
+    atoms = images[-1]
+
+    forces_ref = [
+        [-0.09963, +0.10729, -0.00665],
+        [+0.09339, +0.01482, +0.01147],
+        [-0.02828, -0.11817, -0.03557],
+        [+0.14991, -0.01604, +0.02132],
+        [-0.03495, +0.04016, -0.03526],
+        [+0.07136, -0.07883, +0.04578],
+        [-0.26870, -0.12445, -0.14684],
+        [+0.11690, +0.17523, +0.14574],
+    ]
+    np.testing.assert_array_almost_equal(atoms.get_forces(), forces_ref)
+
+    stress_ref = [
+        +0.390672, +0.388091, +0.385978, -0.276337, -0.061901, -0.144025,
+    ]
+    np.testing.assert_array_almost_equal(atoms.get_stress() / GPa, stress_ref)

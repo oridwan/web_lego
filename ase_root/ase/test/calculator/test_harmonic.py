@@ -1,6 +1,8 @@
+# fmt: off
 import numpy as np
 import pytest
 from numpy.testing import assert_array_almost_equal
+from scipy.integrate import trapezoid
 
 from ase import Atoms
 from ase.calculators.calculator import CalculationFailed, CalculatorSetupError
@@ -9,8 +11,11 @@ from ase.calculators.harmonic import HarmonicCalculator, HarmonicForceField
 from ase.calculators.mixing import MixedCalculator
 from ase.geometry.geometry import get_distances_derivatives
 from ase.md.andersen import Andersen
-from ase.md.velocitydistribution import (MaxwellBoltzmannDistribution,
-                                         Stationary, ZeroRotation)
+from ase.md.velocitydistribution import (
+    MaxwellBoltzmannDistribution,
+    Stationary,
+    ZeroRotation,
+)
 from ase.optimize import BFGS
 from ase.units import fs
 from ase.vibrations import Vibrations
@@ -266,7 +271,7 @@ def test_thermodynamic_integration():
                 e0, e1 = calc_linearCombi.get_energy_contributions(atoms)
                 ediffs[lamb].append(float(e1) - float(e0))
             ediffs[lamb] = np.mean(ediffs[lamb])
-    dA = np.trapz([ediffs[lamb] for lamb in lambs], x=lambs)  # anharm. corr.
+    dA = trapezoid([ediffs[lamb] for lamb in lambs], x=lambs)  # anharm. corr.
     assert -0.005 < dA < 0.005  # the MD run is to short for convergence
     if dA == 0.0:
         raise ValueError('there is most likely something wrong, but it could '

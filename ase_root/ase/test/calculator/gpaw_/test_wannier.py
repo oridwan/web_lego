@@ -1,3 +1,4 @@
+# fmt: off
 from functools import partial
 
 import numpy as np
@@ -6,15 +7,44 @@ import pytest
 from ase import Atoms
 from ase.build import bulk, molecule
 from ase.dft.kpoints import monkhorst_pack
-from ase.dft.wannier import (Wannier, arbitrary_s_orbitals, calculate_weights,
-                             gram_schmidt, init_orbitals, lowdin, md_min,
-                             neighbor_k_search, rotation_from_projection, scdm,
-                             search_for_gamma_point, steepest_descent)
+from ase.dft.wannier import (
+    Wannier,
+    arbitrary_s_orbitals,
+    calculate_weights,
+    gram_schmidt,
+    init_orbitals,
+    lowdin,
+    md_min,
+    neighbor_k_search,
+    rotation_from_projection,
+    scdm,
+    search_for_gamma_point,
+    steepest_descent,
+)
 from ase.dft.wannierstate import random_orthogonal_matrix
 from ase.io.cube import read_cube
-from ase.lattice import (BCC, BCT, CRECT, CUB, FCC, HEX, HEX2D, LINE, MCL,
-                         MCLC, OBL, ORC, ORCC, ORCF, ORCI, RECT, RHL, SQR, TET,
-                         TRI)
+from ase.lattice import (
+    BCC,
+    BCT,
+    CRECT,
+    CUB,
+    FCC,
+    HEX,
+    HEX2D,
+    LINE,
+    MCL,
+    MCLC,
+    OBL,
+    ORC,
+    ORCC,
+    ORCF,
+    ORCI,
+    RECT,
+    RHL,
+    SQR,
+    TET,
+    TRI,
+)
 from ase.transport.tools import dagger, normalize
 
 calc = pytest.mark.calculator
@@ -119,6 +149,7 @@ def wan(rng, h2_calculator):
         rng=rng,
         full_calc=False,
         std_calc=True,
+        symmetry='off'
     ):
         """
         Generate a Wannier object.
@@ -149,7 +180,7 @@ def wan(rng, h2_calculator):
                 gpts=gpts,
                 nbands=nwannier,
                 kpts=kpts,
-                symmetry='off',
+                symmetry=symmetry,
                 txt=None
             )
 
@@ -513,7 +544,8 @@ def test_distances(wan, h2_calculator):
     dist1_ww = wanf.distances([1, 1, 1])
     for i in range(nwannier):
         assert dist_ww[i, i] == pytest.approx(0)
-        assert dist1_ww[i, i] == pytest.approx(np.linalg.norm(atoms.cell.array))
+        assert dist1_ww[i, i] == pytest.approx(
+            np.linalg.norm(atoms.cell.array))
         for j in range(i + 1, nwannier):
             assert dist_ww[i, j] == dist_ww[j, i]
             assert dist_ww[i, j] == \
@@ -542,8 +574,10 @@ def test_get_hopping_random(wan, rng):
     hop1_ww = wanf.get_hopping([1, 1, 1])
     for i in range(nwannier):
         for j in range(i + 1, nwannier):
-            assert np.abs(hop0_ww[i, j]) == pytest.approx(np.abs(hop0_ww[j, i]))
-            assert np.abs(hop1_ww[i, j]) == pytest.approx(np.abs(hop1_ww[j, i]))
+            assert np.abs(hop0_ww[i, j]) == pytest.approx(
+                np.abs(hop0_ww[j, i]))
+            assert np.abs(hop1_ww[i, j]) == pytest.approx(
+                np.abs(hop1_ww[j, i]))
 
 
 def test_get_hamiltonian_bloch(wan):
@@ -784,3 +818,9 @@ def test_spread_contributions(wan):
     test_values_w = wan1._spread_contributions()
     ref_values_w = [2.28535569, 0.04660427]
     assert test_values_w == pytest.approx(ref_values_w, abs=1e-4)
+
+
+def test_symmetry_asserterror(wan):
+    sym = {}
+    with pytest.raises(RuntimeError, match='K-point symmetry*'):
+        wan(kpts=(4, 1, 1), symmetry=sym)

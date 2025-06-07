@@ -1,10 +1,15 @@
+# fmt: off
 from typing import Any, Dict, List
 
 import pytest
 
-from ase.utils import (deprecated, devnull,
-                       get_python_package_path_description, string2index,
-                       tokenize_version)
+from ase.utils import (
+    deprecated,
+    devnull,
+    get_python_package_path_description,
+    string2index,
+    tokenize_version,
+)
 
 
 class DummyWarning(UserWarning):
