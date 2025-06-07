@@ -1,4 +1,4 @@
-# Hosting LEGO-sp2 on Render.com and Previewing Locally
+# Hosting ase database on Render.com and Previewing Locally
 
 This guide explains how to host the **LEGO-sp2** application on Render.com and how to preview the application locally before deployment.
 
