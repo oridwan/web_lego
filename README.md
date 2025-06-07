@@ -76,8 +76,4 @@ The application is hosted on Render.com with the following settings:
      ```
    - Open `http://localhost:5000` in your browser to preview the application with JSmol integration.
 
----
 
-## Contact
-
-For any questions or issues, please contact the owner at **ogridwan@gmail.com**.
