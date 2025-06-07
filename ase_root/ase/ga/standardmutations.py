@@ -1,5 +1,3 @@
-# fmt: off
-
 """A collection of mutations that can be used."""
 from math import cos, pi, sin
 
@@ -9,12 +7,8 @@ from ase import Atoms
 from ase.calculators.lammps.coordinatetransform import calc_rotated_cell
 from ase.cell import Cell
 from ase.ga.offspring_creator import CombinationMutation, OffspringCreator
-from ase.ga.utilities import (
-    atoms_too_close,
-    atoms_too_close_two_sets,
-    gather_atoms_by_tag,
-    get_rotation_matrix,
-)
+from ase.ga.utilities import (atoms_too_close, atoms_too_close_two_sets,
+                              gather_atoms_by_tag, get_rotation_matrix)
 
 
 class RattleMutation(OffspringCreator):

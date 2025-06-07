@@ -1,5 +1,3 @@
-# fmt: off
-
 from collections import defaultdict
 
 from numpy import inf

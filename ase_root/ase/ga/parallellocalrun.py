@@ -1,5 +1,3 @@
-# fmt: off
-
 """ Class for handling several simultaneous jobs.
     The class has been tested on linux and Mac OS X.
 """

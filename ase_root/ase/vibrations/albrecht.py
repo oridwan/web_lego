@@ -1,5 +1,3 @@
-# fmt: off
-
 import sys
 from itertools import combinations_with_replacement
 
@@ -7,10 +5,8 @@ import numpy as np
 
 import ase.units as u
 from ase.parallel import paropen, parprint
-from ase.vibrations.franck_condon import (
-    FranckCondonOverlap,
-    FranckCondonRecursive,
-)
+from ase.vibrations.franck_condon import (FranckCondonOverlap,
+                                          FranckCondonRecursive)
 from ase.vibrations.resonant_raman import ResonantRaman
 
 
@@ -166,7 +162,7 @@ class Albrecht(ResonantRaman):
         omL = omega + 1j * gamma
         omS_Q = omL - self.om_Q
 
-        _n_p, myp, exF_pr = self.init_parallel_excitations()
+        n_p, myp, exF_pr = self.init_parallel_excitations()
         exF_pr = np.where(np.abs(exF_pr) > 1e-2, exF_pr, 0)
 
         m_Qcc = np.zeros((self.ndof, 3, 3), dtype=complex)
@@ -233,7 +229,7 @@ class Albrecht(ResonantRaman):
         n_ov[0] = self.n_vQ.max(axis=1)
         n_ov[1] = nvib_ov[1]
 
-        _n_p, myp, exF_pr = self.init_parallel_excitations()
+        n_p, myp, exF_pr = self.init_parallel_excitations()
 
         m_vcc = np.zeros((nv, 3, 3), dtype=complex)
         for p in myp:

@@ -1,7 +1,4 @@
-# fmt: off
-
 import warnings
-from pathlib import Path
 from typing import IO, Optional, Union
 
 import numpy as np
@@ -19,29 +16,29 @@ class BFGS(Optimizer):
         self,
         atoms: Atoms,
         restart: Optional[str] = None,
-        logfile: Optional[Union[IO, str, Path]] = '-',
-        trajectory: Optional[Union[str, Path]] = None,
+        logfile: Optional[Union[IO, str]] = '-',
+        trajectory: Optional[str] = None,
         append_trajectory: bool = False,
         maxstep: Optional[float] = None,
+        master: Optional[bool] = None,
         alpha: Optional[float] = None,
-        **kwargs,
     ):
         """BFGS optimizer.
 
-        Parameters
-        ----------
-        atoms: :class:`~ase.Atoms`
+        Parameters:
+
+        atoms: Atoms object
             The Atoms object to relax.
 
-        restart: str
-            JSON file used to store hessian matrix. If set, file with
+        restart: string
+            Pickle file used to store hessian matrix. If set, file with
             such a name will be searched and hessian matrix stored will
             be used, if the file exists.
 
-        trajectory: str or Path
-            Trajectory file used to store optimisation path.
+        trajectory: string
+            Pickle file used to store trajectory of atomic movement.
 
-        logfile: file object, Path, or str
+        logfile: file object or str
             If *logfile* is a string, a file with that name will be opened.
             Use '-' for stdout.
 
@@ -49,16 +46,15 @@ class BFGS(Optimizer):
             Used to set the maximum distance an atom can move per
             iteration (default value is 0.2 Å).
 
+        master: boolean
+            Defaults to None, which causes only rank 0 to save files.  If
+            set to true,  this rank will save files.
+
         alpha: float
             Initial guess for the Hessian (curvature of energy surface). A
             conservative value of 70.0 is the default, but number of needed
             steps to converge might be less if a lower value is used. However,
             a lower value also means risk of instability.
-
-        kwargs : dict, optional
-            Extra arguments passed to
-            :class:`~ase.optimize.optimize.Optimizer`.
-
         """
         if maxstep is None:
             self.maxstep = self.defaults['maxstep']
@@ -74,8 +70,7 @@ class BFGS(Optimizer):
             self.alpha = self.defaults['alpha']
         Optimizer.__init__(self, atoms=atoms, restart=restart,
                            logfile=logfile, trajectory=trajectory,
-                           append_trajectory=append_trajectory,
-                           **kwargs)
+                           master=master, append_trajectory=append_trajectory)
 
     def initialize(self):
         # initial hessian

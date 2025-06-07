@@ -1,9 +1,7 @@
-# fmt: off
-
 import numpy as np
 
+from ase.parallel import world, broadcast
 from ase.geometry import get_distances
-from ase.parallel import broadcast, world
 
 
 def random_unit_vector(rng):
@@ -58,7 +56,7 @@ def attach(atoms1, atoms2, distance, direction=(1, 0, 0),
     assert len(direction) == 3
     dist2 = distance**2
 
-    _i1, _i2, dv_c = nearest(atoms, atoms2, atoms.cell, atoms.pbc)
+    i1, i2, dv_c = nearest(atoms, atoms2, atoms.cell, atoms.pbc)
 
     for _ in range(maxiter):
         dv2 = (dv_c**2).sum()
@@ -72,7 +70,7 @@ def attach(atoms1, atoms2, distance, direction=(1, 0, 0),
 
         # we need to move
         atoms2.translate(direction * move)
-        _i1, _i2, dv_c = nearest(atoms, atoms2, atoms.cell, atoms.pbc)
+        i1, i2, dv_c = nearest(atoms, atoms2, atoms.cell, atoms.pbc)
 
     raise RuntimeError('attach did not converge')
 

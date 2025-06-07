@@ -1,4 +1,3 @@
-# fmt: off
 from ase import Atom, Atoms
 from ase.calculators.lj import LennardJones
 from ase.constraints import FixBondLength

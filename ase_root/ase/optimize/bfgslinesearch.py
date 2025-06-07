@@ -1,5 +1,3 @@
-# fmt: off
-
 # ******NOTICE***************
 # optimize.py module by Travis E. Oliphant
 #
@@ -39,23 +37,24 @@ class BFGSLineSearch(Optimizer):
         c2: float = 0.46,
         alpha: float = 10.0,
         stpmax: float = 50.0,
-        **kwargs,
+        master: Optional[bool] = None,
+        force_consistent=Optimizer._deprecated,
     ):
         """Optimize atomic positions in the BFGSLineSearch algorithm, which
         uses both forces and potential energy information.
 
-        Parameters
-        ----------
-        atoms: :class:`~ase.Atoms`
+        Parameters:
+
+        atoms: Atoms object
             The Atoms object to relax.
 
-        restart: str
-            JSON file used to store hessian matrix. If set, file with
+        restart: string
+            Pickle file used to store hessian matrix. If set, file with
             such a name will be searched and hessian matrix stored will
             be used, if the file exists.
 
-        trajectory: str
-            Trajectory file used to store optimisation path.
+        trajectory: string
+            Pickle file used to store trajectory of atomic movement.
 
         maxstep: float
             Used to set the maximum distance an atom can move per
@@ -65,9 +64,9 @@ class BFGSLineSearch(Optimizer):
             If *logfile* is a string, a file with that name will be opened.
             Use '-' for stdout.
 
-        kwargs : dict, optional
-            Extra arguments passed to
-            :class:`~ase.optimize.optimize.Optimizer`.
+        master: boolean
+            Defaults to None, which causes only rank 0 to save files.  If
+            set to true,  this rank will save files.
 
         """
         if maxstep is None:
@@ -92,7 +91,8 @@ class BFGSLineSearch(Optimizer):
         self.no_update = False
         self.replay = False
 
-        Optimizer.__init__(self, atoms, restart, logfile, trajectory, **kwargs)
+        Optimizer.__init__(self, atoms, restart, logfile, trajectory,
+                           master, force_consistent=force_consistent)
 
     def read(self):
         self.r0, self.g0, self.e0, self.task, self.H = self.load()
@@ -111,6 +111,9 @@ class BFGSLineSearch(Optimizer):
         if forces is None:
             forces = optimizable.get_forces()
 
+        if optimizable.is_neb():
+            raise TypeError('NEB calculations cannot use the BFGSLineSearch'
+                            ' optimizer. Use BFGS or another optimizer.')
         r = optimizable.get_positions()
         r = r.reshape(-1)
         g = -forces.reshape(-1) / self.alpha

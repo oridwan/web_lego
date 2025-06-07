@@ -1,5 +1,3 @@
-# fmt: off
-
 import time
 
 from ase.io.utils import PlottingVariables, make_patch_list

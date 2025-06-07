@@ -1,16 +1,9 @@
-# fmt: off
 import contextlib
 from importlib import import_module
 from pathlib import Path
 
 import pytest
-
-try:
-    from numpy.exceptions import VisibleDeprecationWarning  # NumPy 2.0.0
-except ImportError:
-    from numpy import (  # type: ignore[attr-defined,no-redef]
-        VisibleDeprecationWarning,
-    )
+from numpy import VisibleDeprecationWarning
 
 import ase
 

@@ -1,5 +1,3 @@
-# fmt: off
-
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve, solve_triangular
 from scipy.optimize import minimize

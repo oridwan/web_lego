@@ -1,4 +1,3 @@
-# fmt: off
 import shutil
 from math import sqrt
 from os.path import getsize
@@ -10,8 +9,11 @@ import pytest
 from ase.build import bulk
 from ase.calculators.emt import EMT
 from ase.filters import FrechetCellFilter
+from ase.io import read
 from ase.io.trajectory import Trajectory
 from ase.optimize import BFGS, BFGSLineSearch, CellAwareBFGS
+
+break_now = 2
 
 
 def params(opt):
@@ -34,8 +36,7 @@ def opt_filter_atoms(opt, trajectory, restart, opt_params):
 
     # if restarting, we take atoms from traj
     if Path(trajectory).is_file():
-        with Trajectory(trajectory, 'r') as traj:
-            atoms = traj[-1]
+        atoms = read(trajectory, -1)
 
     atoms.calc = EMT()
 
@@ -51,21 +52,19 @@ def opt_filter_atoms(opt, trajectory, restart, opt_params):
 
 
 def fragile_optimizer(opt, trajectory, restart, run_kwargs, opt_params):
-    break_now = 2
+    fragile_init = opt_filter_atoms(opt, trajectory, restart, opt_params)
 
-    with opt_filter_atoms(
-        opt=opt, trajectory=trajectory, restart=restart, opt_params=opt_params
-    ) as fragile_init:
-        if isinstance(fragile_init, CellAwareBFGS):
-            smax = run_kwargs.pop('smax')
-            fragile_init.smax = smax
-        for idx, _ in enumerate(fragile_init.irun(**run_kwargs)):
-            if idx == break_now:
-                break
-        else:
-            raise RuntimeError(
-                'Fragile Optimizer did not break. Check if nsteps is to large.'
-            )
+    if isinstance(fragile_init, CellAwareBFGS):
+        smax = run_kwargs.pop("smax")
+        fragile_init.smax = smax
+
+    for idx, _ in enumerate(fragile_init.irun(**run_kwargs)):
+        if idx == break_now:
+            break
+
+    else:
+        assert 0, ("Fragile Optimizer did not break. Check if nsteps is to "
+                   "large.")
 
     # pick up where we left off, assert we have written the files, and they
     # contain data. We check this here since these files are required in
@@ -77,12 +76,12 @@ def fragile_optimizer(opt, trajectory, restart, run_kwargs, opt_params):
     if not opt_params.get('append_trajectory', False):
         shutil.copy(trajectory, trajectory + '.orig')
 
-    with opt_filter_atoms(
+    fragile_restart = opt_filter_atoms(
         opt=opt, trajectory=trajectory, restart=restart, opt_params=opt_params
-    ) as fragile_restart:
-        if isinstance(fragile_restart, CellAwareBFGS):
-            fragile_restart.smax = smax
-        fragile_restart.run(**run_kwargs)
+    )
+    if isinstance(fragile_restart, CellAwareBFGS):
+        fragile_restart.smax = smax
+    fragile_restart.run(**run_kwargs)
 
     return fragile_init, fragile_restart
 
@@ -98,13 +97,13 @@ def test_optimizers_restart(testdir, opt):
     run_kwargs, opt_params = params(opt)
 
     # single run
-    with opt_filter_atoms(
+    single = opt_filter_atoms(
         opt=opt,
         trajectory="single_" + trajectory_filename,
         restart="single_" + restart_filename,
         opt_params=opt_params,
-    ) as single:
-        single.run(**run_kwargs)
+    )
+    single.run(**run_kwargs)
 
     # fragile restart
     fragile_init, fragile_restart = fragile_optimizer(

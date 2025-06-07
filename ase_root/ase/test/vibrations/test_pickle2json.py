@@ -1,4 +1,3 @@
-# fmt: off
 import pickle
 
 import pytest

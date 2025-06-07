@@ -1,5 +1,3 @@
-# fmt: off
-
 # type: ignore
 """turbomole parameters management classes and functions"""
 
@@ -93,6 +91,10 @@ class TurbomoleParameters(dict):
             'default': None,
             'group': 'denconv',
             'key': 'denconv',
+            'mapping': {
+                'to_control': lambda a: int(-log10(a)),
+                'from_control': lambda a: 10**(-a)
+            },
             'non-define': True,
             'type': float,
             'units': None,

@@ -1,8 +1,6 @@
-# fmt: off
-import itertools
-
 import numpy as np
 import pytest
+import itertools
 
 from ase.cell import Cell
 
@@ -36,9 +34,10 @@ def test_niggli_2d():
 @pytest.mark.parametrize('npbc', [0, 1, 2, 3])
 @pytest.mark.parametrize('perm', itertools.permutations(range(3)))
 def test_niggli_atoms_ndim(npbc, perm):
-    from ase.build import fcc111, niggli_reduce
-    from ase.calculators.emt import EMT
     from ase.geometry.geometry import permute_axes
+    from ase.build import fcc111
+    from ase.build import niggli_reduce
+    from ase.calculators.emt import EMT
 
     perm = np.array(perm)
 
@@ -59,7 +58,8 @@ def test_niggli_atoms_ndim(npbc, perm):
 
 
 def test_no_nonorthogonal_niggli():
-    from ase.build import bulk, niggli_reduce
+    from ase.build import bulk
+    from ase.build import niggli_reduce
     atoms = bulk('Au')
     atoms.pbc[1] = False
     with pytest.raises(ValueError, match='Non-orthogonal'):

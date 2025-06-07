@@ -1,16 +1,10 @@
-# fmt: off
-
-from functools import cached_property
-
 import numpy as np
 
-from ase.calculators.calculator import (
-    Calculator,
-    PropertyNotImplementedError,
-    PropertyNotPresent,
-    all_properties,
-)
+from ase.calculators.calculator import (Calculator,
+                                        PropertyNotImplementedError,
+                                        PropertyNotPresent, all_properties)
 from ase.outputs import Properties
+from ase.utils import lazyproperty
 
 
 class SinglePointCalculator(Calculator):
@@ -80,7 +74,7 @@ def arrays_to_kpoints(eigenvalues, occupations, weights):
 
     Convert eigenvalue, occupation, and weight arrays to list of
     SinglePointKPoint objects."""
-    nspins, nkpts, _nbands = eigenvalues.shape
+    nspins, nkpts, nbands = eigenvalues.shape
     assert eigenvalues.shape == occupations.shape
     assert len(weights) == nkpts
     kpts = []
@@ -230,7 +224,7 @@ def propertygetter(func):
         if value is None:
             raise PropertyNotPresent(func.__name__)
         return value
-    return cached_property(getter)
+    return lazyproperty(getter)
 
 
 class OutputPropertyWrapper:

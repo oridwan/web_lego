@@ -1,5 +1,3 @@
-# fmt: off
-
 import itertools
 
 import numpy as np

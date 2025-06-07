@@ -1,4 +1,3 @@
-# fmt: off
 """Testing lammpsdata reader."""
 
 import re

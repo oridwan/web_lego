@@ -1,4 +1,3 @@
-# fmt: off
 from math import sqrt
 
 import pytest
@@ -8,6 +7,7 @@ from ase.calculators.emt import EMT
 from ase.constraints import FixAtoms
 from ase.io import read
 from ase.optimize import QuasiNewton
+from ase.visualize import view
 
 
 @pytest.mark.optimize()
@@ -23,6 +23,9 @@ def test_replay(testdir):
     # Approximate height of Ag atom on Cu(100) surfece:
     h0 = 2.0
     a += Atom('Ag', (d / 2, d / 2, h0))
+
+    if 0:
+        view(a)
 
     constraint = FixAtoms(range(len(a) - 1))
     a.calc = EMT()

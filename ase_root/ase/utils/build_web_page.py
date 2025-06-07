@@ -7,28 +7,30 @@ import sys
 from pathlib import Path
 
 cmds = """\
+. /etc/bashrc
+module load Tkinter
 python3 -m venv venv
 . venv/bin/activate
-pip install -qq -U pip
-pip install "sphinx<6.0"
-pip install sphinx-rtd-theme pillow scriv
-git clone -q https://gitlab.com/ase/ase.git
+pip install -U pip
+pip install "sphinx<6.0"  # search broken in sphinx-6
+pip install sphinx-rtd-theme pillow
+git clone http://gitlab.com/ase/ase.git
 cd ase
-pip install . -qq
-(scriv collect --keep || echo Not compiling changelog then) &> scriv.out
+pip install .
+python setup.py sdist
 cd doc
 make
 mv build/html ase-web-page"""
 
 
 def build():
-    root = Path('/scratch/jensj/ase-docs')
+    root = Path('/tmp/ase-docs')
     if root.is_dir():
         sys.exit('Locked')
     root.mkdir()
     os.chdir(root)
-    cmds2 = ' && '.join(cmds.splitlines())
-    p = subprocess.run(cmds2, shell=True)
+    cmds2 = ' && '.join(line.split('#')[0] for line in cmds.splitlines())
+    p = subprocess.run(cmds2, shell=True, check=False)
     if p.returncode == 0:
         status = 'ok'
     else:
@@ -43,15 +45,17 @@ def build():
 
 def build_all():
     assert build() == 'ok'
-    webpage = Path('/scratch/jensj/ase-docs-ok/ase/doc/ase-web-page')
+    tar = next(
+        Path('/tmp/ase-docs-ok/ase/dist/').glob('ase-*.tar.gz'))
+    webpage = Path('/tmp/ase-docs-ok/ase/doc/ase-web-page')
     home = Path.home() / 'web-pages'
     cmds = ' && '.join(
-        [
-            f'cd {webpage.parent}',
-            'tar -czf ase-web-page.tar.gz ase-web-page',
-            f'cp ase-web-page.tar.gz {home}',
-        ]
-    )
+        [f'cp {tar} {webpage}',
+         f'find {webpage} -name install.html | '
+         f'xargs sed -i s/snapshot.tar.gz/{tar.name}/g',
+         f'cd {webpage.parent}',
+         'tar -czf ase-web-page.tar.gz ase-web-page',
+         f'cp ase-web-page.tar.gz {home}'])
     subprocess.run(cmds, shell=True, check=True)
 
 

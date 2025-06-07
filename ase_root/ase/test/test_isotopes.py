@@ -1,4 +1,3 @@
-# fmt: off
 from ase.data.isotopes import parse_isotope_data
 
 

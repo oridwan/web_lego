@@ -1,5 +1,3 @@
-# fmt: off
-
 """Function-like objects creating tetragonal lattices.
 
 The following lattice creators are defined:
@@ -7,10 +5,8 @@ The following lattice creators are defined:
     CenteredTetragonal
 """
 
-from ase.lattice.orthorhombic import (
-    BodyCenteredOrthorhombicFactory,
-    SimpleOrthorhombicFactory,
-)
+from ase.lattice.orthorhombic import (BodyCenteredOrthorhombicFactory,
+                                      SimpleOrthorhombicFactory)
 
 
 class _Tetragonalize:

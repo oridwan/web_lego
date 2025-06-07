@@ -1,5 +1,3 @@
-# fmt: off
-
 """Molecular Dynamics."""
 import warnings
 from typing import IO, Optional, Union
@@ -7,6 +5,7 @@ from typing import IO, Optional, Union
 import numpy as np
 
 from ase import Atoms, units
+from ase.io.trajectory import Trajectory
 from ase.md.logger import MDLogger
 from ase.optimize.optimize import Dynamics
 
@@ -70,43 +69,41 @@ class MolecularDynamics(Dynamics):
         trajectory: Optional[str] = None,
         logfile: Optional[Union[IO, str]] = None,
         loginterval: int = 1,
-        **kwargs,
+        append_trajectory: bool = False,
     ):
         """Molecular Dynamics object.
 
-        Parameters
-        ----------
-        atoms : Atoms object
+        Parameters:
+
+        atoms: Atoms object
             The Atoms object to operate on.
 
-        timestep : float
+        timestep: float
             The time step in ASE time units.
 
-        trajectory : Trajectory object or str
+        trajectory: Trajectory object or str
             Attach trajectory object.  If *trajectory* is a string a
             Trajectory will be constructed.  Use *None* for no
             trajectory.
 
-        logfile : file object or str (optional)
+        logfile: file object or str (optional)
             If *logfile* is a string, a file with that name will be opened.
             Use '-' for stdout.
 
-        loginterval : int, default: 1
+        loginterval: int (optional)
             Only write a log line for every *loginterval* time steps.
+            Default: 1
 
-        kwargs : dict, optional
-            Extra arguments passed to :class:`~ase.optimize.optimize.Dynamics`.
+        append_trajectory: boolean (optional)
+            Defaults to False, which causes the trajectory file to be
+            overwriten each time the dynamics is restarted from scratch.
+            If True, the new structures are appended to the trajectory
+            file instead.
         """
         # dt as to be attached _before_ parent class is initialized
         self.dt = timestep
 
-        super().__init__(
-            atoms,
-            logfile=None,
-            trajectory=trajectory,
-            loginterval=loginterval,
-            **kwargs,
-        )
+        super().__init__(atoms, logfile=None, trajectory=None)
 
         # Some codes (e.g. Asap) may be using filters to
         # constrain atoms or do other things.  Current state of the art
@@ -129,6 +126,16 @@ class MolecularDynamics(Dynamics):
 
         if not self.atoms.has('momenta'):
             self.atoms.set_momenta(np.zeros([len(self.atoms), 3]))
+
+        # Trajectory is attached here instead of in Dynamics.__init__
+        # to respect the loginterval argument.
+        if trajectory is not None:
+            if isinstance(trajectory, str):
+                mode = "a" if append_trajectory else "w"
+                trajectory = self.closelater(
+                    Trajectory(trajectory, mode=mode, atoms=atoms)
+                )
+            self.attach(trajectory, interval=loginterval)
 
         if logfile:
             logger = self.closelater(

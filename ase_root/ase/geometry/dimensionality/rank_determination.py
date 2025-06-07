@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 Implements the Rank Determination Algorithm (RDA)
 

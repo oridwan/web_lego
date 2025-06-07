@@ -1,5 +1,3 @@
-# fmt: off
-
 import re
 from functools import lru_cache
 from math import gcd

@@ -1,4 +1,3 @@
-# fmt: off
 """
 test_gaussian_gjf_input.py, Geoffrey Weal, 23/5/24
 
@@ -10,11 +9,11 @@ Notes
 """
 import warnings
 from io import StringIO
-
 import pytest
-
+from ase.io import read
+from ase.io import ParseError
 from ase.calculators.calculator import compare_atoms
-from ase.io import ParseError, read
+
 
 # -----------------------------------------------------------
 # The following strings give the components of an example gif file

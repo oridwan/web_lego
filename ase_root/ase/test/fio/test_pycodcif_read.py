@@ -1,4 +1,3 @@
-# fmt: off
 import pytest
 
 from ase.io.cif import read_cif

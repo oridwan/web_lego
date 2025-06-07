@@ -1,5 +1,3 @@
-# fmt: off
-
 # Note:
 # Try to avoid module level import statements here to reduce
 # import time during CLI execution
@@ -120,15 +118,10 @@ generator.  For hierarchical sorting, see template.""")
 
     @staticmethod
     def diff(args, out):
-        from ase.cli.template import (
-            Table,
-            TableFormat,
-            energy_delta,
-            field_specs_on_conditions,
-            rmsd,
-            slice_split,
-            summary_functions_on_conditions,
-        )
+        from ase.cli.template import (Table, TableFormat, energy_delta,
+                                      field_specs_on_conditions, rmsd,
+                                      slice_split,
+                                      summary_functions_on_conditions)
         from ase.io import read
 
         if args.template is None:

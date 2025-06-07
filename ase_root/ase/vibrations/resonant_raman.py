@@ -1,5 +1,3 @@
-# fmt: off
-
 """Resonant Raman intensities"""
 
 import sys

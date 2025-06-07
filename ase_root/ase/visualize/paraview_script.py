@@ -1,5 +1,3 @@
-# fmt: off
-
 def main():
     import paraview.simple as para
     version_major = para.servermanager.vtkSMProxyManager.GetVersionMajor()

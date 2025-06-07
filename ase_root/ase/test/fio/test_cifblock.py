@@ -1,4 +1,3 @@
-# fmt: off
 import pytest
 
 from ase.io.cif import CIFBlock, CIFLoop, parse_loop

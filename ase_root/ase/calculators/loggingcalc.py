@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 Provides LoggingCalculator class to wrap a Calculator and record
 number of enery and force calls

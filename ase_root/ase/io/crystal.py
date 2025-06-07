@@ -1,5 +1,3 @@
-# fmt: off
-
 from ase.atoms import Atoms
 from ase.utils import reader, writer
 

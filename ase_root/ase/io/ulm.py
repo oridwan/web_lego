@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 ULM files
 =========

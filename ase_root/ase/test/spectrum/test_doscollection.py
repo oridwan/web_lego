@@ -1,14 +1,10 @@
-# fmt: off
 from typing import Iterable
 
 import numpy as np
 import pytest
 
-from ase.spectrum.doscollection import (
-    DOSCollection,
-    GridDOSCollection,
-    RawDOSCollection,
-)
+from ase.spectrum.doscollection import (DOSCollection, GridDOSCollection,
+                                        RawDOSCollection)
 from ase.spectrum.dosdata import DOSData, GridDOSData, RawDOSData
 
 

@@ -1,5 +1,3 @@
-# fmt: off
-
 """
     Objects which handle all communication with the SQLite database.
 """

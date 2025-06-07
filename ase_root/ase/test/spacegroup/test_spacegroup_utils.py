@@ -1,4 +1,3 @@
-# fmt: off
 import numpy as np
 import pytest
 
@@ -97,9 +96,9 @@ def test_get_basis_ase(basis_tests):
 def test_get_basis_wrong_type(basis_tests, spacegroup):
     atoms = basis_tests['atoms']
 
-    with pytest.raises((SpacegroupValueError, TypeError)):
+    with pytest.raises(SpacegroupValueError):
         utils._get_basis_ase(atoms, spacegroup)
-    with pytest.raises((SpacegroupValueError, TypeError)):
+    with pytest.raises(SpacegroupValueError):
         utils.get_basis(atoms, spacegroup=spacegroup)
 
 

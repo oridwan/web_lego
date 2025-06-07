@@ -1,9 +1,7 @@
-# fmt: off
 import pytest
 from numpy.testing import assert_allclose
 
 from ase.build import molecule
-from ase.calculators.fd import calculate_numerical_forces
 
 
 @pytest.mark.skip(reason='we do not know how to compile psi4')
@@ -32,5 +30,5 @@ def test_main(factory):
                     rtol=1e-4, atol=1e-4)
 
     # Compare analytical vs numerical forces
-    assert_allclose(atoms.get_forces(), calculate_numerical_forces(atoms),
+    assert_allclose(atoms.get_forces(), calc.calculate_numerical_forces(atoms),
                     rtol=1e-4, atol=1e-4)

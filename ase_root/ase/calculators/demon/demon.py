@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module defines an ASE interface to deMon.
 
 http://www.demon-software.com
@@ -14,14 +12,9 @@ import numpy as np
 
 import ase.data
 import ase.io
-from ase.calculators.calculator import (
-    CalculatorSetupError,
-    FileIOCalculator,
-    Parameters,
-    ReadError,
-    all_changes,
-    equal,
-)
+from ase.calculators.calculator import (CalculatorSetupError, FileIOCalculator,
+                                        Parameters, ReadError, all_changes,
+                                        equal)
 from ase.units import Bohr, Hartree
 
 from .demon_io import parse_xray

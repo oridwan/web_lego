@@ -1,5 +1,3 @@
-# fmt: off
-
 # flake8: noqa
 """
 The ASE Calculator for OpenMX <http://www.openmx-square.org>: Python interface

@@ -1,4 +1,3 @@
-# fmt: off
 from io import StringIO
 
 import numpy as np

@@ -1,4 +1,3 @@
-# fmt: off
 """Tests for GEN format"""
 import numpy as np
 import pytest

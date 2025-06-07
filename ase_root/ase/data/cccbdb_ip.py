@@ -1,5 +1,3 @@
-# fmt: off
-
 # flake8: noqa
 """
 Experimental ionization energies from CCCBDB at

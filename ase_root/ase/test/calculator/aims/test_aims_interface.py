@@ -1,4 +1,3 @@
-# fmt: off
 import os
 import tempfile
 
@@ -96,9 +95,11 @@ def test_aims_interface():
                 sc_accuracy_forces=1e-4,
                 label=tmp_dir,
                 )
-
-    with pytest.raises(ValueError):
+    try:
         calc.prepare_input_files()
+        raise AssertionError
+    except ValueError:
+        pass
 
     calc.atoms = water
     calc.prepare_input_files()

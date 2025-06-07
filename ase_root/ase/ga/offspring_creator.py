@@ -1,5 +1,3 @@
-# fmt: off
-
 """Base module for all operators that create offspring."""
 import numpy as np
 

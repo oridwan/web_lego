@@ -1,5 +1,3 @@
-# fmt: off
-
 import pickle
 import sys
 

@@ -1,4 +1,3 @@
-# fmt: off
 from pytest import approx, fixture
 
 from ase import Atoms
@@ -6,10 +5,8 @@ from ase.build import bulk
 from ase.calculators.bond_polarizability import BondPolarizability
 from ase.calculators.emt import EMT
 from ase.vibrations.placzek import PlaczekStatic, PlaczekStaticPhonons
-from ase.vibrations.raman import (
-    StaticRamanCalculator,
-    StaticRamanPhononsCalculator,
-)
+from ase.vibrations.raman import (StaticRamanCalculator,
+                                  StaticRamanPhononsCalculator)
 
 
 @fixture(scope='module')

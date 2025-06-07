@@ -1,4 +1,3 @@
-# fmt: off
 # flake8: noqa
 import numpy as np
 import pytest
@@ -337,7 +336,7 @@ def test_default_calc_energy_raises_error(empty_calc_chunk):
     with pytest.raises(
         AimsParseError, match="No energy is associated with the structure."
     ):
-        getattr(empty_calc_chunk, "total_energy")
+        getattr(empty_calc_chunk, "energy")
 
 
 @pytest.mark.parametrize(
@@ -895,11 +894,10 @@ def test_calc_free_energy(calc_chunk):
 
 
 def test_calc_energy(calc_chunk):
-    total_energy = -2.169503986610555e05
-    free_energy = -3.169503986610555e05
-    assert np.abs(calc_chunk.total_energy - total_energy) < eps_hp
-    assert np.abs(calc_chunk.atoms.get_potential_energy() - free_energy) < eps_hp
-    assert np.abs(calc_chunk.results["total_energy"] - total_energy) < eps_hp
+    energy = -2.169503986610555e05
+    assert np.abs(calc_chunk.energy - energy) < eps_hp
+    assert np.abs(calc_chunk.atoms.get_potential_energy() - energy) < eps_hp
+    assert np.abs(calc_chunk.results["energy"] - energy) < eps_hp
 
 
 def test_calc_magnetic_moment(calc_chunk):
@@ -1185,13 +1183,12 @@ def test_molecular_calc_free_energy(molecular_calc_chunk):
 
 
 def test_molecular_calc_energy(molecular_calc_chunk):
-    free_energy = -2.206778551123339e04
-    total_energy = -0.206778551123339e04
-    assert np.abs(molecular_calc_chunk.total_energy - total_energy) < eps_hp
+    energy = -0.206778551123339e04
+    assert np.abs(molecular_calc_chunk.energy - energy) < eps_hp
     assert np.abs(
         molecular_calc_chunk.atoms.get_potential_energy() -
-        free_energy) < eps_hp
-    assert np.abs(molecular_calc_chunk.results["total_energy"] - total_energy) < eps_hp
+        energy) < eps_hp
+    assert np.abs(molecular_calc_chunk.results["energy"] - energy) < eps_hp
 
 
 def test_molecular_calc_n_iter(molecular_calc_chunk):

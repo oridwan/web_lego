@@ -1,5 +1,3 @@
-# fmt: off
-
 """WSGI Flask-app for browsing a database.
 
 ::

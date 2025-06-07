@@ -1,4 +1,3 @@
-# fmt: off
 # flake8: noqa
 # tests of the dlpoly I/O
 from io import StringIO

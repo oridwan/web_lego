@@ -1,4 +1,3 @@
-# fmt: off
 """Tests related to QBOX"""
 
 import numpy as np

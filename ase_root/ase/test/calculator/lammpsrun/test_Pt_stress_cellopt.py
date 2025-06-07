@@ -1,10 +1,8 @@
-# fmt: off
 import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
 from ase.build import bulk
-from ase.calculators.fd import calculate_numerical_stress
 from ase.filters import FrechetCellFilter
 from ase.optimize import BFGS
 
@@ -26,7 +24,7 @@ def test_Pt_stress_cellopt(factory):
         atoms.calc = calc
 
         assert_allclose(atoms.get_stress(),
-                        calculate_numerical_stress(atoms),
+                        calc.calculate_numerical_stress(atoms),
                         atol=1e-4, rtol=1e-4)
 
         with BFGS(FrechetCellFilter(atoms)) as opt:
@@ -42,5 +40,5 @@ def test_Pt_stress_cellopt(factory):
         assert_allclose(np.asarray(atoms.cell), cell1_ref,
                         atol=3e-4, rtol=3e-4)
         assert_allclose(atoms.get_stress(),
-                        calculate_numerical_stress(atoms),
+                        calc.calculate_numerical_stress(atoms),
                         atol=1e-4, rtol=1e-4)

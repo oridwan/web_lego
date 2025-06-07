@@ -1,5 +1,3 @@
-# fmt: off
-
 import os
 import shutil
 import types
@@ -546,7 +544,7 @@ class AutoNEB:
             try:
                 energies.append(a.get_potential_energy())
             except RuntimeError:
-                energies.append(np.nan)
+                energies.append(np.NaN)
         return energies
 
     def get_energies_one_image(self, image):
@@ -555,7 +553,7 @@ class AutoNEB:
         try:
             energy = image.get_potential_energy()
         except RuntimeError:
-            energy = np.nan
+            energy = np.NaN
         return energy
 
     def get_highest_energy_index(self):

@@ -1,5 +1,3 @@
-# fmt: off
-
 """Mutation classes, that mutate the elements in the supplied
 atoms objects."""
 import numpy as np

@@ -1,4 +1,3 @@
-# fmt: off
 """PDB parser
 
 Test dealing with files that are not fully

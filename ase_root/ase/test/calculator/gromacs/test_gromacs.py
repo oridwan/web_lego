@@ -1,4 +1,3 @@
-# fmt: off
 """ test run for gromacs calculator """
 
 import pytest

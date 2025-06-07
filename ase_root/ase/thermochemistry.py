@@ -1,5 +1,3 @@
-# fmt: off
-
 """Modules for calculating thermochemical information from computational
 outputs."""
 
@@ -8,7 +6,6 @@ import sys
 from warnings import warn
 
 import numpy as np
-from scipy.integrate import trapezoid
 
 from ase import units
 
@@ -707,18 +704,18 @@ class CrystalThermo(ThermoChem):
 
         zpe_list = omega_e / 2.
         if self.formula_units == 0:
-            zpe = trapezoid(zpe_list * dos_e, omega_e)
+            zpe = np.trapz(zpe_list * dos_e, omega_e)
         else:
-            zpe = trapezoid(zpe_list * dos_e, omega_e) / self.formula_units
+            zpe = np.trapz(zpe_list * dos_e, omega_e) / self.formula_units
         write(fmt % ('E_ZPE', zpe))
         U += zpe
 
         B = 1. / (units.kB * temperature)
         E_vib = omega_e / (np.exp(omega_e * B) - 1.)
         if self.formula_units == 0:
-            E_phonon = trapezoid(E_vib * dos_e, omega_e)
+            E_phonon = np.trapz(E_vib * dos_e, omega_e)
         else:
-            E_phonon = trapezoid(E_vib * dos_e, omega_e) / self.formula_units
+            E_phonon = np.trapz(E_vib * dos_e, omega_e) / self.formula_units
         write(fmt % ('E_phonon', E_phonon))
         U += E_phonon
 
@@ -753,9 +750,9 @@ class CrystalThermo(ThermoChem):
         S_vib = (omega_e / (temperature * (np.exp(omega_e * B) - 1.)) -
                  units.kB * np.log(1. - np.exp(-omega_e * B)))
         if self.formula_units == 0:
-            S = trapezoid(S_vib * dos_e, omega_e)
+            S = np.trapz(S_vib * dos_e, omega_e)
         else:
-            S = trapezoid(S_vib * dos_e, omega_e) / self.formula_units
+            S = np.trapz(S_vib * dos_e, omega_e) / self.formula_units
 
         write('-' * 49)
         write(fmt % ('S', S, S * temperature))

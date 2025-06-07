@@ -1,9 +1,8 @@
-# fmt: off
 import itertools
 
 import numpy as np
 
-from ase import Atoms
+from ase import Atom, Atoms
 from ase.geometry import distance
 
 
@@ -40,6 +39,15 @@ def test_distance():
             print('rotation', axis, ', angle', rot, '-> distance', dist)
             assert dist < maxdist
             assert dist == dist2
+
+    if 0:
+        # reflect
+        new = Atoms()
+        cm = org.get_center_of_mass()
+        for a in org:
+            new.append(Atom(a.symbol, -(a.position - cm)))
+        dist = distance(org, new)
+        print('reflected -> distance', dist)
 
     # permute
     for i, a in enumerate(org):

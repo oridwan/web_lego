@@ -1,7 +1,4 @@
-# fmt: off
-
 """Filters"""
-from functools import cached_property
 from itertools import product
 from warnings import warn
 
@@ -9,7 +6,7 @@ import numpy as np
 
 from ase.calculators.calculator import PropertyNotImplementedError
 from ase.stress import full_3x3_to_voigt_6_stress, voigt_6_to_full_3x3_stress
-from ase.utils import deprecated
+from ase.utils import deprecated, lazyproperty
 from ase.utils.abc import Optimizable
 
 __all__ = [
@@ -31,7 +28,7 @@ class OptimizableFilter(Optimizable):
     def get_forces(self):
         return self.filterobj.get_forces()
 
-    @cached_property
+    @lazyproperty
     def _use_force_consistent_energy(self):
         # This boolean is in principle invalidated if the
         # calculator changes.  This can lead to weird things
@@ -424,20 +421,17 @@ class UnitCellFilter(Filter):
         natoms = len(self.atoms)
         new_atom_positions = new[:natoms]
         new_deform_grad = new[natoms:] / self.cell_factor
-        deform = (new_deform_grad - np.eye(3)).T * self.mask
         # Set the new cell from the original cell and the new
         # deformation gradient.  Both current and final structures should
         # preserve symmetry, so if set_cell() calls FixSymmetry.adjust_cell(),
         # it should be OK
-        newcell = self.orig_cell @ (np.eye(3) + deform)
-
-        self.atoms.set_cell(newcell,
+        self.atoms.set_cell(self.orig_cell @ new_deform_grad.T,
                             scale_atoms=True)
         # Set the positions from the ones passed in (which are without the
         # deformation gradient applied) and the new deformation gradient.
         # This should also preserve symmetry, so if set_positions() calls
         # FixSymmetyr.adjust_positions(), it should be OK
-        self.atoms.set_positions(new_atom_positions @ (np.eye(3) + deform),
+        self.atoms.set_positions(new_atom_positions @ new_deform_grad.T,
                                  **kwargs)
 
     def get_potential_energy(self, force_consistent=True):

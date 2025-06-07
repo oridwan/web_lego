@@ -1,5 +1,3 @@
-# fmt: off
-
 """Module for wrapping an array without being an array.
 
 This can be desirable because we would like atoms.cell to be like an array,

@@ -1,5 +1,3 @@
-# fmt: off
-
 """Module to read and write atoms in PDB file format.
 
 See::

@@ -1,16 +1,12 @@
-# fmt: off
-
-import uuid
+from random import randint
 from typing import Any, Dict
 
 import numpy as np
 
 from ase import Atoms
-from ase.calculators.calculator import (
-    PropertyNotImplementedError,
-    all_properties,
-    kptdensity2monkhorstpack,
-)
+from ase.calculators.calculator import (PropertyNotImplementedError,
+                                        all_properties,
+                                        kptdensity2monkhorstpack)
 from ase.calculators.singlepoint import SinglePointCalculator
 from ase.data import atomic_masses, chemical_symbols
 from ase.formula import Formula
@@ -37,7 +33,7 @@ def atoms2dict(atoms):
     dct = {
         'numbers': atoms.numbers,
         'positions': atoms.positions,
-        'unique_id': uuid.uuid4().hex}
+        'unique_id': '%x' % randint(16**31, 16**32 - 1)}
     if atoms.pbc.any():
         dct['pbc'] = atoms.pbc
     if atoms.cell.any():

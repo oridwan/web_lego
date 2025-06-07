@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 read and write gromacs geometry files
 """

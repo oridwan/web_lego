@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 IO support for the Gaussian cube format.
 

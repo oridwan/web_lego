@@ -1,4 +1,3 @@
-# fmt: off
 from math import cos, radians, sin
 
 import pytest

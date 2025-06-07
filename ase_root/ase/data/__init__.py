@@ -1,5 +1,3 @@
-# fmt: off
-
 import numpy as np
 
 from ase.data.vdw import vdw_radii

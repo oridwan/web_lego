@@ -1,5 +1,3 @@
-# fmt: off
-
 import configparser
 import os
 import shlex

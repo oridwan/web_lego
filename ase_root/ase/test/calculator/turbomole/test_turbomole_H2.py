@@ -1,4 +1,3 @@
-# fmt: off
 # type: ignore
 import os.path
 

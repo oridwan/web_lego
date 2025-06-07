@@ -1,5 +1,3 @@
-# fmt: off
-
 # flake8: noqa
 """ Van der Waals radii in [A] taken from:
 A cartography of the van der Waals territories

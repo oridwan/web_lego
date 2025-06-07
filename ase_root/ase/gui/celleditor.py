@@ -1,5 +1,3 @@
-# fmt: off
-
 '''celleditor.py - Window for editing the cell of an atoms object
 '''
 import numpy as np
@@ -14,7 +12,7 @@ class CellEditor:
 
     def __init__(self, gui):
         self.gui = gui
-        self.gui.obs.set_atoms.register(self.notify_atoms_changed)
+        self.gui.register_vulnerable(self)
 
         # Create grid control for cells
         # xx xy xz ||x|| pbc

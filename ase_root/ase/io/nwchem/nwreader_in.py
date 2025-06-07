@@ -1,5 +1,3 @@
-# fmt: off
-
 import re
 
 import numpy as np

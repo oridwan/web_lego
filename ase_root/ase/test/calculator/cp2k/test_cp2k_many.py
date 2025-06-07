@@ -1,4 +1,3 @@
-# fmt: off
 """Tests for the CP2K ASE calculator.
 
 http://www.cp2k.org

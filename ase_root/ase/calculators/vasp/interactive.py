@@ -1,5 +1,3 @@
-# fmt: off
-
 import os
 import time
 from subprocess import PIPE, Popen

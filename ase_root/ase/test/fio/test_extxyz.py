@@ -1,4 +1,3 @@
-# fmt: off
 # additional tests of the extended XYZ file I/O
 # (which is also included in oi.py test case)
 # maintained by James Kermode <james.kermode@gmail.com>
@@ -350,7 +349,7 @@ def test_constraints(constraint):
         assert np.all(constraint2[0].mask)
         assert np.all(constraint2[1].mask == constraint.mask)
         assert np.all(constraint2[2].mask)
-    elif cls is list:
+    elif cls == list:
         assert len(constraint2) == len(atoms)
         assert np.all(constraint2[0].mask == constraint[0].mask)
         assert np.all(constraint2[1].mask)
@@ -502,10 +501,3 @@ def test_linear_combination_calculator():
     atoms.calc = LinearCombinationCalculator([EMT()], [1.0])
     atoms.get_potential_energy()
     atoms.write('tmp.xyz')
-
-
-def test_outputs_not_properties(tmp_path):
-    atoms = Atoms('Cu2', cell=[4, 2, 2], positions=[[0, 0, 0], [2.05, 0, 0]],
-                  pbc=[True] * 3, info={'nbands': 1})
-    ase.io.write(tmp_path / 'nbands.extxyz', atoms)
-    _ = ase.io.read(tmp_path / 'nbands.extxyz')

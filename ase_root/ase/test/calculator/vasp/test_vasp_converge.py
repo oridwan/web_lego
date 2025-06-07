@@ -1,4 +1,3 @@
-# fmt: off
 from pathlib import Path
 
 from ase.calculators.vasp import Vasp

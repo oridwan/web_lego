@@ -1,4 +1,3 @@
-# fmt: off
 from ase.atoms import Atoms
 from ase.calculators.gaussian import Gaussian
 from ase.io import read

@@ -1,5 +1,3 @@
-# fmt: off
-
 import atexit
 import functools
 import os
@@ -9,6 +7,21 @@ import time
 import warnings
 
 import numpy as np
+
+
+def get_txt(txt, rank):
+    if hasattr(txt, 'write'):
+        # Note: User-supplied object might write to files from many ranks.
+        return txt
+    elif rank == 0:
+        if txt is None:
+            return open(os.devnull, 'w')
+        elif txt == '-':
+            return sys.stdout
+        else:
+            return open(txt, 'w', 1)
+    else:
+        return open(os.devnull, 'w')
 
 
 def paropen(name, mode='r', buffering=-1, encoding=None, comm=None):
@@ -25,11 +38,9 @@ def paropen(name, mode='r', buffering=-1, encoding=None, comm=None):
     return open(name, mode, buffering, encoding)
 
 
-def parprint(*args, comm=None, **kwargs):
+def parprint(*args, **kwargs):
     """MPI-safe print - prints only from master. """
-    if comm is None:
-        comm = world
-    if comm.rank == 0:
+    if world.rank == 0:
         print(*args, **kwargs)
 
 
@@ -74,7 +85,6 @@ class MPI:
 
     * MPI4Py
     * GPAW
-    * Asap
     * a dummy implementation for serial runs
 
     """
@@ -189,7 +199,7 @@ world = None
 
 # Check for special MPI-enabled Python interpreters:
 if '_gpaw' in sys.builtin_module_names:
-    # http://gpaw.readthedocs.io
+    # http://wiki.fysik.dtu.dk/gpaw
     import _gpaw
     world = _gpaw.Communicator()
 elif '_asap' in sys.builtin_module_names:

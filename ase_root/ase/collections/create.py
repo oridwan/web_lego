@@ -1,5 +1,3 @@
-# fmt: off
-
 import os
 
 import ase.db

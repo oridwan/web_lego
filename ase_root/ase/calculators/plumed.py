@@ -1,5 +1,3 @@
-# fmt: off
-
 from os.path import exists
 
 import numpy as np

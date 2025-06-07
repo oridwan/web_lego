@@ -1,4 +1,3 @@
-# fmt: off
 """This test ensures that logging to a text file and to the trajectory file are
 reporting the same values as in the ContourExploration object."""
 

@@ -1,5 +1,3 @@
-# fmt: off
-
 """Function-like objects creating orthorhombic lattices.
 
 The following lattice creators are defined:

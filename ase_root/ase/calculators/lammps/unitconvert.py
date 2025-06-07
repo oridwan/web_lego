@@ -1,5 +1,3 @@
-# fmt: off
-
 """LAMMPS has the options to use several internal units (which can be different
 from the ones used in ase).  Mapping is therefore necessary.
 

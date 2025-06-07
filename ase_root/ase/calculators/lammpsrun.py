@@ -1,5 +1,3 @@
-# fmt: off
-
 """ASE calculator for the LAMMPS classical MD code"""
 # lammps.py (2011/03/29)
 #
@@ -36,12 +34,8 @@ from typing import Any, Dict
 import numpy as np
 
 from ase.calculators.calculator import Calculator, all_changes
-from ase.calculators.lammps import (
-    CALCULATION_END_MARK,
-    Prism,
-    convert,
-    write_lammps_in,
-)
+from ase.calculators.lammps import (CALCULATION_END_MARK, Prism, convert,
+                                    write_lammps_in)
 from ase.data import atomic_masses, chemical_symbols
 from ase.io.lammpsdata import write_lammps_data
 from ase.io.lammpsrun import read_lammps_dump
@@ -125,7 +119,7 @@ class LAMMPS(Calculator):
         H = Atom('H', position=Ni.cell.diagonal()/2)
         NiH = Ni + H
 
-        lammps = LAMMPS(files=files, **parameters)
+        lammps = LAMMPS(parameters=parameters, files=files)
 
         NiH.calc = lammps
         print("Energy ", NiH.get_potential_energy())

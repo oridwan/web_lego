@@ -1,5 +1,3 @@
-# fmt: off
-
 # Copyright (C) 2012-2023, Jesper Friis, SINTEF
 # Copyright (C) 2024, Rohit Goswami, UI
 # (see accompanying license files for ASE).

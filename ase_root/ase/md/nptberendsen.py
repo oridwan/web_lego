@@ -1,5 +1,3 @@
-# fmt: off
-
 """Berendsen NPT dynamics class."""
 import warnings
 from typing import IO, Optional, Union
@@ -54,7 +52,7 @@ class NPTBerendsen(NVTBerendsen):
             The desired pressure, in bar (1 bar = 1e5 Pa).  Deprecated,
             use ``pressure_au`` instead.
 
-        pressure_au: float
+        pressure: float
             The desired pressure, in atomic units (eV/Å^3).
 
         taut: float

@@ -1,5 +1,3 @@
-# fmt: off
-
 from os import unlink
 
 import numpy as np
@@ -81,7 +79,7 @@ class Render:
 
     def ok(self, *args):
         print("Rendering with povray:")
-        _guiwidth, guiheight = self.get_guisize()
+        guiwidth, guiheight = self.get_guisize()
         width = self.width_widget.value
         height = self.height_widget.value
         # (Do width/height become inconsistent upon gui resize?  Not critical)

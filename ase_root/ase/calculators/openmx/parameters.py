@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 The ASE Calculator for OpenMX <http://www.openmx-square.org>: Python interface
 to the software package for nano-scale material simulations based on density

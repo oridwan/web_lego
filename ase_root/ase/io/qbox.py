@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module contains functions to read from QBox output files"""
 
 import re

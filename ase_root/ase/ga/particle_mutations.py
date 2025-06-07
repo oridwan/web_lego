@@ -1,5 +1,3 @@
-# fmt: off
-
 from operator import itemgetter
 
 import numpy as np

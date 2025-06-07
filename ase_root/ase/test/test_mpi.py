@@ -1,4 +1,3 @@
-# fmt: off
 import sys
 from subprocess import run
 

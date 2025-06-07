@@ -1,4 +1,3 @@
-# fmt: off
 """
 The OPLS io module uses the coordinatetransform.py module under
 calculators/lammps/.  This test simply ensures that it uses that module

@@ -1,15 +1,11 @@
-# fmt: off
 """Tests for NeighborList"""
 import numpy as np
 import pytest
 
 from ase import Atoms
 from ase.build import bulk
-from ase.neighborlist import (
-    NeighborList,
-    NewPrimitiveNeighborList,
-    PrimitiveNeighborList,
-)
+from ase.neighborlist import (NeighborList, NewPrimitiveNeighborList,
+                              PrimitiveNeighborList)
 
 
 @pytest.mark.parametrize(
@@ -76,8 +72,7 @@ def test_supercell(sorted):
                   cell=[(0.2, 1.2, 1.4),
                         (1.4, 0.1, 1.6),
                         (1.3, 2.0, -0.1)])
-    rng = np.random.RandomState(42)
-    atoms.set_scaled_positions(3 * rng.random((10, 3)) - 1)
+    atoms.set_scaled_positions(3 * np.random.random((10, 3)) - 1)
 
     for p1 in range(2):
         for p2 in range(2):

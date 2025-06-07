@@ -1,4 +1,3 @@
-# fmt: off
 import numpy as np
 
 from ase.dft import get_distribution_moment

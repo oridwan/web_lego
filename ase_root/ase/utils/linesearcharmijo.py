@@ -1,5 +1,3 @@
-# fmt: off
-
 # flake8: noqa
 import logging
 import math

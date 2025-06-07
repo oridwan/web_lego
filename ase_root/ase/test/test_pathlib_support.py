@@ -1,4 +1,3 @@
-# fmt: off
 """Test reading/writing in ASE on pathlib objects"""
 
 import io

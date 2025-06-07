@@ -1,5 +1,3 @@
-# fmt: off
-
 import sys
 from typing import Any, Dict
 
@@ -143,7 +141,7 @@ class Runner:
         args = self.args
 
         for p in args.properties or 'efsdMm':
-            _property, method = {'e': ('energy', 'get_potential_energy'),
+            property, method = {'e': ('energy', 'get_potential_energy'),
                                 'f': ('forces', 'get_forces'),
                                 's': ('stress', 'get_stress'),
                                 'd': ('dipole', 'get_dipole_moment'),

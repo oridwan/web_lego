@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module defines an ASE interface to MOPAC.
 
 Set $ASE_MOPAC_COMMAND to something like::
@@ -20,17 +18,6 @@ from packaging import version
 from ase import Atoms
 from ase.calculators.calculator import FileIOCalculator, Parameters, ReadError
 from ase.units import Debye, kcal, mol
-
-
-def get_version_number(lines: Sequence[str]):
-    pattern1 = r'MOPAC\s+v(\S+)'
-    pattern2 = r'MOPAC2016, Version:\s+([^,]+)'
-
-    for line in lines[:10]:
-        match = re.search(pattern1, line) or re.search(pattern2, line)
-        if match:
-            return match.group(1)
-    raise ValueError('Version number was not found in MOPAC output')
 
 
 class MOPAC(FileIOCalculator):
@@ -218,7 +205,7 @@ class MOPAC(FileIOCalculator):
         with open(self.label + '.out') as fd:
             lines = fd.readlines()
 
-        self.results['version'] = get_version_number(lines)
+        self.results['version'] = self.get_version_from_file(lines)
 
         total_energy_regex = re.compile(
             r'^\s+TOTAL ENERGY\s+\=\s+(-?\d+\.\d+) EV')
@@ -283,6 +270,15 @@ class MOPAC(FileIOCalculator):
                  "FINAL HEAT OF FORMATION will be preferred for all versions.")
             self.results['energy'] = self.results['total_energy']
         self.results['free_energy'] = self.results['energy']
+
+    @staticmethod
+    def get_version_from_file(lines: Sequence[str]):
+        version_regex = re.compile(r'^ \*\*\s+MOPAC (v[\.\d]+)\s+\*\*\s$')
+        for line in lines:
+            match = version_regex.match(line)
+            if match:
+                return match.groups()[0]
+        return ValueError('Version number was not found in MOPAC output')
 
     def get_eigenvalues(self, kpt=0, spin=0):
         return self.eigenvalues[spin, kpt]

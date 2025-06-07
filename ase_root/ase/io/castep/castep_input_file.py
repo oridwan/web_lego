@@ -1,5 +1,3 @@
-# fmt: off
-
 import difflib
 import re
 import warnings
@@ -8,6 +6,7 @@ from typing import List, Set
 import numpy as np
 
 from ase import Atoms
+
 
 # A convenient table to avoid the previously used "eval"
 _tf_table = {

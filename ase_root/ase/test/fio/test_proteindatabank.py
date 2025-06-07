@@ -1,4 +1,3 @@
-# fmt: off
 # flake8: noqa
 from io import StringIO
 

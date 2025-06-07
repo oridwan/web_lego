@@ -1,5 +1,3 @@
-# fmt: off
-
 """Bravais.py - class for generating Bravais lattices etc.
 
 This is a base class for numerous classes setting up pieces of crystal.

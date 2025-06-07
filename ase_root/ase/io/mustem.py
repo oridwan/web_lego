@@ -1,5 +1,3 @@
-# fmt: off
-
 """Module to read and write atoms in xtl file format for the muSTEM software.
 
 See http://tcmp.ph.unimelb.edu.au/mustem/muSTEM.html for a few examples of

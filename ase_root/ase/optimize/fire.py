@@ -1,5 +1,3 @@
-# fmt: off
-
 from typing import IO, Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
@@ -57,19 +55,18 @@ class FIRE(Optimizer):
         astart: float = 0.1,
         fa: float = 0.99,
         a: float = 0.1,
+        master: Optional[bool] = None,
         downhill_check: bool = False,
         position_reset_callback: Optional[Callable] = None,
-        **kwargs,
+        force_consistent=Optimizer._deprecated,
     ):
-        """
+        """Parameters:
 
-        Parameters
-        ----------
-        atoms: :class:`~ase.Atoms`
+        atoms: Atoms object
             The Atoms object to relax.
 
-        restart: str
-            JSON file used to store hessian matrix. If set, file with
+        restart: string
+            Pickle file used to store hessian matrix. If set, file with
             such a name will be searched and hessian matrix stored will
             be used, if the file exists.
 
@@ -77,8 +74,8 @@ class FIRE(Optimizer):
             If *logfile* is a string, a file with that name will be opened.
             Use '-' for stdout.
 
-        trajectory: str
-            Trajectory file used to store optimisation path.
+        trajectory: string
+            Pickle file used to store trajectory of atomic movement.
 
         dt: float
             Initial time step. Defualt value is 0.1
@@ -113,7 +110,11 @@ class FIRE(Optimizer):
             Coefficient for mixing the velocity and the force. Called
             alpha in the FIRE article. Default value 0.1.
 
-        downhill_check: bool
+        master: boolean
+            Defaults to None, which causes only rank 0 to save files.  If
+            set to true,  this rank will save files.
+
+        downhill_check: boolean
             Downhill check directly compares potential energies of subsequent
             steps of the FIRE algorithm rather than relying on the current
             product v*f that is positive if the FIRE dynamics moves downhill.
@@ -126,15 +127,17 @@ class FIRE(Optimizer):
             *r* that the optimizer will revert to, current energy *e* and
             energy of last step *e_last*. This is only called if e > e_last.
 
-        kwargs : dict, optional
-            Extra arguments passed to
-            :class:`~ase.optimize.optimize.Optimizer`.
+        force_consistent: boolean or None
+            Use force-consistent energy calls (as opposed to the energy
+            extrapolated to 0 K).  If force_consistent=None, uses
+            force-consistent energies if available in the calculator, but
+            falls back to force_consistent=False if not.
 
         .. deprecated:: 3.19.3
             Use of ``maxmove`` is deprecated; please use ``maxstep``.
-
         """
-        Optimizer.__init__(self, atoms, restart, logfile, trajectory, **kwargs)
+        Optimizer.__init__(self, atoms, restart, logfile, trajectory,
+                           master, force_consistent=force_consistent)
 
         self.dt = dt
 

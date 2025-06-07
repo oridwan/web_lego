@@ -1,5 +1,3 @@
-# fmt: off
-
 """Logging for molecular dynamics."""
 import weakref
 from typing import IO, Any, Union

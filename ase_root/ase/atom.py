@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module defines the Atom object."""
 
 import numpy as np

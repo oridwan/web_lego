@@ -1,5 +1,3 @@
-# fmt: off
-
 """ASE-interface to Octopus.
 
 Ask Hjorth Larsen <asklarsen@gmail.com>
@@ -10,11 +8,8 @@ http://tddft.org/programs/octopus/
 
 import numpy as np
 
-from ase.calculators.genericfileio import (
-    BaseProfile,
-    CalculatorTemplate,
-    GenericFileIOCalculator,
-)
+from ase.calculators.genericfileio import (BaseProfile, CalculatorTemplate,
+                                           GenericFileIOCalculator)
 from ase.io.octopus.input import generate_input, process_special_kwargs
 from ase.io.octopus.output import read_eigenvalues_file, read_static_info
 
@@ -66,8 +61,8 @@ class OctopusTemplate(CalculatorTemplate):
                 kpt_weights = np.ones(len(kpts))  # XXX ?  Or 1 / len(kpts) ?
                 # XXX New Octopus probably has symmetry reduction !!
             results.update(eigenvalues=eigs, occupations=occs,
-                           ibz_kpoints=kpts,
-                           kpoint_weights=kpt_weights)
+                           ibz_k_points=kpts,
+                           k_point_weights=kpt_weights)
         return results
 
     def execute(self, directory, profile):

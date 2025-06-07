@@ -1,5 +1,3 @@
-# fmt: off
-
 # Note:
 # Try to avoid module level import statements here to reduce
 # import time during CLI execution
@@ -27,7 +25,7 @@ class CLICommand:
     @staticmethod
     def run(args):
         if args.calculators is not None:
-            from ase.codes import codes, list_codes
+            from ase.codes import list_codes, codes
             if args.calculators:
                 names = args.calculators
             else:
@@ -46,8 +44,8 @@ class CLICommand:
 
 
 def print_file_info(args):
-    from ase.io.bundletrajectory import print_bundletrajectory_info
     from ase.io.formats import UnknownFileTypeError, filetype, ioformats
+    from ase.io.bundletrajectory import print_bundletrajectory_info
     from ase.io.ulm import print_ulm_info
     n = max(len(filename) for filename in args.files) + 2
     nfiles_not_found = 0

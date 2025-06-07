@@ -1,4 +1,3 @@
-# fmt: off
 import pytest
 
 from ase.calculators.qmmm import EIQMMM, LJInteractions

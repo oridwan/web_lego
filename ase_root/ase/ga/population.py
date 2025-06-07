@@ -1,5 +1,3 @@
-# fmt: off
-
 """ Implementation of a population for maintaining a GA population and
 proposing structures to pair. """
 from math import exp, sqrt, tanh

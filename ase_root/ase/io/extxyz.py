@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 Extended XYZ support
 
@@ -18,7 +16,6 @@ from io import StringIO, UnsupportedOperation
 import numpy as np
 
 from ase.atoms import Atoms
-from ase.calculators.calculator import all_properties
 from ase.calculators.singlepoint import SinglePointCalculator
 from ase.constraints import FixAtoms, FixCartesian
 from ase.io.formats import index2range
@@ -48,14 +45,10 @@ UNPROCESSED_KEYS = {'uid'}
 
 SPECIAL_3_3_KEYS = {'Lattice', 'virial', 'stress'}
 
-# Determine 'per-atom' and 'per-config' based on all_outputs shape,
-# but filter for things in all_properties because that's what
-# SinglePointCalculator accepts
+# 'per-atom' and 'per-config'
 per_atom_properties = []
 per_config_properties = []
 for key, val in all_outputs.items():
-    if key not in all_properties:
-        continue
     if isinstance(val, ArrayProperty) and val.shapespec[0] == 'natoms':
         per_atom_properties.append(key)
     else:
@@ -509,10 +502,9 @@ def set_calc_and_arrays(atoms, arrays):
     results = {}
 
     for name, array in arrays.items():
-        if name in all_properties:
+        if name in all_outputs:
             results[name] = array
         else:
-            # store non-standard items in atoms.arrays
             atoms.new_array(name, array)
 
     for key in list(atoms.info):

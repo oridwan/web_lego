@@ -1,4 +1,3 @@
-# fmt: off
 import pytest
 
 from ase.build import molecule
@@ -14,18 +13,18 @@ def atoms():
 
 def test_set_calculator(atoms):
     calc = EMT()
-    with pytest.warns(FutureWarning):
+    with pytest.deprecated_call():
         atoms.set_calculator(calc)
     assert atoms.calc is calc
 
 
 def test_get_calculator(atoms):
-    with pytest.warns(FutureWarning):
+    with pytest.deprecated_call():
         assert atoms.get_calculator() is None
 
 
 def test_del_calculator(atoms):
     atoms.calc = EMT()
-    with pytest.warns(FutureWarning):
+    with pytest.deprecated_call():
         del atoms.calc
     assert atoms.calc is None

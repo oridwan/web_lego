@@ -1,5 +1,3 @@
-# fmt: off
-
 import datetime
 import json
 

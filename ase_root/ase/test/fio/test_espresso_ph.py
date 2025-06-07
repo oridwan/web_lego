@@ -1,14 +1,9 @@
-# fmt: off
 from io import StringIO
 
 import numpy as np
 
-from ase.io.espresso import (
-    Namelist,
-    read_espresso_ph,
-    read_fortran_namelist,
-    write_espresso_ph,
-)
+from ase.io.espresso import (Namelist, read_espresso_ph, read_fortran_namelist,
+                             write_espresso_ph)
 
 
 def test_write_espresso_ph_single():

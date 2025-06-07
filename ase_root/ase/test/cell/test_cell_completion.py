@@ -1,4 +1,3 @@
-# fmt: off
 import numpy as np
 
 from ase.geometry.cell import complete_cell

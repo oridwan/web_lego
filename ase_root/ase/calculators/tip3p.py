@@ -1,5 +1,3 @@
-# fmt: off
-
 """TIP3P potential."""
 
 import numpy as np

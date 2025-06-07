@@ -1,15 +1,11 @@
-# fmt: off
-
 import re
 from collections import OrderedDict
 
 import numpy as np
 
 from ase import Atoms
-from ase.calculators.singlepoint import (
-    SinglePointDFTCalculator,
-    SinglePointKPoint,
-)
+from ase.calculators.singlepoint import (SinglePointDFTCalculator,
+                                         SinglePointKPoint)
 from ase.units import Bohr, Hartree
 
 from .parser import _define_pattern
@@ -214,6 +210,7 @@ def parse_gto_chunk(chunk):
     forces = None
     energy = None
     dipole = None
+    quadrupole = None
     for theory, pattern in _e_gto.items():
         matches = pattern.findall(chunk)
         if matches:
@@ -236,7 +233,7 @@ def parse_gto_chunk(chunk):
         forces *= Hartree / Bohr
         atoms = Atoms(symbols, positions=pos)
 
-    dipole, _quadrupole = _get_multipole(chunk)
+    dipole, quadrupole = _get_multipole(chunk)
 
     kpts = _get_gto_kpts(chunk)
 

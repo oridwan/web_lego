@@ -1,4 +1,3 @@
-# fmt: off
 """
 This is testing NEB in general, though at the moment focusing on the shared
 calculator implementation that is replacing

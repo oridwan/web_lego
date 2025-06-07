@@ -1,9 +1,8 @@
-# fmt: off
-
-import warnings
 from dataclasses import dataclass
+import warnings
 
 import numpy as np
+
 
 spin_error = (
     'The spin keyword is no longer supported.  Please call the function '
@@ -13,7 +12,7 @@ _deprecated = object()
 
 def get_band_gap(calc, direct=False, spin=_deprecated):
     warnings.warn('Please use ase.dft.bandgap.bandgap() instead!')
-    gap, (s1, k1, _n1), (s2, k2, _n2) = bandgap(calc, direct, spin=spin)
+    gap, (s1, k1, n1), (s2, k2, n2) = bandgap(calc, direct, spin=spin)
     ns = calc.get_number_of_spins()
     if ns == 2:
         return gap, (s1, k1), (s2, k2)
@@ -70,7 +69,7 @@ class GapInfo:
             if ibz_kpoints is not None:
                 coordtxt = '[{:.2f}, {:.2f}, {:.2f}]'.format(
                     *ibz_kpoints[skn[1]])
-                description = f'{description}, {coordtxt}'
+                description = f'{description}, [{coordtxt}]'
             return f'({description})'
 
         gap, skn1, skn2 = self.gap()

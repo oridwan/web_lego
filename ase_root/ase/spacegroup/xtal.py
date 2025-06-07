@@ -1,5 +1,3 @@
-# fmt: off
-
 # Copyright (C) 2010, Jesper Friis
 # (see accompanying license files for details).
 

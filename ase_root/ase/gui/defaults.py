@@ -1,5 +1,3 @@
-# fmt: off
-
 """This is a module to handle generic ASE (gui) defaults ...
 
 ... from a ~/.ase/gui.py configuration file, if it exists. It is imported when
@@ -18,7 +16,6 @@ gui_default_settings = {
     'radii_scale': 0.89,
     'force_vector_scale': 1.0,
     'velocity_vector_scale': 1.0,
-    'magmom_vector_scale': 1.0,
     'show_unit_cell': True,
     'show_axes': True,
     'show_bonds': False,

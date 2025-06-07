@@ -1,5 +1,3 @@
-# fmt: off
-
 import ase.data
 import ase.gui.ui as ui
 from ase import Atoms

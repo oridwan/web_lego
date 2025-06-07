@@ -1,5 +1,3 @@
-# fmt: off
-
 from typing import IO, Optional, Union
 
 import numpy as np
@@ -29,17 +27,16 @@ class LBFGS(Optimizer):
         damping: float = 1.0,
         alpha: float = 70.0,
         use_line_search: bool = False,
-        **kwargs,
+        master: Optional[bool] = None,
+        force_consistent=Optimizer._deprecated,
     ):
-        """
+        """Parameters:
 
-        Parameters
-        ----------
-        atoms: :class:`~ase.Atoms`
+        atoms: Atoms object
             The Atoms object to relax.
 
-        restart: str
-            JSON file used to store vectors for updating the inverse of
+        restart: string
+            Pickle file used to store vectors for updating the inverse of
             Hessian matrix. If set, file with such a name will be searched
             and information stored will be used, if the file exists.
 
@@ -48,7 +45,7 @@ class LBFGS(Optimizer):
             Use '-' for stdout.
 
         trajectory: string
-            Trajectory file used to store optimisation path.
+            Pickle file used to store trajectory of atomic movement.
 
         maxstep: float
             How far is a single atom allowed to move. This is useful for DFT
@@ -69,12 +66,13 @@ class LBFGS(Optimizer):
             steps to converge might be less if a lower value is used. However,
             a lower value also means risk of instability.
 
-        kwargs : dict, optional
-            Extra arguments passed to
-            :class:`~ase.optimize.optimize.Optimizer`.
+        master: boolean
+            Defaults to None, which causes only rank 0 to save files.  If
+            set to true,  this rank will save files.
 
         """
-        Optimizer.__init__(self, atoms, restart, logfile, trajectory, **kwargs)
+        Optimizer.__init__(self, atoms, restart, logfile, trajectory, master,
+                           force_consistent=force_consistent)
 
         if maxstep is not None:
             self.maxstep = maxstep

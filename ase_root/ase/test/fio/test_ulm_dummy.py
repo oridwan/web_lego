@@ -1,4 +1,3 @@
-# fmt: off
 """Test ase.io.ulm.DummyWriter."""
 import numpy as np
 

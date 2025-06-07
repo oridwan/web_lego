@@ -1,3 +1,4 @@
+# type: ignore
 import io
 import os
 import unittest
@@ -10,13 +11,8 @@ import ase.build
 import ase.io
 from ase.build import graphene_nanoribbon
 from ase.calculators.calculator import compare_atoms
-from ase.constraints import (
-    FixAtoms,
-    FixedLine,
-    FixedPlane,
-    FixScaled,
-    constrained_indices,
-)
+from ase.constraints import (FixAtoms, FixedLine, FixedPlane, FixScaled,
+                             constrained_indices)
 from ase.io.vasp import read_vasp_xdatcar, write_vasp_xdatcar
 
 
@@ -111,23 +107,15 @@ indices_to_constrain = [0, 2]
 
 @pytest.fixture()
 def graphene_atoms():
-    atoms = graphene_nanoribbon(2, 2, type='armchair', saturated=False)
+    atoms = graphene_nanoribbon(2, 2, type="armchair", saturated=False)
     atoms.cell = [[10, 0, 0], [0, 10, 0], [0, 0, 10]]
     return atoms
 
 
 def poscar_roundtrip(atoms):
     """Write a POSCAR file, read it back and return the new atoms object"""
-    atoms.write('POSCAR', direct=True)
-    return ase.io.read('POSCAR')
-
-
-@pytest.mark.parametrize('whitespace', ['\n', '   ', '   \n\n  \n'])
-def test_with_whitespace(graphene_atoms, whitespace):
-    graphene_atoms.write('POSCAR', direct=True)
-    with open('POSCAR', 'a') as fd:
-        fd.write(whitespace)
-    assert str(ase.io.read('POSCAR').symbols) == str(graphene_atoms.symbols)
+    atoms.write("POSCAR", direct=True)
+    return ase.io.read("POSCAR")
 
 
 def test_FixAtoms(graphene_atoms):
@@ -164,15 +152,3 @@ def test_FixedLine_and_Plane(ConstraintClass, graphene_atoms):
     # or FixedPlane is along a lattice vector.
 
     assert np.all(constrained_indices(new_atoms) == indices_to_constrain)
-
-
-def test_write_read_velocities(graphene_atoms):
-    vel = np.zeros_like(graphene_atoms.positions)
-    vel = np.linspace(-1, 1, 3 * len(graphene_atoms)).reshape(-1, 3)
-    graphene_atoms.set_velocities(vel)
-
-    graphene_atoms.write('CONTCAR', direct=False)
-    new_atoms = ase.io.read('CONTCAR')
-    new_vel = new_atoms.get_velocities()
-
-    assert np.allclose(vel, new_vel)

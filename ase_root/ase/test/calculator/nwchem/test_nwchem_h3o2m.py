@@ -1,4 +1,3 @@
-# fmt: off
 from math import cos, radians, sin
 
 import pytest
@@ -7,6 +6,7 @@ from ase import Atoms
 from ase.constraints import FixAtoms
 from ase.mep import NEB
 from ase.optimize import BFGS, QuasiNewton
+from ase.visualize import view
 
 
 @pytest.mark.calculator('nwchem')
@@ -23,6 +23,8 @@ def test_h3o2m(factory):
                    (0., 0., doh),
                    (0., 0., doo),
                    (sin(angle) * doht, 0., doo - cos(angle) * doht)])
+    if 0:
+        view(initial)
 
     final = Atoms(
         'HOHOH',
@@ -31,6 +33,8 @@ def test_h3o2m(factory):
                    (0., 0., doo - doh),
                    (0., 0., doo),
                    (sin(angle) * doht, 0., doo - cos(angle) * doht)])
+    if 0:
+        view(final)
 
     # Make band:
     images = [initial.copy()]

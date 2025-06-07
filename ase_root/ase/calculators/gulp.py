@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module defines an ASE interface to GULP.
 
 Written by:

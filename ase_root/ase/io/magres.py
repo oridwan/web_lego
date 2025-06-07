@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module provides I/O functions for the MAGRES file format, introduced
 by CASTEP as an output format to store structural data and ab-initio
 calculated NMR parameters.
@@ -132,7 +130,7 @@ def read_magres(fd, include_unrecognised=False):
             tuples.
         """
 
-        _name, records = block
+        name, records = block
 
         # 3x3 tensor
         def ntensor33(name):
@@ -181,7 +179,7 @@ def read_magres(fd, include_unrecognised=False):
             Parse atoms block into data dictionary given list of record tuples.
         """
 
-        _name, records = block
+        name, records = block
 
         # Lattice record: a1, a2 a3, b1, b2, b3, c1, c2 c3
         def lattice(d):
@@ -218,7 +216,7 @@ def read_magres(fd, include_unrecognised=False):
             tuples.
         """
 
-        _name, records = block
+        name, records = block
 
         data_dict = {}
 

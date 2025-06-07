@@ -1,5 +1,3 @@
-# fmt: off
-
 """Function-like object creating hexagonal lattices.
 
 The following lattice creators are defined:

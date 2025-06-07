@@ -1,4 +1,3 @@
-# fmt: off
 """
 Tests of the plugin functionality for defining IO formats
 outside of the ase package

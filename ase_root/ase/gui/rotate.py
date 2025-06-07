@@ -1,5 +1,3 @@
-# fmt: off
-
 import ase.gui.ui as ui
 from ase.gui.i18n import _
 from ase.utils import irotate, rotate

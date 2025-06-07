@@ -1,4 +1,3 @@
-# fmt: off
 import numpy as np
 
 import ase.calculators.demon as demon

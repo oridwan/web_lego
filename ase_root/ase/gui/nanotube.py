@@ -1,5 +1,3 @@
-# fmt: off
-
 """Window for setting up Carbon nanotubes and similar tubes.
 """
 

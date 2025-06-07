@@ -1,4 +1,3 @@
-# fmt: off
 import re
 from collections import OrderedDict
 

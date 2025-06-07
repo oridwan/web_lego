@@ -1,12 +1,8 @@
-# fmt: off
-
 """
 This module contains functionality for reading and writing an ASE
 Atoms object in VASP POSCAR format.
 
 """
-from __future__ import annotations
-
 import re
 from pathlib import Path
 from typing import List, Optional, TextIO, Tuple
@@ -19,7 +15,6 @@ from ase.io import ParseError
 from ase.io.formats import string2index
 from ase.io.utils import ImageIterator
 from ase.symbols import Symbols
-from ase.units import Ang, fs
 from ase.utils import reader, writer
 
 from .vasp_parsers import vasp_outcar_parsers as vop
@@ -28,27 +23,6 @@ __all__ = [
     'read_vasp', 'read_vasp_out', 'iread_vasp_out', 'read_vasp_xdatcar',
     'read_vasp_xml', 'write_vasp', 'write_vasp_xdatcar'
 ]
-
-
-def parse_poscar_scaling_factor(line: str) -> np.ndarray:
-    """Parse scaling factor(s) in the second line in POSCAR/CONTCAR.
-
-    This can also be one negative number or three positive numbers.
-
-    https://www.vasp.at/wiki/index.php/POSCAR#Full_format_specification
-
-    """
-    scale = []
-    for _ in line.split()[:3]:
-        try:
-            scale.append(float(_))
-        except ValueError:
-            break
-    if len(scale) not in {1, 3}:
-        raise RuntimeError('The number of scaling factors must be 1 or 3.')
-    if len(scale) == 3 and any(_ < 0.0 for _ in scale):
-        raise RuntimeError('All three scaling factors must be positive.')
-    return np.array(scale)
 
 
 def get_atomtypes(fname):
@@ -145,24 +119,17 @@ def get_atomtypes_from_formula(formula):
 
 
 @reader
-def read_vasp(fd):
+def read_vasp(filename='CONTCAR'):
     """Import POSCAR/CONTCAR type file.
 
     Reads unitcell, atom positions and constraints from the POSCAR/CONTCAR
     file and tries to read atom types from POSCAR/CONTCAR header, if this
     fails the atom types are read from OUTCAR or POTCAR file.
     """
-    atoms = read_vasp_configuration(fd)
-    velocities = read_velocities_if_present(fd, len(atoms))
-    if velocities is not None:
-        atoms.set_velocities(velocities)
-    return atoms
 
-
-def read_vasp_configuration(fd):
-    """Read common POSCAR/CONTCAR/CHGCAR/CHG quantities and return Atoms."""
     from ase.data import chemical_symbols
 
+    fd = filename
     # The first line is in principle a comment line, however in VASP
     # 4.x a common convention is to have it contain the atom symbols,
     # eg. "Ag Ge" in the same order as later in the file (and POTCAR
@@ -172,14 +139,21 @@ def read_vasp_configuration(fd):
     # file.
     line1 = fd.readline()
 
-    scale = parse_poscar_scaling_factor(fd.readline())
+    # Scaling factor
+    # This can also be one negative number or three positive numbers.
+    # https://www.vasp.at/wiki/index.php/POSCAR#Full_format_specification
+    scale = np.array(fd.readline().split()[:3], dtype=float)
+    if len(scale) not in [1, 3]:
+        raise RuntimeError('The number of scaling factors must be 1 or 3.')
+    if len(scale) == 3 and np.any(scale < 0.0):
+        raise RuntimeError('All three scaling factors must be positive.')
 
     # Now the lattice vectors
     cell = np.array([fd.readline().split()[:3] for _ in range(3)], dtype=float)
     # Negative scaling factor corresponds to the cell volume.
     if scale[0] < 0.0:
         scale = np.cbrt(-1.0 * scale / np.linalg.det(cell))
-    cell *= scale  # This works for both one and three scaling factors.
+    cell *= scale
 
     # Number of atoms. Again this must be in the same order as
     # in the first line
@@ -261,7 +235,6 @@ def read_vasp_configuration(fd):
         atoms_pos[atom] = [float(_) for _ in ac[0:3]]
         if selective_dynamics:
             selective_flags[atom] = [_ == 'F' for _ in ac[3:6]]
-
     atoms = Atoms(symbols=atom_symbols, cell=cell, pbc=True)
     if cartesian:
         atoms_pos *= scale
@@ -270,26 +243,7 @@ def read_vasp_configuration(fd):
         atoms.set_scaled_positions(atoms_pos)
     if selective_dynamics:
         set_constraints(atoms, selective_flags)
-
     return atoms
-
-
-def read_velocities_if_present(fd, natoms) -> np.ndarray | None:
-    """Read velocities from POSCAR/CONTCAR if present, return in ASE units."""
-    ac_type = fd.readline().strip()
-
-    # Check if velocities are present
-    if not ac_type:
-        return None
-
-    atoms_vel = np.empty((natoms, 3))
-    for atom in range(natoms):
-        words = fd.readline().split()
-        assert len(words) == 3
-        atoms_vel[atom] = (float(words[0]), float(words[1]), float(words[2]))
-
-    # unit conversion from Angstrom/fs to ASE units
-    return atoms_vel * (Ang / fs)
 
 
 def set_constraints(atoms: Atoms, selective_flags: np.ndarray):
@@ -437,10 +391,9 @@ def read_vasp_xml(filename='vasprun.xml', index=-1):
     import xml.etree.ElementTree as ET
     from collections import OrderedDict
 
-    from ase.calculators.singlepoint import (
-        SinglePointDFTCalculator,
-        SinglePointKPoint,
-    )
+    from ase.calculators.singlepoint import (SinglePointDFTCalculator,
+                                             SinglePointKPoint)
+    from ase.constraints import FixAtoms, FixScaled
     from ase.units import GPa
 
     tree = ET.iterparse(filename, events=['start', 'end'])
@@ -513,7 +466,7 @@ def read_vasp_xml(filename='vasprun.xml', index=-1):
                         if flags.all():
                             fixed_indices.append(i)
                         elif flags.any():
-                            constraints.append(FixScaled(i, flags, cell_init))
+                            constraints.append(FixScaled(cell_init, i, flags))
 
                     if fixed_indices:
                         constraints.append(FixAtoms(fixed_indices))
@@ -878,15 +831,6 @@ def write_vasp(
             fd.write(''.join([f'{f:>4s}' for f in flags]))
         fd.write('\n')
 
-    # if velocities in atoms object write velocities
-    if atoms.has('momenta'):
-        cform = 3 * ' {:19.16f}' + '\n'
-        fd.write('Cartesian\n')
-        # unit conversion to Angstrom / fs
-        vel = atoms.get_velocities() / (Ang / fs)
-        for vatom in vel:
-            fd.write(cform.format(*vatom))
-
 
 def _handle_ase_constraints(atoms: Atoms) -> np.ndarray:
     """Convert the ASE constraints on `atoms` to VASP constraints
@@ -916,7 +860,7 @@ def _handle_ase_constraints(atoms: Atoms) -> np.ndarray:
             mask = np.all(
                 np.abs(np.cross(constr.dir, atoms.cell)) < 1e-5, axis=1
             )
-            if mask.sum() != 1:
+            if sum(mask) != 1:
                 raise RuntimeError(
                     'VASP requires that the direction of FixedPlane '
                     'constraints is parallel with one of the cell axis'
@@ -927,7 +871,7 @@ def _handle_ase_constraints(atoms: Atoms) -> np.ndarray:
             mask = np.all(
                 np.abs(np.cross(constr.dir, atoms.cell)) < 1e-5, axis=1
             )
-            if mask.sum() != 1:
+            if sum(mask) != 1:
                 raise RuntimeError(
                     'VASP requires that the direction of FixedLine '
                     'constraints is parallel with one of the cell axis'

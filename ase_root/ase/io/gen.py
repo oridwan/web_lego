@@ -1,5 +1,3 @@
-# fmt: off
-
 """Extension to ASE: read and write structures in GEN format
 
 Refer to DFTB+ manual for GEN format description.
@@ -38,7 +36,7 @@ def read_gen(fileobj):
     positions = []
     symbols = []
     for line in lines[:natoms]:
-        _dummy, symbolid, x, y, z = line.split()[:5]
+        dummy, symbolid, x, y, z = line.split()[:5]
         symbols.append(symboldict[int(symbolid)])
         positions.append([float(x), float(y), float(z)])
     image = Atoms(symbols=symbols, positions=positions)

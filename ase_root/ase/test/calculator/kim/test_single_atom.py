@@ -1,4 +1,3 @@
-# fmt: off
 from pytest import mark
 
 from ase import Atoms

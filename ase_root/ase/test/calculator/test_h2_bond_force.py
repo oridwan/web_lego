@@ -1,4 +1,3 @@
-# fmt: off
 import numpy as np
 import pytest
 
@@ -57,9 +56,9 @@ def test_h2_bond(factory, atoms):
     E = np.array(E)
     F = np.array(F)
 
-    a, b, _c = np.polyfit(X, E, 2)
+    a, b, c = np.polyfit(X, E, 2)
     xmin = -b / (2.0 * a)
-    fa, _fb = np.polyfit(X, F, 1)
+    fa, fb = np.polyfit(X, F, 1)
 
     k_from_energy = 2 * a
     k_from_forces = -fa

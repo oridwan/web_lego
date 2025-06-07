@@ -1,4 +1,3 @@
-# fmt: off
 import pytest
 
 from ase.build import bulk
@@ -17,4 +16,4 @@ def test_neighborlist_initialization():
         nl.get_connectivity_matrix()
 
     nl.update(atoms)
-    nl.get_neighbors(0)
+    indices, offsets = nl.get_neighbors(0)

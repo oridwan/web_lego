@@ -1,5 +1,3 @@
-# fmt: off
-
 import warnings
 from math import acos, pi, sqrt
 
@@ -27,15 +25,15 @@ def formula(Z):
     return '+'.join(strings)
 
 
-class Status:
-    def __init__(self, gui):
-        self.gui = gui
+class Status:  # Status is used as a mixin in GUI
+    def __init__(self):
+        self.ordered_indices = []
 
     def status(self, atoms):
-        gui = self.gui
+        # use where here:  XXX
         natoms = len(atoms)
-        indices = np.arange(natoms)[gui.images.selected[:natoms]]
-        ordered_indices = [i for i in gui.images.selected_ordered
+        indices = np.arange(natoms)[self.images.selected[:natoms]]
+        ordered_indices = [i for i in self.images.selected_ordered
                            if i < len(atoms)]
         n = len(indices)
 
@@ -69,7 +67,7 @@ class Status:
                 if forces is not None:
                     maxf = np.linalg.norm(forces, axis=1).max()
                     line += f'   Max force = {maxf:.3f} eV/Å'
-            gui.window.update_status_line(line)
+            self.window.update_status_line(line)
             return
 
         Z = atoms.numbers[indices]
@@ -80,17 +78,17 @@ class Status:
             text = (' #%d %s (%s): %.3f Å, %.3f Å, %.3f Å ' %
                     ((indices[0], names[Z[0]], symbols[Z[0]]) + tuple(R[0])))
             text += _(' tag=%(tag)s') % dict(tag=tag)
-            magmoms = get_magmoms(gui.atoms)
+            magmoms = get_magmoms(self.atoms)
             if magmoms.any():
                 # TRANSLATORS: mom refers to magnetic moment
                 text += _(' mom={:1.2f}'.format(
                     magmoms[indices][0]))
-            charges = gui.atoms.get_initial_charges()
+            charges = self.atoms.get_initial_charges()
             if charges.any():
                 text += _(' q={:1.2f}'.format(
                     charges[indices][0]))
-            haveit = {'numbers', 'positions', 'forces', 'momenta',
-                      'initial_charges', 'initial_magmoms', 'tags'}
+            haveit = ['numbers', 'positions', 'forces', 'momenta',
+                      'initial_charges', 'initial_magmoms']
             for key in atoms.arrays:
                 if key not in haveit:
                     val = atoms.get_array(key)[indices[0]]
@@ -123,10 +121,10 @@ class Status:
             text = (' %s-%s-%s: %.1f°, %.1f°, %.1f°' %
                     tuple([symbols[z] for z in Z] + a))
         elif len(ordered_indices) == 4:
-            angle = gui.atoms.get_dihedral(*ordered_indices, mic=True)
+            angle = self.atoms.get_dihedral(*ordered_indices, mic=True)
             text = ('%s %s → %s → %s → %s: %.1f°' %
                     tuple([_('dihedral')] + [symbols[z] for z in Z] + [angle]))
         else:
             text = ' ' + formula(Z)
 
-        gui.window.update_status_line(text)
+        self.window.update_status_line(text)

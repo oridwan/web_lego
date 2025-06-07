@@ -1,24 +1,16 @@
-# fmt: off
-
 import collections
 from functools import reduce, singledispatch
-from typing import (
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import (Any, Dict, Iterable, List, Optional, Sequence, TypeVar,
+                    Union, overload)
 
 import numpy as np
-from matplotlib.axes import Axes
 
 from ase.spectrum.dosdata import DOSData, Floats, GridDOSData, Info, RawDOSData
 from ase.utils.plotting import SimplePlottingAxes
+
+# This import is for the benefit of type-checking / mypy
+if False:
+    import matplotlib.axes
 
 
 class DOSCollection(collections.abc.Sequence):
@@ -61,10 +53,10 @@ class DOSCollection(collections.abc.Sequence):
              xmax: float = None,
              width: float = 0.1,
              smearing: str = 'Gauss',
-             ax: Axes = None,
+             ax: 'matplotlib.axes.Axes' = None,
              show: bool = False,
              filename: str = None,
-             mplargs: dict = None) -> Axes:
+             mplargs: dict = None) -> 'matplotlib.axes.Axes':
         """Simple plot of collected DOS data, resampled onto a grid
 
         If the special key 'label' is present in self.info, this will be set
@@ -286,8 +278,7 @@ class DOSCollection(collections.abc.Sequence):
         matches = self._select_to_list(self, info_selection, negative=True)
         return type(self)(matches)
 
-    # Use typehint *info_keys: str from python3.11+
-    def sum_by(self, *info_keys) -> 'DOSCollection':
+    def sum_by(self, *info_keys: str) -> 'DOSCollection':
         """Return a DOSCollection with some data summed by common attributes
 
         For example, if ::
@@ -398,9 +389,7 @@ class GridDOSCollection(DOSCollection):
         else:
             self._energies = np.asarray(energies)
 
-        self._weights: np.ndarray = np.empty(
-            (len(dos_list), len(self._energies)), float,
-        )
+        self._weights = np.empty((len(dos_list), len(self._energies)), float)
         self._info = []
 
         for i, dos_data in enumerate(dos_list):
@@ -547,10 +536,10 @@ class GridDOSCollection(DOSCollection):
              xmax: float = None,
              width: float = None,
              smearing: str = 'Gauss',
-             ax: Axes = None,
+             ax: 'matplotlib.axes.Axes' = None,
              show: bool = False,
              filename: str = None,
-             mplargs: dict = None) -> Axes:
+             mplargs: dict = None) -> 'matplotlib.axes.Axes':
         """Simple plot of collected DOS data, resampled onto a grid
 
         If the special key 'label' is present in self.info, this will be set
@@ -600,7 +589,7 @@ class GridDOSCollection(DOSCollection):
         return ax
 
     @staticmethod
-    def _plot_broadened(ax: Axes,
+    def _plot_broadened(ax: 'matplotlib.axes.Axes',
                         energies: Floats,
                         all_y: np.ndarray,
                         all_labels: Sequence[str],

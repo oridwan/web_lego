@@ -1,5 +1,3 @@
-# fmt: off
-
 import argparse
 import traceback
 from math import pi

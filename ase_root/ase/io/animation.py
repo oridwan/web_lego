@@ -1,5 +1,3 @@
-# fmt: off
-
 from ase.visualize.plot import animate
 
 

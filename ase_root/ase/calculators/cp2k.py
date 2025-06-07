@@ -1,5 +1,3 @@
-# fmt: off
-
 """This module defines an ASE interface to CP2K.
 
 https://www.cp2k.org/
@@ -15,12 +13,8 @@ from warnings import warn
 import numpy as np
 
 import ase.io
-from ase.calculators.calculator import (
-    Calculator,
-    CalculatorSetupError,
-    Parameters,
-    all_changes,
-)
+from ase.calculators.calculator import (Calculator, CalculatorSetupError,
+                                        Parameters, all_changes)
 from ase.config import cfg
 from ase.units import Rydberg
 

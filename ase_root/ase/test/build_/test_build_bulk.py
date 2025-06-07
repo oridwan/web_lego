@@ -1,4 +1,3 @@
-# fmt: off
 """Tests for `bulk`"""
 import pytest
 
@@ -17,45 +16,51 @@ lat_map = {
 }
 
 
-@pytest.mark.parametrize('symbol', chemical_symbols)
-def test_build_bulk(symbol):
+def test_build_bulk():
     """Test reference states"""
-    atomic_number = chemical_symbols.index(symbol)
-    ref = reference_states[atomic_number]
+    lat_counts: dict = {}
 
-    if ref is None:
-        return
+    for symbol in chemical_symbols:
+        atomic_number = chemical_symbols.index(symbol)
+        ref = reference_states[atomic_number]
 
-    structure = str(ref['symmetry'])
-    if structure not in lat_map:
-        return
+        if ref is None:
+            continue
 
-    if symbol in {'B', 'Se', 'Te'}:
-        return
+        structure = str(ref['symmetry'])
+        if structure not in lat_map:
+            continue
 
-    atoms = bulk(symbol)
-    lattice = atoms.cell.get_bravais_lattice()
-    print(
-        atomic_number,
-        atoms.symbols[0],
-        structure,
-        lattice,
-        atoms.cell.lengths(),
-    )
-    par1 = lattice.tocell().niggli_reduce()[0].cellpar()
-    par2 = atoms.cell.niggli_reduce()[0].cellpar()
-    assert abs(par2 - par1).max() < 1e-10
-    assert lat_map[structure] == lattice.name
+        if symbol in {'B', 'Se', 'Te'}:
+            continue
+        lat_counts.setdefault(structure, []).append(symbol)
 
-    if lattice.name in ['RHL', 'BCT']:
-        return
+        atoms = bulk(symbol)
+        lattice = atoms.cell.get_bravais_lattice()
+        print(
+            atomic_number,
+            atoms.symbols[0],
+            structure,
+            lattice,
+            atoms.cell.lengths(),
+        )
+        par1 = lattice.tocell().niggli_reduce()[0].cellpar()
+        par2 = atoms.cell.niggli_reduce()[0].cellpar()
+        assert abs(par2 - par1).max() < 1e-10
+        assert lat_map[structure] == lattice.name
 
-    _check_orthorhombic(symbol)
+        if lattice.name in ['RHL', 'BCT']:
+            continue
 
-    if lattice.name in ['HEX', 'TET', 'ORC']:
-        return
+        _check_orthorhombic(symbol)
 
-    _check_cubic(symbol)
+        if lattice.name in ['HEX', 'TET', 'ORC']:
+            continue
+
+        _check_cubic(symbol)
+
+        for key, val in lat_counts.items():
+            print(key, len(val), ''.join(val))
 
 
 def _check_orthorhombic(symbol: str):

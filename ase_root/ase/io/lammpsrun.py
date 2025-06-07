@@ -1,5 +1,3 @@
-# fmt: off
-
 import gzip
 import struct
 from collections import deque
@@ -10,7 +8,6 @@ import numpy as np
 from ase.atoms import Atoms
 from ase.calculators.lammps import convert
 from ase.calculators.singlepoint import SinglePointCalculator
-from ase.data import atomic_masses, chemical_symbols
 from ase.parallel import paropen
 from ase.quaternions import Quaternions
 
@@ -105,12 +102,6 @@ def lammps_data_to_ase_atoms(
     if "element" in colnames:
         # priority to elements written in file
         elements = data[:, colnames.index("element")]
-    elif "mass" in colnames:
-        # try to determine elements from masses
-        elements = [
-            _mass2element(m)
-            for m in data[:, colnames.index("mass")].astype(float)
-        ]
     elif "type" in colnames:
         # fall back to `types` otherwise
         elements = data[:, colnames.index("type")].astype(int)
@@ -216,17 +207,11 @@ def lammps_data_to_ase_atoms(
     # process the extra columns of fixes, variables and computes
     #    that can be dumped, add as additional arrays to atoms object
     for colname in colnames:
-        # determine if it is a compute, fix or
-        # custom property/atom (but not the quaternian)
+        # determine if it is a compute or fix (but not the quaternian)
         if (colname.startswith('f_') or colname.startswith('v_') or
-            colname.startswith('d_') or colname.startswith('d2_') or
-            (colname.startswith('c_') and not colname.startswith('c_q['))):
+                (colname.startswith('c_') and not colname.startswith('c_q['))):
             out_atoms.new_array(colname, get_quantity([colname]),
                                 dtype='float')
-
-        elif colname.startswith('i_') or colname.startswith('i2_'):
-            out_atoms.new_array(colname, get_quantity([colname]),
-                                dtype='int')
 
     return out_atoms
 
@@ -279,16 +264,16 @@ def read_lammps_dump_text(fileobj, index=-1, **kwargs):
     images = []
 
     # avoid references before assignment in case of incorrect file structure
-    cell, celldisp, pbc, info = None, None, False, {}
+    cell, celldisp, pbc = None, None, False
 
     while len(lines) > n_atoms:
         line = lines.popleft()
 
         if "ITEM: TIMESTEP" in line:
+            n_atoms = 0
             line = lines.popleft()
             # !TODO: pyflakes complains about this line -> do something
-            ntimestep = int(line.split()[0])  # NOQA
-            info["timestep"] = ntimestep
+            # ntimestep = int(line.split()[0])  # NOQA
 
         if "ITEM: NUMBER OF ATOMS" in line:
             line = lines.popleft()
@@ -330,7 +315,7 @@ def read_lammps_dump_text(fileobj, index=-1, **kwargs):
         if "ITEM: ATOMS" in line:
             colnames = line.split()[2:]
             datarows = [lines.popleft() for _ in range(n_atoms)]
-            data = np.loadtxt(datarows, dtype=str, ndmin=2)
+            data = np.loadtxt(datarows, dtype=str)
             out_atoms = lammps_data_to_ase_atoms(
                 data=data,
                 colnames=colnames,
@@ -338,9 +323,8 @@ def read_lammps_dump_text(fileobj, index=-1, **kwargs):
                 celldisp=celldisp,
                 atomsobj=Atoms,
                 pbc=pbc,
-                **kwargs,
+                **kwargs
             )
-            out_atoms.info.update(info)
             images.append(out_atoms)
 
         if len(images) > index_end >= 0:
@@ -365,7 +349,7 @@ def read_lammps_dump_binary(
     # depending on the chosen compilation flag lammps uses either normal
     # integers or long long for its id or timestep numbering
     # !TODO: tags are cast to double -> missing/double ids (add check?)
-    _tagformat, bigformat = dict(
+    tagformat, bigformat = dict(
         SMALLSMALL=("i", "i"), SMALLBIG=("i", "q"), BIGBIG=("q", "q")
     )[intformat]
 
@@ -415,7 +399,7 @@ def read_lammps_dump_binary(
                 # TODO: Use the endianness of the dump file in subsequent
                 #       read_variables rather than just assuming it will match
                 #       that of the host
-                read_variables("=i")
+                endian, = read_variables("=i")
 
                 # Read revision number (integer)
                 revision, = read_variables("=i")
@@ -423,7 +407,7 @@ def read_lammps_dump_binary(
                 # Finally, read the actual timestep (bigint)
                 ntimestep, = read_variables("=" + bigformat)
 
-            _n_atoms, triclinic = read_variables("=" + bigformat + "i")
+            n_atoms, triclinic = read_variables("=" + bigformat + "i")
             boundary = read_variables("=6i")
             diagdisp = read_variables("=6d")
             if triclinic != 0:
@@ -448,7 +432,7 @@ def read_lammps_dump_binary(
                 flag, = read_variables("=c")
                 if flag != b'\x00':
                     # Flag was non-empty string
-                    read_variables("=d")
+                    time, = read_variables("=d")
 
                 # Length of column string
                 columns_str_len, = read_variables("=i")
@@ -495,15 +479,3 @@ def read_lammps_dump_binary(
             break
 
     return images[index]
-
-
-def _mass2element(mass):
-    """
-    Guess the element corresponding to a given atomic mass.
-
-    :param mass: Atomic mass for searching.
-    :return: Element symbol as a string.
-    """
-    min_idx = np.argmin(np.abs(atomic_masses - mass))
-    element = chemical_symbols[min_idx]
-    return element

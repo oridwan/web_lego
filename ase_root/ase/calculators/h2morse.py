@@ -1,5 +1,3 @@
-# fmt: off
-
 from itertools import count
 
 import numpy as np

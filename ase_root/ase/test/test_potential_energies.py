@@ -1,4 +1,3 @@
-# fmt: off
 from numpy.testing import assert_allclose
 
 import ase.build

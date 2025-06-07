@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 Stream input commands to lammps to perform desired simulations
 """

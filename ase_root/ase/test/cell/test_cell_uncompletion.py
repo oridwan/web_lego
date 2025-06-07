@@ -1,4 +1,3 @@
-# fmt: off
 import itertools
 
 import pytest

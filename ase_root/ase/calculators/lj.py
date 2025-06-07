@@ -1,5 +1,3 @@
-# fmt: off
-
 import numpy as np
 
 from ase.calculators.calculator import Calculator, all_changes

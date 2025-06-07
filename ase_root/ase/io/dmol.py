@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 IO functions for DMol3 file formats.
 

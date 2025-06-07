@@ -1,4 +1,3 @@
-# fmt: off
 # type: ignore
 from numpy.linalg import norm
 

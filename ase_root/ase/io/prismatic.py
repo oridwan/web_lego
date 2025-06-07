@@ -1,5 +1,3 @@
-# fmt: off
-
 """Module to read and write atoms in xtl file format for the prismatic and
 computem software.
 

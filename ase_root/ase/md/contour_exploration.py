@@ -1,5 +1,3 @@
-# fmt: off
-
 from typing import IO, Optional, Union
 
 import numpy as np
@@ -240,7 +238,7 @@ class ContourExploration(Dynamics):
 
     def rand_vect(self):
         '''Returns a random (Natoms,3) vector'''
-        vect = self.rng.normal(size=(len(self._actual_atoms), 3))
+        vect = self.rng.random((len(self._actual_atoms), 3)) - 0.5
         return vect
 
     def create_drift_unit_vector(self, N, T):

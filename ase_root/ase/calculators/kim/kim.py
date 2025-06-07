@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 Knowledgebase of Interatomic Models (KIM) Calculator for ASE written by:
 
@@ -15,12 +13,8 @@ on KIM, visit https://openkim.org.
 """
 
 from . import kimpy_wrappers
-from .calculators import (
-    ASAPCalculator,
-    KIMCalculator,
-    LAMMPSLibCalculator,
-    LAMMPSRunCalculator,
-)
+from .calculators import (ASAPCalculator, KIMCalculator, LAMMPSLibCalculator,
+                          LAMMPSRunCalculator)
 from .exceptions import KIMCalculatorError
 
 

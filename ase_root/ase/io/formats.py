@@ -1,5 +1,3 @@
-# fmt: off
-
 """File formats.
 
 This module implements the read(), iread() and write() functions in ase.io.
@@ -26,17 +24,8 @@ import warnings
 from importlib import import_module
 from importlib.metadata import entry_points
 from pathlib import Path, PurePath
-from typing import (
-    IO,
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-)
+from typing import (IO, Any, Dict, Iterable, List, Optional, Sequence, Tuple,
+                    Union)
 
 from ase.atoms import Atoms
 from ase.parallel import parallel_function, parallel_generator
@@ -361,8 +350,6 @@ F('aims', 'FHI-aims geometry file', '1S', ext='in')
 F('aims-output', 'FHI-aims output', '+S',
   module='aims', magic=b'*Invoking FHI-aims ...')
 F('bundletrajectory', 'ASE bundle trajectory', '+S')
-# XXX: Define plugin in ase db backends package:
-# F('aselmdb', 'ASE LMDB format', '+F')
 F('castep-castep', 'CASTEP output file', '+F',
   module='castep', ext='castep')
 F('castep-cell', 'CASTEP geom file', '1F',
@@ -473,8 +460,6 @@ F('onetep-in', 'ONETEP input file', '1F',
   magic=[b'*lock species ',
          b'*LOCK SPECIES ',
          b'*--- INPUT FILE ---*'])
-F('orca-output', 'ORCA output', '+F',
-  module='orca', magic=b'* O   R   C   A *')
 F('proteindatabank', 'Protein Data Bank', '+F',
   ext='pdb')
 F('png', 'Portable Network Graphics', '1B')
@@ -596,7 +581,7 @@ def open_with_compression(filename: str, mode: str = 'r') -> IO:
     elif mode == 'a':
         mode = 'at'
 
-    _root, compression = get_compression(filename)
+    root, compression = get_compression(filename)
 
     if compression == 'gz':
         import gzip
@@ -955,11 +940,8 @@ def filetype(
         if filename.startswith('mysql') or filename.startswith('mariadb'):
             return 'mysql'
 
-        if filename.endswith('aselmdb'):
-            return 'db'
-
         # strip any compression extensions that can be read
-        root, _compression = get_compression(filename)
+        root, compression = get_compression(filename)
         basename = os.path.basename(root)
 
         if '.' in basename:

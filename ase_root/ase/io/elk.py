@@ -1,5 +1,3 @@
-# fmt: off
-
 import collections
 from pathlib import Path
 

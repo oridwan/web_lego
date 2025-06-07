@@ -1,5 +1,3 @@
-# fmt: off
-
 """ Read/Write DL_POLY_4 CONFIG files """
 import itertools
 import re
@@ -246,8 +244,8 @@ def write_dlp4(fd: IO, atoms: Atoms,
         for row in atoms.get_cell():
             print("".join(map(float_format, row)), file=fd)
 
-    vels = atoms.get_velocities() / DLP_V_ASE if levcfg > 0 else None
-    forces = atoms.get_forces() / DLP_F_ASE if levcfg > 1 else None
+    vels = atoms.get_velocities() / DLP_V_ASE if levcfg > 0 else []
+    forces = atoms.get_forces() / DLP_F_ASE if levcfg > 1 else []
 
     labels = atoms.arrays.get(DLP4_LABELS_KEY)
 

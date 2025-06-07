@@ -1,4 +1,3 @@
-# fmt: off
 import os
 from io import StringIO
 

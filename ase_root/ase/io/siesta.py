@@ -1,5 +1,3 @@
-# fmt: off
-
 """Helper functions for read_fdf."""
 from pathlib import Path
 from re import compile

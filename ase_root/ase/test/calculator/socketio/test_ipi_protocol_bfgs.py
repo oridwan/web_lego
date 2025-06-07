@@ -1,4 +1,3 @@
-# fmt: off
 import os
 import sys
 import threading

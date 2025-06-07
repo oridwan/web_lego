@@ -1,5 +1,3 @@
-# fmt: off
-
 """Infrared intensities"""
 
 from math import sqrt

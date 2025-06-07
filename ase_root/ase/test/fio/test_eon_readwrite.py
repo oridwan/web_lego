@@ -1,4 +1,3 @@
-# fmt: off
 """Check that reading and writing .con files is consistent."""
 
 import numpy as np

@@ -1,4 +1,3 @@
-# fmt: off
 import io
 from datetime import datetime
 

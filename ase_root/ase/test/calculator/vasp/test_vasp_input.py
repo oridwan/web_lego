@@ -1,16 +1,12 @@
-# fmt: off
 from unittest import mock
 
 import numpy as np
 import pytest
 
 from ase.build import bulk
-from ase.calculators.vasp.create_input import (
-    GenerateVaspInput,
-    _args_without_comment,
-    _from_vasp_bool,
-    _to_vasp_bool,
-)
+from ase.calculators.vasp.create_input import (GenerateVaspInput,
+                                               _args_without_comment,
+                                               _from_vasp_bool, _to_vasp_bool)
 
 
 def dict_is_subset(d1, d2):
@@ -249,7 +245,7 @@ def test_ichain(vaspinput_factory):
         calc_warn.read_incar('INCAR')
         assert calc_warn.int_params['iopt'] == 1
         assert calc_warn.exp_params['ediffg'] == -0.01
-        assert calc_warn.int_params['ibrion'] == 3
+        assert calc_warn.int_params['ibrion'] == 1
         assert calc_warn.float_params['potim'] == 0.0
 
     with pytest.raises(RuntimeError):
@@ -262,65 +258,10 @@ def test_ichain(vaspinput_factory):
                              ediffg=-0.01,
                              iopt=1,
                              potim=0.0,
-                             ibrion=3)
+                             ibrion=1)
     calc.write_incar(nacl)
     calc.read_incar('INCAR')
     assert calc.int_params['iopt'] == 1
     assert calc.exp_params['ediffg'] == -0.01
-    assert calc.int_params['ibrion'] == 3
+    assert calc.int_params['ibrion'] == 1
     assert calc.float_params['potim'] == 0.0
-
-
-def test_non_registered_keys(vaspinput_factory) -> None:
-    """Test if non-registered INCAR keys can be written and read.
-
-    Here the SCAN meta-GGA functional via LIBXC is tested.
-
-    https://www.vasp.at/wiki/index.php/LIBXC1#Examples_of_INCAR
-
-    """
-    calc = vaspinput_factory(metagga='LIBXC')
-
-    # Be sure that `libxc1` and `libxc2` are not in the registered INCAR keys.
-    assert 'libxc1' not in calc.string_params
-    assert 'libxc2' not in calc.int_params
-
-    calc.set(libxc1='MGGA_X_SCAN')  # or 263
-    calc.set(libxc2=267)  # or "MGGA_C_SCAN"
-
-    calc.write_incar(nacl)
-    calc.read_incar('INCAR')
-
-    assert calc.string_params['libxc1'] == 'MGGA_X_SCAN'
-    assert calc.int_params['libxc2'] == 267
-
-
-def test_bool(tmp_path, vaspinput_factory):
-    """Test that INCAR parser behaves similarly to Vasp, which uses
-    default fortran 'read' parsing
-    """
-
-    for bool_str in ['t', 'T', 'true', 'TRUE', 'TrUe', '.true.', '.T', 'tbob']:
-        with open(tmp_path / 'INCAR', 'w') as fout:
-            fout.write('ENCUT = 100\n')
-            fout.write(f'LCHARG = {bool_str}\n')
-        calc = vaspinput_factory(encut=100)
-        calc.read_incar(tmp_path / 'INCAR')
-        assert calc.bool_params['lcharg']
-
-    for bool_str in ['f', 'F', 'false', 'FALSE', 'FaLSe', '.false.', '.F',
-                     'fbob']:
-        with open(tmp_path / 'INCAR', 'w') as fout:
-            fout.write('ENCUT = 100\n')
-            fout.write(f'LCHARG = {bool_str}\n')
-        calc = vaspinput_factory(encut=100)
-        calc.read_incar(tmp_path / 'INCAR')
-        assert not calc.bool_params['lcharg']
-
-    for bool_str in ['x', '..true.', '1']:
-        with open(tmp_path / 'INCAR', 'w') as fout:
-            fout.write('ENCUT = 100\n')
-            fout.write(f'LCHARG = {bool_str}\n')
-        calc = vaspinput_factory(encut=100)
-        with pytest.raises(ValueError):
-            calc.read_incar(tmp_path / 'INCAR')

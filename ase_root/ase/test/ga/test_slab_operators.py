@@ -1,15 +1,12 @@
-# fmt: off
 import numpy as np
 import pytest
 
 from ase.build import fcc111
-from ase.ga.slab_operators import (
-    CutSpliceSlabCrossover,
-    NeighborhoodElementMutation,
-    RandomCompositionMutation,
-    RandomElementMutation,
-    RandomSlabPermutation,
-)
+from ase.ga.slab_operators import (CutSpliceSlabCrossover,
+                                   NeighborhoodElementMutation,
+                                   RandomCompositionMutation,
+                                   RandomElementMutation,
+                                   RandomSlabPermutation)
 
 
 @pytest.fixture()
@@ -73,7 +70,7 @@ def test_random_element_mutation(seed, cu_slab):
 
     op = RandomElementMutation(element_pools=[['Cu', 'Au']], rng=rng)
 
-    child, _desc = op.get_new_individual([cu_slab.copy()])
+    child, desc = op.get_new_individual([cu_slab.copy()])
 
     assert (child.symbols == 'Au').sum() == 24
 
@@ -85,7 +82,7 @@ def test_neighborhood_element_mutation(seed, cu_slab):
     op = NeighborhoodElementMutation(element_pools=[['Cu', 'Ni', 'Au']],
                                      rng=rng)
 
-    child, _desc = op.get_new_individual([cu_slab])
+    child, desc = op.get_new_individual([cu_slab])
 
     assert (child.symbols == 'Ni').sum() == 24
 
@@ -98,7 +95,7 @@ def test_random_permutation(seed, cu_slab):
     p1.symbols[:8] = 'Au'
 
     op = RandomSlabPermutation(rng=rng)
-    child, _desc = op.get_new_individual([p1])
+    child, desc = op.get_new_individual([p1])
 
     assert (child.symbols == 'Au').sum() == 8
     assert sum(p1.numbers == child.numbers) == 22

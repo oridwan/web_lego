@@ -1,5 +1,3 @@
-# fmt: off
-
 import numpy as np
 
 # flake8: noqa

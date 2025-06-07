@@ -1,5 +1,3 @@
-# fmt: off
-
 import copy
 
 _setups_defaults = {

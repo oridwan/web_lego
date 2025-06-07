@@ -1,5 +1,3 @@
-# fmt: off
-
 from ase.nomad import read as _read_nomad_json
 
 

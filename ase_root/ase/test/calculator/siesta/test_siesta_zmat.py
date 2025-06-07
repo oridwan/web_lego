@@ -1,4 +1,3 @@
-# fmt: off
 """Tests for Zmatrix"""
 import os
 

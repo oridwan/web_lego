@@ -1,5 +1,3 @@
-# fmt: off
-
 import numpy as np
 
 # The indices of the full stiffness matrix of (orthorhombic) interest

@@ -1,5 +1,3 @@
-# fmt: off
-
 from typing import IO, Optional, Union
 
 import numpy as np
@@ -30,23 +28,24 @@ class SciPyOptimizer(Optimizer):
         trajectory: Optional[str] = None,
         callback_always: bool = False,
         alpha: float = 70.0,
-        **kwargs,
+        master: Optional[bool] = None,
+        force_consistent=Optimizer._deprecated,
     ):
         """Initialize object
 
-        Parameters
-        ----------
-        atoms: :class:`~ase.Atoms`
+        Parameters:
+
+        atoms: Atoms object
             The Atoms object to relax.
 
-        trajectory: str
-            Trajectory file used to store optimisation path.
+        trajectory: string
+            Pickle file used to store trajectory of atomic movement.
 
         logfile: file object or str
             If *logfile* is a string, a file with that name will be opened.
             Use '-' for stdout.
 
-        callback_always: bool
+        callback_always: book
             Should the callback be run after each force call (also in the
             linesearch)
 
@@ -56,13 +55,14 @@ class SciPyOptimizer(Optimizer):
             steps to converge might be less if a lower value is used. However,
             a lower value also means risk of instability.
 
-        kwargs : dict, optional
-            Extra arguments passed to
-            :class:`~ase.optimize.optimize.Optimizer`.
+        master: boolean
+            Defaults to None, which causes only rank 0 to save files.  If
+            set to true,  this rank will save files.
 
         """
         restart = None
-        Optimizer.__init__(self, atoms, restart, logfile, trajectory, **kwargs)
+        Optimizer.__init__(self, atoms, restart, logfile, trajectory,
+                           master, force_consistent=force_consistent)
         self.force_calls = 0
         self.callback_always = callback_always
         self.H0 = alpha
@@ -197,29 +197,24 @@ class SciPyGradientlessOptimizer(Optimizer):
     XXX: This is still a work in progress
     """
 
-    def __init__(
-        self,
-        atoms: Atoms,
-        logfile: Union[IO, str] = '-',
-        trajectory: Optional[str] = None,
-        callback_always: bool = False,
-        **kwargs,
-    ):
+    def __init__(self, atoms, logfile='-', trajectory=None,
+                 callback_always=False, master=None,
+                 force_consistent=Optimizer._deprecated):
         """Initialize object
 
-        Parameters
-        ----------
-        atoms: :class:`~ase.Atoms`
+        Parameters:
+
+        atoms: Atoms object
             The Atoms object to relax.
 
-        trajectory: str
-            Trajectory file used to store optimisation path.
+        trajectory: string
+            Pickle file used to store trajectory of atomic movement.
 
         logfile: file object or str
             If *logfile* is a string, a file with that name will be opened.
             Use '-' for stdout.
 
-        callback_always: bool
+        callback_always: book
             Should the callback be run after each force call (also in the
             linesearch)
 
@@ -229,13 +224,14 @@ class SciPyGradientlessOptimizer(Optimizer):
             steps to converge might be less if a lower value is used. However,
             a lower value also means risk of instability.
 
-        kwargs : dict, optional
-            Extra arguments passed to
-            :class:`~ase.optimize.optimize.Optimizer`.
+        master: boolean
+            Defaults to None, which causes only rank 0 to save files.  If
+            set to true,  this rank will save files.
 
         """
         restart = None
-        Optimizer.__init__(self, atoms, restart, logfile, trajectory, **kwargs)
+        Optimizer.__init__(self, atoms, restart, logfile, trajectory,
+                           master, force_consistent=force_consistent)
         self.function_calls = 0
         self.callback_always = callback_always
 

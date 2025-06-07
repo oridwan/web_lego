@@ -1,5 +1,3 @@
-# fmt: off
-
 """TAB-completion sub-command and update helper funtion.
 
 Run this when ever options are changed::
@@ -55,9 +53,6 @@ def update(path: Path,
         def add_argument(self, *args, **kwargs):
             dct[command].extend(arg for arg in args
                                 if arg.startswith('-'))
-
-        def add_argument_group(self, name):
-            return self
 
         def add_mutually_exclusive_group(self, required=False):
             return self

@@ -1,5 +1,3 @@
-# fmt: off
-
 """Reads Quantum ESPRESSO files.
 
 Read multiple structures and results from pw.x output files. Read
@@ -25,10 +23,8 @@ import numpy as np
 
 from ase.atoms import Atoms
 from ase.calculators.calculator import kpts2ndarray, kpts2sizeandoffsets
-from ase.calculators.singlepoint import (
-    SinglePointDFTCalculator,
-    SinglePointKPoint,
-)
+from ase.calculators.singlepoint import (SinglePointDFTCalculator,
+                                         SinglePointKPoint)
 from ase.constraints import FixAtoms, FixCartesian
 from ase.data import chemical_symbols
 from ase.dft.kpoints import kpoint_convert
@@ -194,13 +190,12 @@ def read_espresso_out(fileobj, index=slice(None), results_required=True):
         # Get the structure
         # Use this for any missing data
         prev_structure = pwscf_start_info[prev_start_index]['atoms']
-        cell_alat = pwscf_start_info[prev_start_index]['alat']
         if image_index in indexes[_PW_START]:
             structure = prev_structure.copy()  # parsed from start info
         else:
             if _PW_CELL in pwo_lines[image_index - 5]:
                 # CELL_PARAMETERS would be just before positions if present
-                cell, _ = get_cell_parameters(
+                cell, cell_alat = get_cell_parameters(
                     pwo_lines[image_index - 5:image_index])
             else:
                 cell = prev_structure.cell
@@ -311,7 +306,10 @@ def read_espresso_out(fileobj, index=slice(None), results_required=True):
                 continue
 
             # QE prints the k-points in units of 2*pi/alat
+            # with alat defined as the length of the first
+            # cell vector
             cell = structure.get_cell()
+            alat = np.linalg.norm(cell[0])
             ibzkpts = []
             weights = []
             for i in range(nkpts):
@@ -319,7 +317,7 @@ def read_espresso_out(fileobj, index=slice(None), results_required=True):
                 weights.append(float(L[-1]))
                 coord = np.array([L[-6], L[-5], L[-4].strip('),')],
                                  dtype=float)
-                coord *= 2 * np.pi / cell_alat
+                coord *= 2 * np.pi / alat
                 coord = kpoint_convert(cell, ckpts_kv=coord)
                 ibzkpts.append(coord)
             ibzkpts = np.array(ibzkpts)
@@ -1235,8 +1233,8 @@ def write_espresso_in(fd, atoms, input_data=None, pseudopotentials=None,
         Generate a grid of k-points with this as the minimum distance,
         in A^-1 between them in reciprocal space. If set to None, kpts
         will be used instead.
-    kpts: (int, int, int), dict or np.ndarray
-        If ``kpts`` is a tuple (or list) of 3 integers, it is interpreted
+    kpts: (int, int, int) or dict
+        If kpts is a tuple (or list) of 3 integers, it is interpreted
         as the dimensions of a Monkhorst-Pack grid.
         If ``kpts`` is set to ``None``, only the Γ-point will be included
         and QE will use routines optimized for Γ-point-only calculations.
@@ -1246,10 +1244,6 @@ def write_espresso_in(fd, atoms, input_data=None, pseudopotentials=None,
         If kpts is a dict, it will either be interpreted as a path
         in the Brillouin zone (*) if it contains the 'path' keyword,
         otherwise it is converted to a Monkhorst-Pack grid (**).
-        If ``kpts`` is a NumPy array, the raw k-points will be passed to
-        Quantum Espresso as given in the array (in crystal coordinates).
-        Must be of shape (n_kpts, 4). The fourth column contains the
-        k-point weights.
         (*) see ase.dft.kpoints.bandpath
         (**) see ase.calculators.calculator.kpts2sizeandoffsets
     koffset: (int, int, int)
@@ -1408,14 +1402,6 @@ def write_espresso_in(fd, atoms, input_data=None, pseudopotentials=None,
         pwi.append('\n')
     elif isinstance(kgrid, str) and (kgrid == "gamma"):
         pwi.append('K_POINTS gamma\n')
-        pwi.append('\n')
-    elif isinstance(kgrid, np.ndarray):
-        if np.shape(kgrid)[1] != 4:
-            raise ValueError('Only Nx4 kgrids are supported right now.')
-        pwi.append('K_POINTS crystal\n')
-        pwi.append(f'{len(kgrid)}\n')
-        for k in kgrid:
-            pwi.append(f"{k[0]:.14f} {k[1]:.14f} {k[2]:.14f} {k[3]:.14f}\n")
         pwi.append('\n')
     else:
         pwi.append('K_POINTS automatic\n')

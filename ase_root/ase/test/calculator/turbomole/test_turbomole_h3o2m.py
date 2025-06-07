@@ -1,4 +1,3 @@
-# fmt: off
 # type: ignore
 from math import cos, radians, sin
 

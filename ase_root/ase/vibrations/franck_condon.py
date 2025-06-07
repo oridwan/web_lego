@@ -1,5 +1,3 @@
-# fmt: off
-
 from functools import reduce
 from itertools import chain, combinations
 from math import factorial

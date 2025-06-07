@@ -1,5 +1,3 @@
-# fmt: off
-
 from .interactive import VaspInteractive
 from .vasp import Vasp
 from .vasp2 import Vasp2

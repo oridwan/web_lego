@@ -1,8 +1,7 @@
-# fmt: off
-
 import pickle
 import subprocess
 import sys
+import weakref
 from functools import partial
 from time import time
 
@@ -15,7 +14,6 @@ from ase.gui.i18n import _
 from ase.gui.images import Images
 from ase.gui.nanoparticle import SetupNanoparticle
 from ase.gui.nanotube import SetupNanotube
-from ase.gui.observer import Observers
 from ase.gui.save import save_dialog
 from ase.gui.settings import Settings
 from ase.gui.status import Status
@@ -23,14 +21,7 @@ from ase.gui.surfaceslab import SetupSurfaceSlab
 from ase.gui.view import View
 
 
-class GUIObservers:
-    def __init__(self):
-        self.new_atoms = Observers()
-        self.set_atoms = Observers()
-        self.draw = Observers()
-
-
-class GUI(View):
+class GUI(View, Status):
     ARROWKEY_SCAN = 0
     ARROWKEY_MOVE = 1
     ARROWKEY_ROTATE = 2
@@ -43,10 +34,7 @@ class GUI(View):
             images = Images(images)
 
         self.images = images
-
-        # Ordinary observers seem unused now, delete?
         self.observers = []
-        self.obs = GUIObservers()
 
         self.config = read_defaults()
         if show_bonds:
@@ -61,11 +49,12 @@ class GUI(View):
                                       release=self.release,
                                       resize=self.resize)
 
-        super().__init__(rotations)
-        self.status = Status(self)
+        View.__init__(self, rotations)
+        Status.__init__(self)
 
         self.subprocesses = []  # list of external processes
         self.movie_window = None
+        self.vulnerable_windows = []
         self.simulation = {}  # Used by modules on Calculate menu.
         self.module_state = {}  # Used by modules to store their state.
 
@@ -123,7 +112,7 @@ class GUI(View):
         i = max(0, min(len(self.images) - 1, self.frame + d))
         self.set_frame(i)
         if self.movie_window is not None:
-            self.movie_window.frame_number.value = i
+            self.movie_window.frame_number.value = i + 1
 
     def copy_image(self, key=None):
         self.images._images.append(self.atoms.copy())
@@ -157,16 +146,13 @@ class GUI(View):
         return Settings(self)
 
     def scroll(self, event):
-        shift = 0x1
-        ctrl = 0x4
-        alt_l = 0x8
-        mac_option_key = 0x10
+        CTRL = event.modifier == 'ctrl'
 
-        use_small_step = bool(event.state & shift)
-        rotate_into_plane = bool(event.state & (ctrl | alt_l | mac_option_key))
-
-        dxdydz = {'up': (0, 1 - rotate_into_plane, rotate_into_plane),
-                  'down': (0, -1 + rotate_into_plane, -rotate_into_plane),
+        # Bug: Simultaneous CTRL + shift is the same as just CTRL.
+        # Therefore movement in Z direction does not support the
+        # shift modifier.
+        dxdydz = {'up': (0, 1 - CTRL, CTRL),
+                  'down': (0, -1 + CTRL, -CTRL),
                   'right': (1, 0, 0),
                   'left': (-1, 0, 0)}.get(event.key, None)
 
@@ -189,7 +175,7 @@ class GUI(View):
             return
 
         vec = 0.1 * np.dot(self.axes, dxdydz)
-        if use_small_step:
+        if event.modifier == 'shift':
             vec *= 0.1
 
         if self.arrowkey_mode == self.ARROWKEY_MOVE:
@@ -375,7 +361,30 @@ class GUI(View):
         self.frame = 0  # Prevent crashes
         self.images.repeat_images(rpt)
         self.set_frame(frame=0, focus=True)
-        self.obs.new_atoms.notify()
+        self.notify_vulnerable()
+
+    def notify_vulnerable(self):
+        """Notify windows that would break when new_atoms is called.
+
+        The notified windows may adapt to the new atoms.  If that is not
+        possible, they should delete themselves.
+        """
+        new_vul = []  # Keep weakrefs to objects that still exist.
+        for wref in self.vulnerable_windows:
+            ref = wref()
+            if ref is not None:
+                new_vul.append(wref)
+                ref.notify_atoms_changed()
+        self.vulnerable_windows = new_vul
+
+    def register_vulnerable(self, obj):
+        """Register windows that are vulnerable to changing the images.
+
+        Some windows will break if the atoms (and in particular the
+        number of images) are changed.  They can register themselves
+        and be closed when that happens.
+        """
+        self.vulnerable_windows.append(weakref.ref(obj))
 
     def exit(self, event=None):
         for process in self.subprocesses:
@@ -395,12 +404,6 @@ class GUI(View):
     def selected_atoms(self):
         selection_mask = self.images.selected[:len(self.atoms)]
         return self.atoms[selection_mask]
-
-    def wrap_atoms(self, key=None):
-        """Wrap atoms around the unit cell."""
-        for atoms in self.images:
-            atoms.wrap()
-        self.set_frame()
 
     @property
     def clipboard(self):
@@ -508,8 +511,6 @@ class GUI(View):
                 value=False),
               M(_('Show _forces'), self.toggle_show_forces, 'Ctrl+F',
                 value=False),
-              M(_('Show _magmoms'), self.toggle_show_magmoms,
-                value=False),
               M(_('Show _Labels'), self.show_labels,
                 choices=[_('_None'),
                          _('Atom _Index'),
@@ -558,8 +559,7 @@ class GUI(View):
                 'Ctrl+R'),
               M(_('NE_B plot'), self.neb),
               M(_('B_ulk Modulus'), self.bulk_modulus),
-              M(_('Reciprocal space ...'), self.reciprocal),
-              M(_('Wrap atoms'), self.wrap_atoms, 'Ctrl+W')]),
+              M(_('Reciprocal space ...'), self.reciprocal)]),
 
             # TRANSLATORS: Set up (i.e. build) surfaces, nanoparticles, ...
             (_('_Setup'),

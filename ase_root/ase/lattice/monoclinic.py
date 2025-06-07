@@ -1,5 +1,3 @@
-# fmt: off
-
 """Function-like object creating monoclinic lattices.
 
 The following lattice creator is defined:

@@ -1,4 +1,3 @@
-# fmt: off
 import numpy as np
 
 from ase.dft.dos import linear_tetrahedron_integration as lti
@@ -43,3 +42,8 @@ def test_dos():
         print(dims, norm, error)
         assert error < 0.2, error
         assert abs(norm - 1) < 0.11**dims, norm
+        if 0:
+            import matplotlib.pyplot as plt
+            plt.plot(energies, dos)
+            plt.plot(energies, ref)
+            plt.show()

@@ -1,4 +1,3 @@
-# fmt: off
 import doctest
 import importlib
 
@@ -18,7 +17,7 @@ ase.geometry.cell
 ase.geometry.geometry
 ase.io.ulm
 ase.lattice
-ase.neighborlist
+ase.phasediagram
 ase.spacegroup.spacegroup
 ase.spacegroup.xtal
 ase.symbols

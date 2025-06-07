@@ -1,4 +1,3 @@
-# fmt: off
 from collections import OrderedDict
 from typing import Any, List, Tuple
 

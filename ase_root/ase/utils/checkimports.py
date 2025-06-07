@@ -1,5 +1,3 @@
-# fmt: off
-
 """Utility for checking Python module imports triggered by any code snippet.
 
 This module was developed to monitor the import footprint of the ase CLI

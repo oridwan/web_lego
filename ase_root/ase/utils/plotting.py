@@ -1,23 +1,22 @@
-# fmt: off
-
-from typing import Any, Optional
-
-import matplotlib.pyplot as plt
-from matplotlib.axes import Axes
+# This import is for the benefit of type-checking / mypy
+if False:
+    import matplotlib.axes
+    import matplotlib.figure
 
 
 class SimplePlottingAxes:
     def __init__(self,
-                 ax: Optional[Axes] = None,
+                 ax: 'matplotlib.axes.Axes' = None,
                  show: bool = False,
                  filename: str = None) -> None:
         self.ax = ax
         self.show = show
         self.filename = filename
-        self.figure: Any = None  # Don't know about Figure/SubFigure etc
+        self.figure = None
 
-    def __enter__(self) -> Axes:
+    def __enter__(self) -> 'matplotlib.axes.Axes':
         if self.ax is None:
+            import matplotlib.pyplot as plt
             self.figure, self.ax = plt.subplots()
         else:
             self.figure = self.ax.get_figure()

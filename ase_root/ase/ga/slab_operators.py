@@ -1,5 +1,3 @@
-# fmt: off
-
 """Operators that work on slabs.
 Allowed compositions are respected.
 Identical indexing of the slabs are assumed for the cut-splice operator."""
@@ -488,7 +486,6 @@ class SymmetrySlabPermutation(SlabOperator):
                 self.descriptor + parent_message)
 
     def operate(self, atoms):
-        from ase.spacegroup.symmetrize import spglib_get_symmetry_dataset
         # Do the operation
         sym_num = 1
         sg = self.sym_goal
@@ -497,7 +494,7 @@ class SymmetrySlabPermutation(SlabOperator):
                 for _ in range(2):
                     permute2(atoms, rng=self.rng)
                 self.dcf(atoms)
-                sym_num = spglib_get_symmetry_dataset(
+                sym_num = spglib.get_symmetry_dataset(
                     atoms_to_spglib_cell(atoms))['number']
                 if sym_num >= sg:
                     break

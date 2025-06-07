@@ -1,5 +1,3 @@
-# fmt: off
-
 """Structure optimization. """
 
 from ase.optimize.bfgs import BFGS

@@ -1,5 +1,3 @@
-# fmt: off
-
 """
 Wrappers that provide a minimal interface to kimpy methods and objects
 
@@ -12,12 +10,8 @@ from abc import ABC
 
 import numpy as np
 
-from .exceptions import (
-    KIMModelInitializationError,
-    KIMModelNotFound,
-    KIMModelParameterError,
-    KimpyError,
-)
+from .exceptions import (KIMModelInitializationError, KIMModelNotFound,
+                         KIMModelParameterError, KimpyError)
 
 
 class LazyKimpyImport:

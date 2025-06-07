@@ -1,4 +1,3 @@
-# fmt: off
 from math import cos, pi, sqrt
 
 import numpy as np

@@ -1,5 +1,3 @@
-# fmt: off
-
 """Various utility methods used troughout the GA."""
 import itertools
 import os
