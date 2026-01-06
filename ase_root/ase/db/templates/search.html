@@ -9,7 +9,18 @@ Browse ASE Database
 <script>
 document.addEventListener('DOMContentLoaded',
                           function() {
-                              update_table({{ session_id }}, 'query', '0');
+                const runSearch = () => update_table({{ session_id }}, 'query', '0');
+                runSearch();
+
+                const quickButtons = document.querySelectorAll('[data-query-value]');
+                const queryInput = document.getElementById('formula-result');
+
+                quickButtons.forEach(function(button) {
+                  button.addEventListener('click', function() {
+                    queryInput.value = this.getAttribute('data-query-value');
+                    runSearch();
+                  });
+                });
                               },
                           false);
 </script>
@@ -17,64 +28,108 @@ document.addEventListener('DOMContentLoaded',
 
 {% block content %}
 
-<div class="container">
-  {% block contenttitle %}
-  <div class="row">
-    <h1>{{project.title}}</h1>
-  </div>
-  {% endblock %}
+<div class="page-shell">
+  <div class="container py-4">
 
-  <div class="card text-bg-light shadow-sm mt-2">
-    <form id="mainFormID" class="navbar-form navbar-default mt-2"
-          role="search"
-          action="javascript:update_table({{ session_id }}, 'query', '0')">
-      <div class="form-group d-flex align-items-center col-auto" style="margin-top:5px;">
-        <input type="text" name="query" id="formula-result"
-               class="form-control mx-2 ase-input"
-               value="{{ q }}"
-               placeholder="Search formula e.g. MoS2" size="60">
-        <button type="submit" class="btn btn-secondary mx-2">
-          Search
-        </button>
-      </div><br/>
-      {% block search %}
-      {% endblock search %}
-      <div class="form-group col-auto mx-2 col-form-label" style="margin-bottom:10px;">
-        <small class="form-text">
-          <a href="https://wiki.fysik.dtu.dk/ase/ase/db/db.html#querying"
-             target="_blank">
-            Help with constructing advanced search queries ...
-          </a>
-        </small>
-      </div><br/>
+    <div class="row g-4 align-items-stretch">
+      <div class="col-lg-7">
+        <div class="hero-panel h-100">
+          <p class="eyebrow mb-2">Atomic Simulation Environment</p>
+          <h1 class="display-5 mb-2">{{ project.title }}</h1>
+          <p class="lede mb-3">
+            Browse sp2-inspired crystal structures, compare energetics, and jump into detailed rows without digging through flat files.
+          </p>
+          <div class="pill-row">
+            <span class="pill">Quick filters for space groups</span>
+            <span class="pill">Energies from MACE, FF, VASP</span>
+            <span class="pill">Topology tags for graph families</span>
+          </div>
 
-      {# Flash query messages #}
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <ul class="list-group">
-          {% for message in messages %}
-            <li class="list-group-item list-group-item-warning">{{ message }}
-            </li>
-          {% endfor %}
-          </ul>
-        {% endif %}
-      {% endwith %}
-
-      <small class="form-text mx-2 mb-2">
-      <a data-bs-toggle="collapse" role="button" href="#collapse1" aria-controls="collapse1">Toggle list of keys ...</a>
-      </small><br/>
-      <div id="collapse1" class="collapse">
-        <table class="table table-striped">
-        {% for key, keydesc in project.key_descriptions|dictsort %}
-          <tr><td>{{ key }}</td><td>{{ keydesc.longdesc }}</td><td>{{ keydesc.unit|safe }}</td></tr>
-        {% endfor %}
-        </table>
+          <div class="row g-3 mt-2">
+            <div class="col-md-4">
+              <div class="stat-card">
+                <h3>Search</h3>
+                <p>Formulae, space group, topology, or energy ranges.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-card">
+                <h3>Compare</h3>
+                <p>Line up MACE, FF, and VASP energies per structure.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-card">
+                <h3>Inspect</h3>
+                <p>Open a row to view geometry and metadata instantly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </form>
+
+      <div class="col-lg-5">
+        <div class="search-card">
+          <h4 class="mb-1">Search the database</h4>
+          <p class="mb-2" style="color: var(--muted);">Type a formula, key=value pair, or a boolean expression.</p>
+
+          <form id="mainFormID" class="mt-2" role="search"
+                action="javascript:update_table({{ session_id }}, 'query', '0')">
+            <label for="formula-result" class="form-label text-uppercase small" style="letter-spacing:0.08em; color: var(--muted);">Query</label>
+            <div class="d-flex gap-2 align-items-stretch">
+              <input type="text" name="query" id="formula-result"
+                     class="form-control ase-input search-input-lg w-100"
+                     value="{{ q }}"
+                     placeholder="space_group_number=191 AND topology=hcb">
+              <button type="submit" class="btn btn-primary flex-shrink-0">Search</button>
+            </div>
+
+            {% block search %}
+            {% endblock search %}
+
+            <div class="quick-filters mt-3">
+              <button type="button" class="btn btn-outline-light btn-sm" data-query-value="topology=hcb">Graphene-like (hcb)</button>
+              <button type="button" class="btn btn-outline-light btn-sm" data-query-value="space_group_number=191">Space group 191</button>
+              <button type="button" class="btn btn-outline-light btn-sm" data-query-value="mace_energy<-9.3">Lower MACE energy</button>
+              <button type="button" class="btn btn-outline-light btn-sm" data-query-value="vasp_energy<-7">With VASP energy</button>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="list-group mt-3">
+                {% for message in messages %}
+                  <li class="list-group-item list-group-item-warning">{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+          </form>
+        </div>
+
+        <div class="info-card mt-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <span>Need syntax reminders?</span>
+            <a class="small" href="https://wiki.fysik.dtu.dk/ase/ase/db/db.html#querying" target="_blank" rel="noreferrer">Query help</a>
+          </div>
+
+          <small class="form-text mt-2">
+            <a data-bs-toggle="collapse" role="button" href="#collapse1" aria-controls="collapse1">Toggle list of keys</a>
+          </small>
+          <div id="collapse1" class="collapse mt-2">
+            <table class="table table-striped">
+            {% for key, keydesc in project.key_descriptions|dictsort %}
+              <tr><td>{{ key }}</td><td>{{ keydesc.longdesc }}</td><td>{{ keydesc.unit|safe }}</td></tr>
+            {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="database-wrapper" id="database1"></div>
+
   </div>
-
-  <div id="database1"></div>
-
-</div> <!-- class="container" -->
+</div>
 
 {% endblock content %}
