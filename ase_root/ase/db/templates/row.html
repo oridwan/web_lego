@@ -1,36 +1,39 @@
 {% extends 'ase/db/templates/layout.html' %}
 
 {% macro atoms() %}
-<div id="appdiv"></div>
-<div class="row align-items-center">
-  <div class="col-6">
-    <a class="btn btn-primary btn-sm" href="/gui/{{ row.id }}">Open ASE's GUI</a>
-  </div>
-  <div class="col-3 px-1">
-    <div class="btn-group pull-right">
-      <button type="button" class="btn btn-primary dropdown-toggle btn-sm"
-              data-bs-toggle="dropdown">
-        Unit cell <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><a onclick="repeatCell(1, 1, 1);">1x1x1</a></li>
-        <li><a onclick="repeatCell({{ n1 }}, {{ n2 }}, {{ n3 }});">
-            {{ n1 }}x{{ n2 }}x{{ n3 }}</a></li>
-      </ul>
+<div class="viewer-card">
+  <div id="appdiv" class="viewer-frame"></div>
+  <div class="row align-items-center mt-2 gy-2">
+    <div class="col-sm-4">
+      <a class="btn btn-primary btn-sm w-100" href="/gui/{{ row.id }}">Open ASE's GUI</a>
+    </div>
+    <div class="col-sm-4 px-1">
+      <div class="btn-group pull-right w-100">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm w-100"
+                data-bs-toggle="dropdown">
+          Unit cell <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a onclick="repeatCell(1, 1, 1);">1x1x1</a></li>
+          <li><a onclick="repeatCell({{ n1 }}, {{ n2 }}, {{ n3 }});">
+              {{ n1 }}x{{ n2 }}x{{ n3 }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="btn-group pull-right w-100">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm w-100"
+                data-bs-toggle="dropdown">
+          Download <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="/atoms/{{ project.name }}/{{ row.id }}/xyz">xyz</a></li>
+          <li><a href="/atoms/{{ project.name }}/{{ row.id }}/json">json</a></li>
+        </ul>
+      </div>
     </div>
   </div>
-  <div class="col-3">
-    <div class="btn-group pull-right">
-      <button type="button" class="btn btn-primary dropdown-toggle btn-sm"
-              data-bs-toggle="dropdown">
-        Download <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><a href="/atoms/{{ project.name }}/{{ row.id }}/xyz">xyz</a></li>
-        <li><a href="/atoms/{{ project.name }}/{{ row.id }}/json">json</a></li>
-      </ul>
-    </div>
-  </div>
+  <small class="text-muted d-block mt-2">If the GUI button does not open remotely, use the 3D view above or download the structure.</small>
 </div>
 {% endmacro %}
 
@@ -100,39 +103,47 @@ jmol_isReady = function(applet)
 
 {% block content %}
 
-<div class="container-fluid">
-  <h1>{{ dct.formula|safe }}</h1>
+<div class="page-shell">
+  <div class="container py-4">
+    <a href="/{{ project.name }}/" class="mb-3 d-inline-block">Back to search page</a>
+    <h1 class="mb-3">{{ dct.formula|safe }}</h1>
 
-  <h4 class="card-title">Structure</h4>
-  <div class="card">
-    <div class="col-md-6 p-2">
-      {{ atoms() }}
-      <div class="col">{{ cell() }}</div>
-    </div> <!--END col-md-6-->
-  </div> <!--END CARD-->
+    <div class="row g-4 align-items-start">
+      <div class="col-xl-6">
+        <h4 class="card-title">Structure</h4>
+        {{ atoms() }}
+      </div>
+      <div class="col-xl-6">
+        <div class="card p-3">
+          <h5 class="mb-2">Unit cell</h5>
+          {{ cell() }}
+        </div>
+      </div>
+    </div>
 
-  <div class="col-9">
-    <h4 class="card-title mt-2">Keys and values</h4>
-    <div class="card">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Key</th>
-            <th>Description</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for key, desc, val in dct.table %}
-          <tr>
-            <td> {{ key }} </td>
-            <td> {{ desc }} </td>
-            <td> {{ val|safe }} </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-    </div> <!--END Col-9-->
+    <div class="card mt-4 p-3">
+      <h4 class="card-title">Keys and values</h4>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Description</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for key, desc, val in dct.table %}
+            <tr>
+              <td> {{ key }} </td>
+              <td> {{ desc }} </td>
+              <td> {{ val|safe }} </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}

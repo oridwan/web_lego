@@ -1,5 +1,8 @@
 Jmol._isAsync = false;
 var jmolApplet0;
+var jmolRetryCount = 0;
+var JSMOL_MAX_RETRY = 10;
+var JSMOL_RETRY_DELAY = 150;
 
 var Info = {
     width: 450,
@@ -26,7 +29,23 @@ function repeatCell(n1, n2, n3)
     Jmol.script(jmolApplet0, 'load "" ' + s);
 }
 
-$(document).ready(function()
+function initJsmol()
 {
-    $("#appdiv").html(Jmol.getAppletHtml("jmolApplet0", Info))
-})
+    if (window.Jmol && typeof Jmol.getAppletHtml === 'function') {
+        $("#appdiv").html(Jmol.getAppletHtml("jmolApplet0", Info));
+        return;
+    }
+
+    if (jmolRetryCount < JSMOL_MAX_RETRY) {
+        jmolRetryCount += 1;
+        setTimeout(initJsmol, JSMOL_RETRY_DELAY);
+    } else {
+        $("#appdiv").html(
+            '<div class="viewer-fallback">3D viewer failed to load. Download XYZ/CIF above.</div>'
+        );
+    }
+}
+
+$(document).ready(function() {
+    initJsmol();
+});
