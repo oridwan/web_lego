@@ -73,6 +73,41 @@ a {
   font-size: 0.9rem;
 }
 
+.achievement-block {
+  background: rgba(91, 224, 189, 0.08);
+  border: 1px solid rgba(91, 224, 189, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.achievement-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.achievement-badge {
+  background: rgba(91, 224, 189, 0.15);
+  border: 1px solid rgba(91, 224, 189, 0.4);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.achievement-info {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.achievement-info strong {
+  color: var(--text-strong);
+}
+
 .stat-card {
   background: var(--card);
   border: 1px solid var(--border);
