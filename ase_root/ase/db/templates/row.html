@@ -122,7 +122,7 @@ jmol_isReady = function(applet)
     </div>
 
     <div class="card mt-4 p-3">
-      <h4 class="card-title">Keys and values</h4>
+      <h4 class="card-title">Properties</h4>
       <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -133,12 +133,15 @@ jmol_isReady = function(applet)
             </tr>
           </thead>
           <tbody>
+          {% set visible_keys = ['mace_energy', 'formula', 'pearson_symbol', 'space_group_number', 'density', 'pbc', 'dimension', 'wps', 'volume', 'topology', 'natoms', 'mass'] %}
           {% for key, desc, val in dct.table %}
+            {% if key in visible_keys %}
             <tr>
               <td> {{ key }} </td>
               <td> {{ desc }} </td>
               <td> {{ val|safe }} </td>
             </tr>
+            {% endif %}
           {% endfor %}
           </tbody>
         </table>
