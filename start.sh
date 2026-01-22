@@ -1,4 +1,25 @@
 #!/bin/bash
+# 
+# LEGO-xtal: AI-Assisted Rapid Crystal Structure Generation Towards a Target Local Environment
+# 
+# Authors: Osman Goni Ridwan, Sylvain Pitié, Monish Soundar Raj, Dong Dai, Gilles Frapper, 
+#          Hongfei Xue, Qiang Zhu
+# 
+# Reference:
+# @article{ridwan2025ai,
+#   title={AI-Assisted Rapid Crystal Structure Generation Towards a Target Local Environment},
+#   author={Ridwan, Osman Goni and Piti{\'e}, Sylvain and Raj, Monish Soundar and Dai, Dong and Frapper, Gilles and Xue, Hongfei and Zhu, Qiang},
+#   journal={arXiv preprint arXiv:2506.08224},
+#   year={2025}
+# }
+#
+# Contact: oridwan@charlotte.edu, qzhu8@charlotte.edu
+# Research Group: Materials Modelling and Informatics (MMI) / Zhu's Group
+# PI: Qiang Zhu (Interim Director of BATT CAVE, Associate Professor)
+#     Mechanical Engineering and Engineering Science
+#     https://qzhu2017.github.io
+#
+
 set -e  # Exit immediately on error
 
 # 1. Ensure jsmol assets exist (Render sometimes starts without them)
@@ -35,6 +56,26 @@ else
     fi
 fi
 
-# 2. Start the ASE web server
-echo "Starting ASE web server..."
-ase db lego-sp2.db -w
+# 2. Determine port (CLI arg > $PORT > default 5000)
+if [ -n "$1" ]; then
+    PORT="$1"
+elif [ -z "$PORT" ]; then
+    PORT=5000
+fi
+export PORT
+
+# 3. Run the Flask app directly so we can set the port
+echo "Starting ASE web server on port $PORT..."
+export PYTHONPATH="$PWD/ase_root${PYTHONPATH:+:$PYTHONPATH}"
+python3 - <<'PY'
+import os
+from ase.db.app import DBApp
+from ase.db import connect
+
+db_path = 'lego-sp2.db'
+port = int(os.environ.get('PORT', '5000'))
+
+app = DBApp()
+app.add_project('default', connect(db_path))
+app.flask.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+PY
